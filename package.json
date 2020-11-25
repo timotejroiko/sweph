@@ -1,0 +1,14 @@
+{
+  "name": "sweph",
+  "version": "1.0.0",
+  "description": "swiss ephemeris bindings for node.js",
+  "main": "src/sweph.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "node-addon-api": "*"
+  },
+  "author": "Timotej Valentin Rojko",
+  "license": "ISC"
+}
