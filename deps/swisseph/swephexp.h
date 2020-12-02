@@ -703,12 +703,6 @@ ext_def( int32 ) swe_calc(
         double *xx,
         char *serr);
 
-/* Custom function by Timotej Rojko */
-ext_def( int32 ) swe_calc_elem(
-        double tjd, char *elem, int32 iflag, 
-        double *xx,
-        char *serr);
-
 ext_def(int32) swe_calc_ut(double tjd_ut, int32 ipl, int32 iflag, 
 	double *xx, char *serr);
 
@@ -734,9 +728,6 @@ ext_def(int32) swe_fixstar2_ut(char *star, double tjd_ut, int32 iflag,
 	double *xx, char *serr);
 
 ext_def(int32) swe_fixstar2_mag(char *star, double *mag, char *serr);
-
-/* Custom function by Timotej Rojko */
-ext_def( int32 ) swe_fixstar3(char *star, char *srecord, double tjd, int32 iflag, double *xx, char *serr);
 
 /* close Swiss Ephemeris */
 ext_def( void ) swe_close(void);
@@ -1013,6 +1004,19 @@ ext_def( char *) swe_cs2timestr(CSEC t, int sep, AS_BOOL suppressZero, char *a);
 ext_def( char *) swe_cs2lonlatstr(CSEC t, char pchar, char mchar, char *s);
 
 ext_def( char *) swe_cs2degstr(CSEC t, char *a);
+
+/******************************************************* 
+ * Custom functions by Timotej Rojko
+ ********************************************************/
+
+/* Fixed stars from elements */
+ext_def( int32 ) swe_fixstar3(char *star, char *srecord, double tjd, int32 iflag, double *xx, char *serr);
+
+/* Object from elements */
+ext_def( int32 ) swe_calc_elem(
+        double tjd, char *elem, int32 iflag, 
+        double *xx,
+        char *serr);
 
 #endif  /* #ifndef _SWEDLL_H */
 

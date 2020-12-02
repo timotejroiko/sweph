@@ -81,12 +81,6 @@ static int read_elements_file(int32 ipl, double tjd,
   double *parg, double *node, double *incl,
   char *pname, int32 *fict_ifl, char *serr);
 
-static int read_elements_elem(char *elem, double tjd, 
-  double *tjd0, double *tequ, 
-  double *mano, double *sema, double *ecce, 
-  double *parg, double *node, double *incl,
-  char *pname, int32 *fict_ifl, char *serr);
-
 static const int pnoint2msh[]   = {2, 2, 0, 1, 3, 4, 5, 6, 7, 8, };
 
 
@@ -695,125 +689,6 @@ int swi_osc_el_plan(double tjd, double *xp, int ipl, int ipli, double *xearth, d
   return OK;
 }
 
-/* computes a planet from osculating elements *
- * tjd    julian day
- * ipl    body number
- * ipli   body number in planetary data structure
- * iflag  flags
- */
-int swi_osc_el_plan_elem(double tjd, double *xp, char *elem, int ipli, double *xearth, double *xsun, char *serr)
-{
-  double pqr[9], x[6];
-  double eps, K, fac, rho, cose, sine;
-  double alpha, beta, zeta, sigma, M2, Msgn, M_180_or_0;
-  double tjd0, tequ, mano, sema, ecce, parg, node, incl, dmot;
-  double cosnode, sinnode, cosincl, sinincl, cosparg, sinparg;
-  double M, E;
-  struct plan_data *pedp = &swed.pldat[SEI_EARTH];
-  struct plan_data *pdp = &swed.pldat[ipli];
-  int32 fict_ifl = 0;
-  int i;
-  /* orbital elements, either from file or, if file not found,
-   * from above built-in set  
-   */
-  if (read_elements_elem(elem, tjd, &tjd0, &tequ, 
-       &mano, &sema, &ecce, &parg, &node, &incl, 
-       NULL, &fict_ifl, serr) == ERR)
-    return ERR;
-  dmot = 0.9856076686 * DEGTORAD / sema / sqrt(sema); /* daily motion */
-  if (fict_ifl & FICT_GEO)
-    dmot /= sqrt(SUN_EARTH_MRAT);
-  cosnode = cos(node);
-  sinnode = sin(node);
-  cosincl = cos(incl);
-  sinincl = sin(incl); 
-  cosparg = cos(parg);
-  sinparg = sin(parg);
-  /* Gaussian vector */
-  pqr[0] = cosparg * cosnode - sinparg * cosincl * sinnode;
-  pqr[1] = -sinparg * cosnode - cosparg * cosincl * sinnode;
-  pqr[2] = sinincl * sinnode;
-  pqr[3] = cosparg * sinnode + sinparg * cosincl * cosnode;
-  pqr[4] = -sinparg * sinnode + cosparg * cosincl * cosnode;
-  pqr[5] = -sinincl * cosnode;
-  pqr[6] = sinparg * sinincl;
-  pqr[7] = cosparg * sinincl;
-  pqr[8] = cosincl;
-  /* Kepler problem */
-  E = M = swi_mod2PI(mano + (tjd - tjd0) * dmot); /* mean anomaly of date */
-  /* better E for very high eccentricity and small M */
-  if (ecce > 0.975) {
-    M2 = M * RADTODEG;
-    if (M2 > 150 && M2 < 210) {
-      M2 -= 180;
-      M_180_or_0 = 180;
-    } else
-      M_180_or_0 = 0;
-    if (M2 > 330) 
-      M2 -= 360;
-    if (M2 < 0) {
-      M2 = -M2;
-      Msgn = -1;
-    } else
-      Msgn = 1;
-    if (M2 < 30) {
-      M2 *= DEGTORAD;
-      alpha = (1 - ecce) / (4 * ecce + 0.5);
-      beta = M2 / (8 * ecce + 1);
-      zeta = pow(beta + sqrt(beta * beta + alpha * alpha), 1/3);
-      sigma = zeta - alpha / 2;
-      sigma = sigma - 0.078 * sigma * sigma * sigma * sigma * sigma / (1 + ecce);
-      E = Msgn * (M2 + ecce * (3 * sigma - 4 * sigma * sigma * sigma))
-      + M_180_or_0;
-    }
-  }
-  E = swi_kepler(E, M, ecce);
-  /* position and speed, referred to orbital plane */
-  if (fict_ifl & FICT_GEO)
-    K = KGAUSS_GEO / sqrt(sema);
-  else
-    K = KGAUSS / sqrt(sema);
-  cose = cos(E);
-  sine = sin(E);
-  fac = sqrt((1 - ecce) * (1 + ecce));
-  rho = 1 - ecce * cose;
-  x[0] = sema * (cose - ecce);
-  x[1] = sema * fac * sine;
-  x[3] = -K * sine / rho;
-  x[4] = K * fac * cose / rho;
-  /* transformation to ecliptic */
-  xp[0] = pqr[0] * x[0] + pqr[1] * x[1];
-  xp[1] = pqr[3] * x[0] + pqr[4] * x[1];
-  xp[2] = pqr[6] * x[0] + pqr[7] * x[1];
-  xp[3] = pqr[0] * x[3] + pqr[1] * x[4];
-  xp[4] = pqr[3] * x[3] + pqr[4] * x[4];
-  xp[5] = pqr[6] * x[3] + pqr[7] * x[4];
-  /* transformation to equator */
-  eps = swi_epsiln(tequ, 0);
-  swi_coortrf(xp, xp, -eps);
-  swi_coortrf(xp+3, xp+3, -eps);
-  /* precess to J2000 */
-  if (tequ != J2000) {
-    swi_precess(xp, tequ, 0, J_TO_J2000);
-    swi_precess(xp+3, tequ, 0, J_TO_J2000);
-  }
-  /* to solar system barycentre */
-  if (fict_ifl & FICT_GEO) {
-    for (i = 0; i <= 5; i++) {
-      xp[i] += xearth[i];
-    }
-  } else {
-  for (i = 0; i <= 5; i++) {
-    xp[i] += xsun[i];
-  }
-  }
-  if (pdp->x == xp) {
-    pdp->teval = tjd; /* for precession! */
-    pdp->iephe = pedp->iephe;
-  }
-  return OK;
-}
-
 #if 1
 /* note: input parameter tjd is required for T terms in elements */
 static int read_elements_file(int32 ipl, double tjd, 
@@ -1036,6 +911,183 @@ return_err:
   fclose(fp);
   return ERR;
 }
+#endif
+
+static int check_t_terms(double t, char *sinp, double *doutp)
+{
+  int i, isgn = 1, z;
+  int retc = 0;
+  char *sp;
+  double tt[5], fac;
+  tt[0] = t / 36525;
+  tt[1] = tt[0];
+  tt[2] = tt[1] * tt[1];
+  tt[3] = tt[2] * tt[1];
+  tt[4] = tt[3] * tt[1];
+  if ((sp = strpbrk(sinp, "+-")) != NULL)
+    retc = 1; /* with additional terms */
+  sp = sinp;
+  *doutp = 0;
+  fac = 1;
+  z = 0;
+  while (1) {
+    while(*sp != '\0' && strchr(" \t", *sp) != NULL)
+      sp++;
+    if (strchr("+-", *sp) || *sp == '\0') {
+	  if (z > 0)
+		*doutp += fac;
+	  isgn = 1;
+	  if (*sp == '-')
+	    isgn = -1;
+	  fac = 1 * isgn;
+	  if (*sp == '\0')
+		return retc;
+	  sp++;
+	} else {
+      while(*sp != '\0' && strchr("* \t", *sp) != NULL)
+        sp++;
+      if (*sp != '\0' && strchr("tT", *sp) != NULL) {
+		/* a T */
+        sp++;
+        if (*sp != '\0' && strchr("+-", *sp))
+		  fac *= tt[0];
+	    else if ((i = atoi(sp)) <= 4 && i >= 0)
+          fac *= tt[i];
+	  } else {
+        /* a number */
+        if (atof(sp) != 0 || *sp == '0')
+          fac *= atof(sp);
+	  }
+      while (*sp != '\0' && strchr("0123456789.", *sp))
+	    sp++;
+	}
+	z++;
+  }
+  return retc;	/* there have been additional terms */
+}
+
+/******************************************************* 
+ * Custom functions by Timotej Rojko
+ ********************************************************/
+
+static int read_elements_elem(char *elem, double tjd, 
+  double *tjd0, double *tequ, 
+  double *mano, double *sema, double *ecce, 
+  double *parg, double *node, double *incl,
+  char *pname, int32 *fict_ifl, char *serr);
+
+int swi_osc_el_plan_elem(double tjd, double *xp, char *elem, int ipli, double *xearth, double *xsun, char *serr)
+{
+  double pqr[9], x[6];
+  double eps, K, fac, rho, cose, sine;
+  double alpha, beta, zeta, sigma, M2, Msgn, M_180_or_0;
+  double tjd0, tequ, mano, sema, ecce, parg, node, incl, dmot;
+  double cosnode, sinnode, cosincl, sinincl, cosparg, sinparg;
+  double M, E;
+  struct plan_data *pedp = &swed.pldat[SEI_EARTH];
+  struct plan_data *pdp = &swed.pldat[ipli];
+  int32 fict_ifl = 0;
+  int i;
+  /* orbital elements, either from file or, if file not found,
+   * from above built-in set  
+   */
+  if (read_elements_elem(elem, tjd, &tjd0, &tequ, 
+       &mano, &sema, &ecce, &parg, &node, &incl, 
+       NULL, &fict_ifl, serr) == ERR)
+    return ERR;
+  dmot = 0.9856076686 * DEGTORAD / sema / sqrt(sema); /* daily motion */
+  if (fict_ifl & FICT_GEO)
+    dmot /= sqrt(SUN_EARTH_MRAT);
+  cosnode = cos(node);
+  sinnode = sin(node);
+  cosincl = cos(incl);
+  sinincl = sin(incl); 
+  cosparg = cos(parg);
+  sinparg = sin(parg);
+  /* Gaussian vector */
+  pqr[0] = cosparg * cosnode - sinparg * cosincl * sinnode;
+  pqr[1] = -sinparg * cosnode - cosparg * cosincl * sinnode;
+  pqr[2] = sinincl * sinnode;
+  pqr[3] = cosparg * sinnode + sinparg * cosincl * cosnode;
+  pqr[4] = -sinparg * sinnode + cosparg * cosincl * cosnode;
+  pqr[5] = -sinincl * cosnode;
+  pqr[6] = sinparg * sinincl;
+  pqr[7] = cosparg * sinincl;
+  pqr[8] = cosincl;
+  /* Kepler problem */
+  E = M = swi_mod2PI(mano + (tjd - tjd0) * dmot); /* mean anomaly of date */
+  /* better E for very high eccentricity and small M */
+  if (ecce > 0.975) {
+    M2 = M * RADTODEG;
+    if (M2 > 150 && M2 < 210) {
+      M2 -= 180;
+      M_180_or_0 = 180;
+    } else
+      M_180_or_0 = 0;
+    if (M2 > 330) 
+      M2 -= 360;
+    if (M2 < 0) {
+      M2 = -M2;
+      Msgn = -1;
+    } else
+      Msgn = 1;
+    if (M2 < 30) {
+      M2 *= DEGTORAD;
+      alpha = (1 - ecce) / (4 * ecce + 0.5);
+      beta = M2 / (8 * ecce + 1);
+      zeta = pow(beta + sqrt(beta * beta + alpha * alpha), 1/3);
+      sigma = zeta - alpha / 2;
+      sigma = sigma - 0.078 * sigma * sigma * sigma * sigma * sigma / (1 + ecce);
+      E = Msgn * (M2 + ecce * (3 * sigma - 4 * sigma * sigma * sigma))
+      + M_180_or_0;
+    }
+  }
+  E = swi_kepler(E, M, ecce);
+  /* position and speed, referred to orbital plane */
+  if (fict_ifl & FICT_GEO)
+    K = KGAUSS_GEO / sqrt(sema);
+  else
+    K = KGAUSS / sqrt(sema);
+  cose = cos(E);
+  sine = sin(E);
+  fac = sqrt((1 - ecce) * (1 + ecce));
+  rho = 1 - ecce * cose;
+  x[0] = sema * (cose - ecce);
+  x[1] = sema * fac * sine;
+  x[3] = -K * sine / rho;
+  x[4] = K * fac * cose / rho;
+  /* transformation to ecliptic */
+  xp[0] = pqr[0] * x[0] + pqr[1] * x[1];
+  xp[1] = pqr[3] * x[0] + pqr[4] * x[1];
+  xp[2] = pqr[6] * x[0] + pqr[7] * x[1];
+  xp[3] = pqr[0] * x[3] + pqr[1] * x[4];
+  xp[4] = pqr[3] * x[3] + pqr[4] * x[4];
+  xp[5] = pqr[6] * x[3] + pqr[7] * x[4];
+  /* transformation to equator */
+  eps = swi_epsiln(tequ, 0);
+  swi_coortrf(xp, xp, -eps);
+  swi_coortrf(xp+3, xp+3, -eps);
+  /* precess to J2000 */
+  if (tequ != J2000) {
+    swi_precess(xp, tequ, 0, J_TO_J2000);
+    swi_precess(xp+3, tequ, 0, J_TO_J2000);
+  }
+  /* to solar system barycentre */
+  if (fict_ifl & FICT_GEO) {
+    for (i = 0; i <= 5; i++) {
+      xp[i] += xearth[i];
+    }
+  } else {
+  for (i = 0; i <= 5; i++) {
+    xp[i] += xsun[i];
+  }
+  }
+  if (pdp->x == xp) {
+    pdp->teval = tjd; /* for precession! */
+    pdp->iephe = pedp->iephe;
+  }
+  return OK;
+}
 
 static int read_elements_elem(char *elem, double tjd, 
   double *tjd0, double *tequ, 
@@ -1206,58 +1258,4 @@ static int read_elements_elem(char *elem, double tjd,
   return OK;
 return_err:
   return ERR;
-}
-#endif
-
-static int check_t_terms(double t, char *sinp, double *doutp)
-{
-  int i, isgn = 1, z;
-  int retc = 0;
-  char *sp;
-  double tt[5], fac;
-  tt[0] = t / 36525;
-  tt[1] = tt[0];
-  tt[2] = tt[1] * tt[1];
-  tt[3] = tt[2] * tt[1];
-  tt[4] = tt[3] * tt[1];
-  if ((sp = strpbrk(sinp, "+-")) != NULL)
-    retc = 1; /* with additional terms */
-  sp = sinp;
-  *doutp = 0;
-  fac = 1;
-  z = 0;
-  while (1) {
-    while(*sp != '\0' && strchr(" \t", *sp) != NULL)
-      sp++;
-    if (strchr("+-", *sp) || *sp == '\0') {
-	  if (z > 0)
-		*doutp += fac;
-	  isgn = 1;
-	  if (*sp == '-')
-	    isgn = -1;
-	  fac = 1 * isgn;
-	  if (*sp == '\0')
-		return retc;
-	  sp++;
-	} else {
-      while(*sp != '\0' && strchr("* \t", *sp) != NULL)
-        sp++;
-      if (*sp != '\0' && strchr("tT", *sp) != NULL) {
-		/* a T */
-        sp++;
-        if (*sp != '\0' && strchr("+-", *sp))
-		  fac *= tt[0];
-	    else if ((i = atoi(sp)) <= 4 && i >= 0)
-          fac *= tt[i];
-	  } else {
-        /* a number */
-        if (atof(sp) != 0 || *sp == '0')
-          fac *= atof(sp);
-	  }
-      while (*sp != '\0' && strchr("0123456789.", *sp))
-	    sp++;
-	}
-	z++;
-  }
-  return retc;	/* there have been additional terms */
 }
