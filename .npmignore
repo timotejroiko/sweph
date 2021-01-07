@@ -1,0 +1,9 @@
+.vscode
+build
+deps/release
+deps/swisseph.sln
+deps/swisseph.vcxproj
+deps/swisseph.vcxproj.filters
+.eslintrc.json
+.gitattributes
+.gitignore

@@ -3,7 +3,7 @@
 		{
 			"target_name": "sweph",
 			"sources": [
-				"<(module_root_dir)/src/sweph.cc"
+				"<(module_root_dir)/src/*.cpp"
 			],
 			"include_dirs": [
 				"<(module_root_dir)/node_modules/node-addon-api"

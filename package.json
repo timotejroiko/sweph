@@ -2,13 +2,17 @@
   "name": "sweph",
   "version": "1.0.0",
   "description": "swiss ephemeris bindings for node.js",
-  "main": "src/sweph.js",
+  "main": "index.js",
   "scripts": {
+    "install": "node-gyp rebuild -j max",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "node-addon-api": "*"
   },
   "author": "Timotej Valentin Rojko",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.16.0"
+  }
 }
