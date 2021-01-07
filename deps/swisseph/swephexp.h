@@ -28,7 +28,7 @@
   Swiss Ephemeris is distributed with NO WARRANTY OF ANY KIND.  No author
   or distributor accepts any responsibility for the consequences of using it,
   or for whether it serves any particular purpose or works at all, unless he
-  or she says so in writing. 
+  or she says so in writing.  
 
   Swiss Ephemeris is made available by its authors under a dual licensing
   system. The software developer, who uses any part of Swiss Ephemeris
@@ -213,8 +213,8 @@ extern "C" {
                                       * 1962 - today to 0.002 arcsec. */
 #define SEFLG_JPLHOR	SEFLG_DPSIDEPS_1980
 #define SEFLG_JPLHOR_APPROX	(512*1024)   /* approximate JPL Horizons 1962 - today */
-#define SEFLG_CENTER_BODY	(1024*1024)  /* calculate position of center of body of 
-                                                planet, not barycenter of its system */
+#define SEFLG_CENTER_BODY	(1024*1024)  /* calculate position of center of body (COB)
+                                                of planet, not barycenter of its system */
 #define SEFLG_TEST_PLMOON	(2*1024*1024 | SEFLG_J2000 | SEFLG_ICRS | SEFLG_HELCTR | SEFLG_TRUEPOS)  /* test raw data in files sepm9* */
 
 
@@ -478,7 +478,7 @@ extern "C" {
 /* for swe_set_tid_acc() and ephemeris-dependent delta t:
  * intrinsic tidal acceleration in the mean motion of the moon,
  * not given in the parameters list of the ephemeris files but computed
- * by Chapront/Chapront-Touze/Francou A&A 387 (2002), p. 705.
+ * by Chapront/Chapront-Touzé/Francou A&A 387 (2002), p. 705.
  */
 #define SE_TIDAL_DE200          (-23.8946)
 #define SE_TIDAL_DE403          (-25.580)  /* was (-25.8) until V. 1.76.2 */
@@ -488,7 +488,7 @@ extern "C" {
 #define SE_TIDAL_DE421          (-25.85)   /* JPL Interoffice Memorandum 14-mar-2008 on DE421 Lunar Orbit */
 #define SE_TIDAL_DE422          (-25.85)   /* JPL Interoffice Memorandum 14-mar-2008 on DE421 (sic!) Lunar Orbit */
 #define SE_TIDAL_DE430          (-25.82)   /* JPL Interoffice Memorandum 9-jul-2013 on DE430 Lunar Orbit */
-#define SE_TIDAL_DE431          (-25.80)   /* IPN Progress Report 42-196, February 15, 2014, p. 15; was (-25.82) in V. 2.00.00 */
+#define SE_TIDAL_DE431          (-25.80)   /* IPN Progress Report 42-196 • February 15, 2014, p. 15; was (-25.82) in V. 2.00.00 */
 #define SE_TIDAL_26             (-26.0)
 #define SE_TIDAL_STEPHENSON_2016             (-25.85)
 #define SE_TIDAL_DEFAULT        SE_TIDAL_DE431
@@ -755,6 +755,7 @@ ext_def(double) swe_get_ayanamsa_ut(double tjd_ut);
 
 
 ext_def(const char *) swe_get_ayanamsa_name(int32 isidmode);
+ext_def(const char *) swe_get_current_file_data(int ifno, double *tfstart, double *tfend, int *denum);
 
 /*ext_def(void) swe_set_timeout(int32 tsec);*/
 
@@ -1004,19 +1005,6 @@ ext_def( char *) swe_cs2timestr(CSEC t, int sep, AS_BOOL suppressZero, char *a);
 ext_def( char *) swe_cs2lonlatstr(CSEC t, char pchar, char mchar, char *s);
 
 ext_def( char *) swe_cs2degstr(CSEC t, char *a);
-
-/******************************************************* 
- * Custom functions by Timotej Rojko
- ********************************************************/
-
-/* Fixed stars from elements */
-ext_def( int32 ) swe_fixstar3(char *star, char *srecord, double tjd, int32 iflag, double *xx, char *serr);
-
-/* Object from elements */
-ext_def( int32 ) swe_calc_elem(
-        double tjd, char *elem, int32 iflag, 
-        double *xx,
-        char *serr);
 
 #endif  /* #ifndef _SWEDLL_H */
 

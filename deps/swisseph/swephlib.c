@@ -464,7 +464,7 @@ double swi_dot_prod_unit(double *x, double *y)
   return dop;
 }
 
-/* functions for precession and ecliptic obliquity according to Vondrak et alii, 2011 */
+/* functions for precession and ecliptic obliquity according to Vondrák et alii, 2011 */
 #define AS2R (DEGTORAD / 3600.0)
 #define D2PI TWOPI
 #define EPS0 (84381.406 * AS2R)
@@ -976,7 +976,7 @@ double swi_epsiln(double J, int32 iflag)
  * Vondrak 2011 by Dieter Koch.
  *
  * SEMOD_PREC_VONDRAK_2011 
- * J. Vondrak, N. Capitaine, and P. Wallace, "New precession expressions,
+ * J. Vondrák, N. Capitaine, and P. Wallace, "New precession expressions,
  * valid for long time intervals", A&A 534, A22 (2011)
  *
  * SEMOD_PREC_IAU_2006 
@@ -3951,7 +3951,7 @@ static void split_deg_nakshatra(double ddeg, int32 roundflag, int32 *ideg, int32
     *inak = -1;
     ddeg = 0;
   }
-  // Sheoran "Vedic" ayanamsha: 0 Aries = 3:20 Ashvini
+  // Sheoran "Vedic" ayanamsha: 0 Aries = 3°20 Ashvini
   if ((swed.sidd.sid_mode & SE_SIDM_TRUE_SHEORAN) == SE_SIDM_TRUE_SHEORAN)
     ddeg = swe_degnorm(ddeg + 3.33333333333333);
   if (roundflag & SE_SPLIT_DEG_ROUND_DEG) {
@@ -3995,10 +3995,10 @@ static void split_deg_nakshatra(double ddeg, int32 roundflag, int32 *ideg, int32
 # define SE_SPLIT_DEG_NAKSHATRA 1024   * split into nakshatras *
 # define SE_SPLIT_DEG_KEEP_SIGN   16   * don't round to next zodiac sign,
                                        * e.g. 29.9999998 will be rounded
-				       * to 29:59'59" (or 29:59' or 29) * 
+				       * to 29°59'59" (or 29°59' or 29°) * 
 				       * or next nakshatra:
                                        * e.g. 13.3333332 will be rounded
-				       * to 13:19'59" (or 13:19' or 13) * 
+				       * to 13°19'59" (or 13°19' or 13°) * 
 # define SE_SPLIT_DEG_KEEP_DEG    32   * don't round to next degree
                                        * e.g. 10.9999999 will be rounded
 				       * to 10d59'59" (or 10d59' or 10d) * 
@@ -4039,7 +4039,7 @@ void CALL_CONV swe_split_deg(double ddeg, int32 roundflag, int32 *ideg, int32 *i
   ddeg += dadd;
   if (roundflag & SE_SPLIT_DEG_ZODIACAL) {
     *isgn = (int32) (ddeg / 30);
-    if (*isgn == 12) // 360 = 0
+    if (*isgn == 12) // 360° = 0°
       *isgn = 0;
     ddeg = fmod(ddeg, 30);
   }
@@ -4276,7 +4276,7 @@ static void get_precession_model(int precmod, int32 iflag, char *s)
       strcpy(s, "Newcomb 1895");
       break;
     case SEMOD_PREC_VONDRAK_2011:
-      strcpy(s, "Vondrak 2011");
+      strcpy(s, "Vondrák 2011");
       break;
     default:
       break;

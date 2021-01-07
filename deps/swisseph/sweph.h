@@ -62,7 +62,7 @@
  * move over from swephexp.h
  */
 
-#define SE_VERSION      "2.09.03" 
+#define SE_VERSION      "2.10" 
 
 #define J2000           2451545.0  	/* 2000 January 1.5 */
 #define B1950           2433282.42345905  	/* 1950 January 0.923 */
@@ -850,9 +850,3 @@ struct swe_data {
 };
 
 extern TLS struct swe_data swed;
-
-/******************************************************* 
- * Custom functions by Timotej Rojko
- ********************************************************/
-
-extern int swi_osc_el_plan_elem(double tjd, double *xp, char *elem, int ipli, double *xearth, double *xsun, char *serr);

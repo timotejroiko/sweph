@@ -7,8 +7,10 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports.Set(Napi::String::New(env, "set_jpl_file"), Napi::Function::New(env, sweph_set_jpl_file));
 	exports.Set(Napi::String::New(env, "get_library_path"), Napi::Function::New(env, sweph_get_library_path));
 	exports.Set(Napi::String::New(env, "get_planet_name"), Napi::Function::New(env, sweph_get_planet_name));
+	exports.Set(Napi::String::New(env, "get_current_file_data"), Napi::Function::New(env, sweph_get_current_file_data));
 	exports.Set(Napi::String::New(env, "calc"), Napi::Function::New(env, sweph_calc));
 	exports.Set(Napi::String::New(env, "calc_ut"), Napi::Function::New(env, sweph_calc_ut));
+	exports.Set(Napi::String::New(env, "calc_pctr"), Napi::Function::New(env, sweph_calc_pctr));
 	exports.Set(Napi::String::New(env, "fixstar"), Napi::Function::New(env, sweph_fixstar));
 	exports.Set(Napi::String::New(env, "fixstar_ut"), Napi::Function::New(env, sweph_fixstar_ut));
 	exports.Set(Napi::String::New(env, "fixstar_mag"), Napi::Function::New(env, sweph_fixstar_mag));
