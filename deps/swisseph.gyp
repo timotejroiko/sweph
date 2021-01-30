@@ -18,7 +18,28 @@
 				"swisseph/swemplan.c",
 				"swisseph/sweph.c",
 				"swisseph/swephlib.c"
-			]
+			],
+			"cflags": [
+				"-flto",
+				"-Ofast",
+				"-march=native",
+				"-pipe"
+			],
+			"cflags_cc": [
+				"-flto",
+				"-Ofast",
+				"-march=native",
+				"-pipe"
+			],
+			"msvs_settings": {
+				"VCCLCompilerTool": {
+					"AdditionalOptions": [
+						"/O2",
+						"/GL",
+						"/Gw"
+					]
+				},
+			}
 		}
 	]
 }
