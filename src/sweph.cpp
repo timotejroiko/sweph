@@ -2,12 +2,23 @@
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["close"] = Napi::Function::New(env, sweph_close);
-	exports["version"] = Napi::Function::New(env, sweph_version);
+	exports["set_delta_t_userdef"] = Napi::Function::New(env, sweph_set_delta_t_userdef);
 	exports["set_ephe_path"] = Napi::Function::New(env, sweph_set_ephe_path);
 	exports["set_jpl_file"] = Napi::Function::New(env, sweph_set_jpl_file);
+	exports["set_sid_mode"] = Napi::Function::New(env, sweph_set_sid_mode);
+	exports["set_tid_acc"] = Napi::Function::New(env, sweph_set_tid_acc);
+	exports["set_topo"] = Napi::Function::New(env, sweph_set_topo);
+	exports["version"] = Napi::Function::New(env, sweph_version);
 	exports["get_library_path"] = Napi::Function::New(env, sweph_get_library_path);
+	exports["get_tid_acc"] = Napi::Function::New(env, sweph_get_tid_acc);
 	exports["get_planet_name"] = Napi::Function::New(env, sweph_get_planet_name);
 	exports["get_current_file_data"] = Napi::Function::New(env, sweph_get_current_file_data);
+	exports["get_orbital_elements"] = Napi::Function::New(env, sweph_get_orbital_elements);
+	exports["get_ayanamsa_name"] = Napi::Function::New(env, sweph_get_ayanamsa_name);
+	exports["get_ayanamsa_ex_ut"] = Napi::Function::New(env, sweph_get_ayanamsa_ex_ut);
+	exports["get_ayanamsa_ex"] = Napi::Function::New(env, sweph_get_ayanamsa_ex);
+	exports["get_ayanamsa_ut"] = Napi::Function::New(env, sweph_get_ayanamsa_ut);
+	exports["get_ayanamsa"] = Napi::Function::New(env, sweph_get_ayanamsa);
 	exports["calc"] = Napi::Function::New(env, sweph_calc);
 	exports["calc_ut"] = Napi::Function::New(env, sweph_calc_ut);
 	exports["calc_pctr"] = Napi::Function::New(env, sweph_calc_pctr);
@@ -19,7 +30,6 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["fixstar2_mag"] = Napi::Function::New(env, sweph_fixstar2_mag);
 	exports["nod_aps"] = Napi::Function::New(env, sweph_nod_aps);
 	exports["nod_aps_ut"] = Napi::Function::New(env, sweph_nod_aps_ut);
-	exports["get_orbital_elements"] = Napi::Function::New(env, sweph_get_orbital_elements);
 	exports["orbit_max_min_true_distance"] = Napi::Function::New(env, sweph_orbit_max_min_true_distance);
 	exports["sol_eclipse_when_loc"] = Napi::Function::New(env, sweph_sol_eclipse_when_loc);
 	exports["sol_eclipse_when_glob"] = Napi::Function::New(env, sweph_sol_eclipse_when_glob);
@@ -54,16 +64,6 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["lat_to_lmt"] = Napi::Function::New(env, sweph_lat_to_lmt);
 	exports["deltat"] = Napi::Function::New(env, sweph_deltat);
 	exports["deltat_ex"] = Napi::Function::New(env, sweph_deltat_ex);
-	exports["get_tid_acc"] = Napi::Function::New(env, sweph_get_tid_acc);
-	exports["set_tid_acc"] = Napi::Function::New(env, sweph_set_tid_acc);
-	exports["set_delta_t_userdef"] = Napi::Function::New(env, sweph_set_delta_t_userdef);
-	exports["set_topo"] = Napi::Function::New(env, sweph_set_topo);
-	exports["set_sid_mode"] = Napi::Function::New(env, sweph_set_sid_mode);
-	exports["get_ayanamsa_name"] = Napi::Function::New(env, sweph_get_ayanamsa_name);
-	exports["get_ayanamsa_ex_ut"] = Napi::Function::New(env, sweph_get_ayanamsa_ex_ut);
-	exports["get_ayanamsa_ex"] = Napi::Function::New(env, sweph_get_ayanamsa_ex);
-	exports["get_ayanamsa_ut"] = Napi::Function::New(env, sweph_get_ayanamsa_ut);
-	exports["get_ayanamsa"] = Napi::Function::New(env, sweph_get_ayanamsa);
 	exports["house_name"] = Napi::Function::New(env, sweph_house_name);
 	exports["houses"] = Napi::Function::New(env, sweph_houses);
 	exports["houses_armc"] = Napi::Function::New(env, sweph_houses_armc);

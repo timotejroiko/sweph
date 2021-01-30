@@ -10,8 +10,8 @@
     "node-addon-api": "*"
   },
   "author": "Timotej Valentin Rojko",
-  "license": "ISC",
+  "license": "GPL-2.0",
   "devDependencies": {
-    "eslint": "^7.16.0"
+    "eslint": "^7.18.0"
   }
 }
