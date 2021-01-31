@@ -1,6 +1,6 @@
 #include <sweph.h>
 
-static std::vector<std::pair<int, std::string>> args = {
+constexpr std::pair<int, const char*> args[] = {
 	{ 1, "Expecting 1 argument: hsys" },
 	{ NUMBER, "Argument 1 should be a number - house system ID" }
 };

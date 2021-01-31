@@ -1,6 +1,6 @@
 #include <sweph.h>
 
-static std::vector<std::pair<int, std::string>> args = {
+constexpr std::pair<int, const char*> args[] = {
 	{ 4, "Expecting 4 arguments: inalt, atpress, attemp, calc_flag" },
 	{ NUMBER, "Argument 1 should be a number - altitude above horizon in degrees" },
 	{ NUMBER, "Argument 2 should be a number - atmospheric pressure in mbar/hpa" },

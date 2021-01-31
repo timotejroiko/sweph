@@ -1,0 +1,366 @@
+"use strict";
+
+exports.OK = 0;
+exports.ERR = -1;
+
+exports.SE_AUNIT_TO_KM = 149597870.700;
+exports.SE_AUNIT_TO_LIGHTYEAR = 1 / 63241.07708427;
+exports.SE_AUNIT_TO_PARSEC = 1 / 206264.8062471;
+
+exports.SE_JUL_CAL = 0;
+exports.SE_GREG_CAL = 1;
+
+exports.SE_ECL_NUT = -1;
+
+exports.SE_SUN = 0;
+exports.SE_MOON = 1;
+exports.SE_MERCURY = 2;
+exports.SE_VENUS = 3;
+exports.SE_MARS = 4;
+exports.SE_JUPITER = 5;
+exports.SE_SATURN = 6;
+exports.SE_URANUS = 7;
+exports.SE_NEPTUNE = 8;
+exports.SE_PLUTO = 9;
+exports.SE_MEAN_NODE = 10;
+exports.SE_TRUE_NODE = 11;
+exports.SE_MEAN_APOG = 12;
+exports.SE_OSCU_APOG = 13;
+exports.SE_EARTH = 14;
+exports.SE_CHIRON = 15;
+exports.SE_PHOLUS = 16;
+exports.SE_CERES = 17;
+exports.SE_PALLAS = 18;
+exports.SE_JUNO = 19;
+exports.SE_VESTA = 20;
+exports.SE_INTP_APOG = 21;
+exports.SE_INTP_PERG = 22;
+
+exports.SE_NPLANETS = 23;
+
+exports.SE_PLMOON_OFFSET = 9000;
+exports.SE_AST_OFFSET = 10000;
+exports.SE_VARUNA = exports.SE_AST_OFFSET + 20000;
+
+exports.SE_FICT_OFFSET = 40;
+exports.SE_FICT_OFFSET_1 = 39;
+exports.SE_FICT_MAX = 999;
+exports.SE_NFICT_ELEM = 15;
+
+exports.SE_COMET_OFFSET = 1000;
+
+exports.SE_NALL_NAT_POINTS = exports.SE_NPLANETS + exports.SE_NFICT_ELEM;
+
+exports.SE_CUPIDO = 40;
+exports.SE_HADES = 41;
+exports.SE_ZEUS = 42;
+exports.SE_KRONOS = 43;
+exports.SE_APOLLON = 44;
+exports.SE_ADMETOS = 45;
+exports.SE_VULKANUS = 46;
+exports.SE_POSEIDON = 47;
+exports.SE_ISIS = 48;
+exports.SE_NIBIRU = 49;
+exports.SE_HARRINGTON = 50;
+exports.SE_NEPTUNE_LEVERRIER = 51;
+exports.SE_NEPTUNE_ADAMS = 52;
+exports.SE_PLUTO_LOWELL = 53;
+exports.SE_PLUTO_PICKERING = 54;
+exports.SE_VULCAN = 55;
+exports.SE_WHITE_MOON = 56;
+exports.SE_PROSERPINA = 57;
+exports.SE_WALDEMATH = 58;
+
+exports.SE_FIXSTAR = -10;
+
+exports.SE_ASC = 0;
+exports.SE_MC = 1;
+exports.SE_ARMC = 2;
+exports.SE_VERTEX = 3;
+exports.SE_EQUASC = 4;
+exports.SE_COASC1 = 5;
+exports.SE_COASC2 = 6;
+exports.SE_POLASC = 7;
+exports.SE_NASCMC = 8;
+
+exports.SEFLG_JPLEPH = 1;
+exports.SEFLG_SWIEPH = 2;
+exports.SEFLG_MOSEPH = 4;
+
+exports.SEFLG_HELCTR = 8;
+exports.SEFLG_TRUEPOS = 16;
+exports.SEFLG_J2000 = 32;
+exports.SEFLG_NONUT = 64;
+exports.SEFLG_SPEED3 = 128;
+exports.SEFLG_SPEED = 256;
+exports.SEFLG_NOGDEFL = 512;
+exports.SEFLG_NOABERR = 1024;
+exports.SEFLG_ASTROMETRIC = exports.SEFLG_NOABERR | exports.SEFLG_NOGDEFL;
+exports.SEFLG_EQUATORIAL = 2 * 1024;
+exports.SEFLG_XYZ = 4 * 1024;
+exports.SEFLG_RADIANS = 8 * 1024;
+exports.SEFLG_BARYCTR = 16 * 1024;
+exports.SEFLG_TOPOCTR = 32 * 1024;
+exports.SEFLG_ORBEL_AA = exports.SEFLG_TOPOCTR;
+exports.SEFLG_TROPICAL = 0;
+exports.SEFLG_SIDEREAL = 64 * 1024;
+exports.SEFLG_ICRS = 128 * 1024;
+exports.SEFLG_DPSIDEPS_1980 = 256 * 1024;
+exports.SEFLG_JPLHOR = exports.SEFLG_DPSIDEPS_1980;
+exports.SEFLG_JPLHOR_APPROX = 512 * 1024;
+exports.SEFLG_CENTER_BODY = 1024 * 1024;
+exports.SEFLG_TEST_PLMOON = 2 * 1024 * 1024 | exports.SEFLG_J2000 | exports.SEFLG_ICRS | exports.SEFLG_HELCTR | exports.SEFLG_TRUEPOS;
+
+exports.SE_SIDBITS = 256;
+exports.SE_SIDBIT_ECL_T0 = 256;
+exports.SE_SIDBIT_SSY_PLANE = 512;
+exports.SE_SIDBIT_USER_UT = 1024;
+exports.SE_SIDBIT_ECL_DATE = 2048;
+exports.SE_SIDBIT_NO_PREC_OFFSET = 4096;
+exports.SE_SIDBIT_PREC_ORIG = 8192;
+
+exports.SE_SIDM_FAGAN_BRADLEY = 0;
+exports.SE_SIDM_LAHIRI = 1;
+exports.SE_SIDM_DELUCE = 2;
+exports.SE_SIDM_RAMAN = 3;
+exports.SE_SIDM_USHASHASHI = 4;
+exports.SE_SIDM_KRISHNAMURTI = 5;
+exports.SE_SIDM_DJWHAL_KHUL = 6;
+exports.SE_SIDM_YUKTESHWAR = 7;
+exports.SE_SIDM_JN_BHASIN = 8;
+exports.SE_SIDM_BABYL_KUGLER1 = 9;
+exports.SE_SIDM_BABYL_KUGLER2 = 10;
+exports.SE_SIDM_BABYL_KUGLER3 = 11;
+exports.SE_SIDM_BABYL_HUBER = 12;
+exports.SE_SIDM_BABYL_ETPSC = 13;
+exports.SE_SIDM_ALDEBARAN_15TAU = 14;
+exports.SE_SIDM_HIPPARCHOS = 15;
+exports.SE_SIDM_SASSANIAN = 16;
+exports.SE_SIDM_GALCENT_0SAG = 17;
+exports.SE_SIDM_J2000 = 18;
+exports.SE_SIDM_J1900 = 19;
+exports.SE_SIDM_B1950 = 20;
+exports.SE_SIDM_SURYASIDDHANTA = 21;
+exports.SE_SIDM_SURYASIDDHANTA_MSUN = 22;
+exports.SE_SIDM_ARYABHATA = 23;
+exports.SE_SIDM_ARYABHATA_MSUN = 24;
+exports.SE_SIDM_SS_REVATI = 25;
+exports.SE_SIDM_SS_CITRA = 26;
+exports.SE_SIDM_TRUE_CITRA = 27;
+exports.SE_SIDM_TRUE_REVATI = 28;
+exports.SE_SIDM_TRUE_PUSHYA = 29;
+exports.SE_SIDM_GALCENT_RGILBRAND = 30;
+exports.SE_SIDM_GALEQU_IAU1958 = 31;
+exports.SE_SIDM_GALEQU_TRUE = 32;
+exports.SE_SIDM_GALEQU_MULA = 33;
+exports.SE_SIDM_GALALIGN_MARDYKS = 34;
+exports.SE_SIDM_TRUE_MULA = 35;
+exports.SE_SIDM_GALCENT_MULA_WILHELM = 36;
+exports.SE_SIDM_ARYABHATA_522 = 37;
+exports.SE_SIDM_BABYL_BRITTON = 38;
+exports.SE_SIDM_TRUE_SHEORAN = 39;
+exports.SE_SIDM_GALCENT_COCHRANE = 40;
+exports.SE_SIDM_GALEQU_FIORENZA = 41;
+exports.SE_SIDM_VALENS_MOON = 42;
+exports.SE_SIDM_LAHIRI_1940 = 43;
+exports.SE_SIDM_LAHIRI_VP285 = 44;
+exports.SE_SIDM_KRISHNAMURTI_VP291 = 45;
+exports.SE_SIDM_LAHIRI_ICRC = 46;
+exports.SE_SIDM_USER = 255;
+
+exports.SE_NSIDM_PREDEF = 47;
+
+exports.SE_NODBIT_MEAN = 1;
+exports.SE_NODBIT_OSCU = 2;
+exports.SE_NODBIT_OSCU_BAR = 4;
+exports.SE_NODBIT_FOPOINT = 256;
+
+exports.SEFLG_DEFAULTEPH = exports.SEFLG_SWIEPH;
+
+exports.SE_MAX_STNAME = 256;
+
+exports.SE_ECL_CENTRAL = 1;
+exports.SE_ECL_NONCENTRAL = 2;
+exports.SE_ECL_TOTAL = 4;
+exports.SE_ECL_ANNULAR = 8;
+exports.SE_ECL_PARTIAL = 16;
+exports.SE_ECL_ANNULAR_TOTAL = 32;
+exports.SE_ECL_HYBRID = 32;
+exports.SE_ECL_PENUMBRAL = 64;
+exports.SE_ECL_ALLTYPES_SOLAR = exports.SE_ECL_CENTRAL | exports.SE_ECL_NONCENTRAL | exports.SE_ECL_TOTAL | exports.SE_ECL_ANNULAR | exports.SE_ECL_PARTIAL | exports.SE_ECL_ANNULAR_TOTAL;
+exports.SE_ECL_ALLTYPES_LUNAR = exports.SE_ECL_TOTAL | exports.SE_ECL_PARTIAL | exports.SE_ECL_PENUMBRAL;
+exports.SE_ECL_VISIBLE = 128;
+exports.SE_ECL_MAX_VISIBLE = 256;
+exports.SE_ECL_1ST_VISIBLE = 512;
+exports.SE_ECL_PARTBEG_VISIBLE = 512;
+exports.SE_ECL_2ND_VISIBLE = 1024;
+exports.SE_ECL_TOTBEG_VISIBLE = 1024;
+exports.SE_ECL_3RD_VISIBLE = 2048;
+exports.SE_ECL_TOTEND_VISIBLE = 2048;
+exports.SE_ECL_4TH_VISIBLE = 4096;
+exports.SE_ECL_PARTEND_VISIBLE = 4096;
+exports.SE_ECL_PENUMBBEG_VISIBLE = 8192;
+exports.SE_ECL_PENUMBEND_VISIBLE = 16384;
+exports.SE_ECL_OCC_BEG_DAYLIGHT = 8192;
+exports.SE_ECL_OCC_END_DAYLIGHT = 16384;
+exports.SE_ECL_ONE_TRY = 32 * 1024;
+
+exports.SE_CALC_RISE = 1;
+exports.SE_CALC_SET = 2;
+exports.SE_CALC_MTRANSIT = 4;
+exports.SE_CALC_ITRANSIT = 8;
+exports.SE_BIT_DISC_CENTER = 256;
+exports.SE_BIT_DISC_BOTTOM = 8192;
+exports.SE_BIT_GEOCTR_NO_ECL_LAT = 128;
+exports.SE_BIT_NO_REFRACTION = 512;
+exports.SE_BIT_CIVIL_TWILIGHT = 1024;
+exports.SE_BIT_NAUTIC_TWILIGHT = 2048;
+exports.SE_BIT_ASTRO_TWILIGHT = 4096;
+exports.SE_BIT_FIXED_DISC_SIZE = 16384;
+exports.SE_BIT_FORCE_SLOW_METHOD = 32768;
+exports.SE_BIT_HINDU_RISING = exports.SE_BIT_DISC_CENTER | exports.SE_BIT_NO_REFRACTION | exports.SE_BIT_GEOCTR_NO_ECL_LAT;
+
+exports.SE_ECL2HOR = 0;
+exports.SE_EQU2HOR = 1;
+exports.SE_HOR2ECL = 0;
+exports.SE_HOR2EQU = 1;
+
+exports.SE_TRUE_TO_APP = 0;
+exports.SE_APP_TO_TRUE = 1;
+
+exports.SE_DE_NUMBER = 431;
+exports.SE_FNAME_DE200 = "de200.eph";
+exports.SE_FNAME_DE403 = "de403.eph";
+exports.SE_FNAME_DE404 = "de404.eph";
+exports.SE_FNAME_DE405 = "de405.eph";
+exports.SE_FNAME_DE406 = "de406.eph";
+exports.SE_FNAME_DE431 = "de431.eph";
+exports.SE_FNAME_DFT = exports.SE_FNAME_DE431;
+exports.SE_FNAME_DFT2 = exports.SE_FNAME_DE406;
+exports.SE_STARFILE_OLD = "fixstars.cat";
+exports.SE_STARFILE = "sefstars.txt";
+exports.SE_ASTNAMFILE = "seasnam.txt";
+exports.SE_FICTFILE = "seorbel.txt";
+
+exports.SE_SPLIT_DEG_ROUND_SEC = 1;
+exports.SE_SPLIT_DEG_ROUND_MIN = 2;
+exports.SE_SPLIT_DEG_ROUND_DEG = 4;
+exports.SE_SPLIT_DEG_ZODIACAL = 8;
+exports.SE_SPLIT_DEG_NAKSHATRA = 1024;
+exports.SE_SPLIT_DEG_KEEP_SIGN = 16;
+exports.SE_SPLIT_DEG_KEEP_DEG = 32;
+
+exports.SE_HELIACAL_RISING = 1;
+exports.SE_HELIACAL_SETTING = 2;
+exports.SE_MORNING_FIRST = exports.SE_HELIACAL_RISING;
+exports.SE_EVENING_LAST = exports.SE_HELIACAL_SETTING;
+exports.SE_EVENING_FIRST = 3;
+exports.SE_MORNING_LAST = 4;
+exports.SE_ACRONYCHAL_RISING = 5;
+exports.SE_ACRONYCHAL_SETTING = 6;
+exports.SE_COSMICAL_SETTING = exports.SE_ACRONYCHAL_SETTING;
+
+exports.SE_HELFLAG_LONG_SEARCH = 128;
+exports.SE_HELFLAG_HIGH_PRECISION = 256;
+exports.SE_HELFLAG_OPTICAL_PARAMS = 512;
+exports.SE_HELFLAG_NO_DETAILS = 1024;
+exports.SE_HELFLAG_SEARCH_1_PERIOD = 1 << 11;
+exports.SE_HELFLAG_VISLIM_DARK = 1 << 12;
+exports.SE_HELFLAG_VISLIM_NOMOON = 1 << 13;
+exports.SE_HELFLAG_VISLIM_PHOTOPIC = 1 << 14;
+exports.SE_HELFLAG_VISLIM_SCOTOPIC = 1 << 15;
+exports.SE_HELFLAG_AV = 1 << 16;
+exports.SE_HELFLAG_AVKIND_VR = 1 << 16;
+exports.SE_HELFLAG_AVKIND_PTO = 1 << 17;
+exports.SE_HELFLAG_AVKIND_MIN7 = 1 << 18;
+exports.SE_HELFLAG_AVKIND_MIN9 = 1 << 19;
+exports.SE_HELFLAG_AVKIND = exports.SE_HELFLAG_AVKIND_VR | exports.SE_HELFLAG_AVKIND_PTO | exports.SE_HELFLAG_AVKIND_MIN7 | exports.SE_HELFLAG_AVKIND_MIN9;
+exports.TJD_INVALID = 99999999.0;
+exports.SIMULATE_VICTORVB = 1;
+
+exports.SE_PHOTOPIC_FLAG = 0;
+exports.SE_SCOTOPIC_FLAG = 1;
+exports.SE_MIXEDOPIC_FLAG = 2;
+
+exports.SE_TIDAL_DE200 = -23.8946;
+exports.SE_TIDAL_DE403 = -25.580;
+exports.SE_TIDAL_DE404 = -25.580;
+exports.SE_TIDAL_DE405 = -25.826;
+exports.SE_TIDAL_DE406 = -25.826;
+exports.SE_TIDAL_DE421 = -25.85;
+exports.SE_TIDAL_DE422 = -25.85;
+exports.SE_TIDAL_DE430 = -25.82;
+exports.SE_TIDAL_DE431 = -25.80;
+exports.SE_TIDAL_26 = -26.0;
+exports.SE_TIDAL_STEPHENSON_2016 = -25.85;
+exports.SE_TIDAL_DEFAULT = exports.SE_TIDAL_DE431;
+exports.SE_TIDAL_AUTOMATIC = 999999;
+exports.SE_TIDAL_MOSEPH = exports.SE_TIDAL_DE404;
+exports.SE_TIDAL_SWIEPH = exports.SE_TIDAL_DEFAULT;
+exports.SE_TIDAL_JPLEPH = exports.SE_TIDAL_DEFAULT;
+
+exports.SE_DELTAT_AUTOMATIC = -1E-10;
+
+exports.SE_MODEL_DELTAT = 0;
+exports.SE_MODEL_PREC_LONGTERM = 1;
+exports.SE_MODEL_PREC_SHORTTERM = 2;
+exports.SE_MODEL_NUT = 3;
+exports.SE_MODEL_BIAS = 4;
+exports.SE_MODEL_JPLHOR_MODE = 5;
+exports.SE_MODEL_JPLHORA_MODE = 6;
+exports.SE_MODEL_SIDT = 7;
+exports.NSE_MODELS = 8;
+
+exports.SEMOD_NPREC = 11;
+exports.SEMOD_PREC_IAU_1976 = 1;
+exports.SEMOD_PREC_LASKAR_1986 = 2;
+exports.SEMOD_PREC_WILL_EPS_LASK = 3;
+exports.SEMOD_PREC_WILLIAMS_1994 = 4;
+exports.SEMOD_PREC_SIMON_1994 = 5;
+exports.SEMOD_PREC_IAU_2000 = 6;
+exports.SEMOD_PREC_BRETAGNON_2003 = 7;
+exports.SEMOD_PREC_IAU_2006 = 8;
+exports.SEMOD_PREC_VONDRAK_2011 = 9;
+exports.SEMOD_PREC_OWEN_1990 = 10;
+exports.SEMOD_PREC_NEWCOMB = 11;
+exports.SEMOD_PREC_DEFAULT = exports.SEMOD_PREC_VONDRAK_2011;
+exports.SEMOD_PREC_DEFAULT_SHORT = exports.SEMOD_PREC_VONDRAK_2011;
+
+exports.SEMOD_NNUT = 5;
+exports.SEMOD_NUT_IAU_1980 = 1;
+exports.SEMOD_NUT_IAU_CORR_1987 = 2;
+exports.SEMOD_NUT_IAU_2000A = 3;
+exports.SEMOD_NUT_IAU_2000B = 4;
+exports.SEMOD_NUT_WOOLARD = 5;
+exports.SEMOD_NUT_DEFAULT = exports.SEMOD_NUT_IAU_2000B;
+
+exports.SEMOD_NSIDT = 4;
+exports.SEMOD_SIDT_IAU_1976 = 1;
+exports.SEMOD_SIDT_IAU_2006 = 2;
+exports.SEMOD_SIDT_IERS_CONV_2010 = 3;
+exports.SEMOD_SIDT_LONGTERM = 4;
+exports.SEMOD_SIDT_DEFAULT = exports.SEMOD_SIDT_LONGTERM;
+
+exports.SEMOD_NBIAS = 3;
+exports.SEMOD_BIAS_NONE = 1;
+exports.SEMOD_BIAS_IAU2000 = 2;
+exports.SEMOD_BIAS_IAU2006 = 3;
+exports.SEMOD_BIAS_DEFAULT = exports.SEMOD_BIAS_IAU2006;
+
+exports.SEMOD_NJPLHOR = 2;
+exports.SEMOD_JPLHOR_LONG_AGREEMENT = 1;
+exports.SEMOD_JPLHOR_DEFAULT = exports.SEMOD_JPLHOR_LONG_AGREEMENT;
+
+exports.SEMOD_NJPLHORA = 3;
+exports.SEMOD_JPLHORA_1 = 1;
+exports.SEMOD_JPLHORA_2 = 2;
+exports.SEMOD_JPLHORA_3 = 3;
+exports.SEMOD_JPLHORA_DEFAULT = exports.SEMOD_JPLHORA_3;
+
+exports.SEMOD_NDELTAT = 5;
+exports.SEMOD_DELTAT_STEPHENSON_MORRISON_1984 = 1;
+exports.SEMOD_DELTAT_STEPHENSON_1997 = 2;
+exports.SEMOD_DELTAT_STEPHENSON_MORRISON_2004 = 3;
+exports.SEMOD_DELTAT_ESPENAK_MEEUS_2006 = 4;
+exports.SEMOD_DELTAT_STEPHENSON_ETC_2016 = 5;
+exports.SEMOD_DELTAT_DEFAULT = exports.SEMOD_DELTAT_STEPHENSON_ETC_2016;

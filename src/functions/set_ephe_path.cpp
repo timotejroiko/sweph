@@ -1,6 +1,6 @@
 #include <sweph.h>
 
-static std::vector<std::pair<int, std::string>> args = {
+constexpr std::pair<int, const char*> args[] = {
 	{ 1, "Expecting 1 arguments: path" },
 	{ STRING, "Argument 1 should be a string - path to ephemeris files" }
 };

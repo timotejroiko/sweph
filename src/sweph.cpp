@@ -104,7 +104,7 @@ bool sweph_is_type(int type, Napi::Value data) {
 	}
 }
 
-bool sweph_type_check(std::vector<std::pair<int, std::string>> types, const Napi::CallbackInfo& info) {
+bool sweph_type_check(const std::pair<int, const char*> types[], const Napi::CallbackInfo& info) {
 	Napi::Env env = info.Env();
 	if(info.Length() < types[0].first) {
 		Napi::TypeError::New(env, types[0].second).ThrowAsJavaScriptException();

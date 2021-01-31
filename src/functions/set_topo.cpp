@@ -1,6 +1,6 @@
 #include <sweph.h>
 
-static std::vector<std::pair<int, std::string>> args = {
+constexpr std::pair<int, const char*> args[] = {
 	{ 3, "Expecting 3 arguments: geolon, geolat, elevation" },
 	{ NUMBER, "Argument 1 should be a number - geographical longitude" },
 	{ NUMBER, "Argument 2 should be a number - geographical latitude" },

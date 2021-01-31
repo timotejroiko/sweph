@@ -1,6 +1,6 @@
 #include <sweph.h>
 
-static std::vector<std::pair<int, std::string>> args = {
+constexpr std::pair<int, const char*> args[] = {
 	{ 5, "Expecting 5 arguments: year, month, day, hour, gregflag" },
 	{ NUMBER, "Argument 1 should be a number - full year" },
 	{ NUMBER, "Argument 2 should be a number - month 1-12" },

@@ -1,6 +1,6 @@
 #include <sweph.h>
 
-static std::vector<std::pair<int, std::string>> args = {
+constexpr std::pair<int, const char*> args[] = {
 	{ 2, "Expecting 2 arguments: xpo, eps" },
 	{ ARRAY, "Argument 1 should be an array of 3 numbers - [lon, lat, dist]" },
 	{ NUMBER, "Argument 2 should be a number - obliquity of the ecliptic in decimal degrees" }
