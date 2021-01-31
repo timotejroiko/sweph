@@ -1,6 +1,6 @@
 #include <sweph.h>
 
-std::vector<std::pair<int, std::string>> args[] = {
+constexpr std::pair<int, const char*> args[] = {
 	{ 8, "Expecting 8 arguments: tjd_ut, ipl, starname, iflag, imeth, geopos, atpress, attemp" },
 	{ NUMBER, "Argument 1 should be a number - julian day in universal time" },
 	{ NUMBER, "Argument 2 should be a number - planet ID" },

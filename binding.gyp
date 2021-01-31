@@ -4,7 +4,7 @@
 			"target_name": "sweph",
 			"sources": [
 				"src/sweph.cpp",
-				"<!@(node -p \"const { readdirSync, readFileSync, writeFileSync } = require(`fs`); const file = readdirSync(`./src/functions`).map((x,i) => readFileSync(`./src/functions/${x}`, `utf8`).replace(/args/g, `args${i}`).replace(`static`, ``).replace(`#include <sweph.h>`, ``)).reduce((a,b) => a + b,`#include <sweph.h>\\n`); writeFileSync(`./src/functions.cpp`, file, `utf8`); `src/functions.cpp`\")"
+				"<!@(node -p \"const { readdirSync, readFileSync, writeFileSync } = require(`fs`); const file = readdirSync(`./src/functions`).map((x,i) => readFileSync(`./src/functions/${x}`, `utf8`).replace(/args/g, `args${i}`).replace(`#include <sweph.h>`, ``)).reduce((a,b) => a + b,`#include <sweph.h>`); writeFileSync(`./src/functions.cpp`, file, `utf8`); `src/functions.cpp`\")"
 			],
 			"include_dirs": [
 				"<!(node -p \"require('node-addon-api').include_dir\")",
