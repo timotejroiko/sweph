@@ -38,52 +38,86 @@ declare module "sweph" {
 	export function close(): void;
 
 	/**
-	 * Set user-defined delta T
+	 * Set custom delta T
+	 * ```js
+	 * // custom delta T
+	 * sweph.set_delta_t_userdef(66.5);
+	 * // reset delta T back to auto
+	 * sweph.set_delta_t_userdef(constants.SE_DELTAT_AUTOMATIC);
+	 * ```
 	 * @param t_acc Delta T value
 	 */
 	export function set_delta_t_userdef(t_acc: number): void;
 
 	/**
 	 * Set ephemeris files location
+	 * ```js
+	 * sweph.set_ephe_path("./ephemeris");
+	 * ```
 	 * @param path Path to ephemeris files
 	 */
 	export function set_ephe_path(path: string): void;
 
 	/**
-	 * Set JPL file location
-	 * @param file Path to JPL file
+	 * Set JPL file. File must be placed in the ephemeris files location
+	 * ```js
+	 * sweph.set_jpl_file("de405.eph");
+	 * ```
+	 * @param file JPL file name
 	 */
 	export function set_jpl_file(file: string): void;
 
 	/**
-	 * Set ayanamsa for sidereal mode
+	 * Set ayanamsa for sidereal mode  
+	 * For predefined ayanamsas, set second and third parameters to 0  
+	 * ```js
+	 * // set ayanamsa to Lahiri
+	 * sweph.set_sid_mode(constants.SE_SIDM_LAHIRI,0,0)
+	 * // define custom ayanamsa as 25 degrees at J2000
+	 * sweph.set_sid_mode(constants.SE_SIDM_USER,2451545,25)
+	 * ```
 	 * @param sid_mode Ayanamsa ID
-	 * @param t0 Reference date for custom ayanamsas
-	 * @param ayan_t0 Initial value for custom ayanamsas
+	 * @param t0 Reference date in jd_ut for custom ayanamsas
+	 * @param ayan_t0 Initial value in degrees for custom ayanamsas
 	 */
 	export function set_sid_mode(sid_mode: number, t0: number, ayan_t0: number): void;
 
 	/**
-	 * Set user-defined tidal acceleration
+	 * Set custom tidal acceleration
+	 * ```js
+	 * // set custom value
+	 * sweph.set_tid_acc(25.90);
+	 * // set predefined value
+	 * sweph.set_tid_acc(constants.SE_TIDAL_DE403);
+	 * // reset to auto
+	 * sweph.set_tid_acc(constants.SE_TIDAL_AUTOMATIC);
+	 * ```
 	 * @param t_acc tidal acceleration value
 	 */
 	export function set_tid_acc(t_acc: number): void;
 
 	/**
 	 * Set geographic coordinates for topocentric mode
-	 * @param geolon Geographic longitude
-	 * @param geolat Geographic latitude
-	 * @param elevation Elevation
+	 * ```js
+	 * // set observer to 124'30E, 23'30N, 1250 meters above sea level;
+	 * sweph.set_topo(124.5, 23.5, 1250);
+	 * ```
+	 * @param geolon Geographic longitude in decimal degrees
+	 * @param geolat Geographic latitude in decimal degrees
+	 * @param elevation Elevation in meters
 	 */
 	export function set_topo(geolon: number, geolat: number, elevation: number): void;
 
 	/**
-	 * Get swisseph version
+	 * Get Swiss Ephemeris version
+	 * ```js
+	 * let version = sweph.version(); // "2.10"
+	 * ```
 	 */
 	export function version(): string;
 
 	/**
-	 * Get library path
+	 * Get library path (returns the location of node.exe);
 	 */
 	export function get_library_path(): string;
 
@@ -94,9 +128,62 @@ declare module "sweph" {
 
 	/**
 	 * Get the name of a planet or object
+	 * ```js
+	 * let name = sweph.get_planet_name(constants.SE_MOON); // "Moon"
+	 * ```
 	 * @param ipl Object ID
 	 */
 	export function get_planet_name(ipl: number): string;
+
+	export function get_current_file_data(ifno: number): {
+		path: string;
+		start: number;
+		end: number;
+		denum: number;
+	};
+
+	export function get_orbital_elements(tjd_et: number, ipl: number, iflag: number): {
+		flag: number;
+		error: string;
+		data: [
+			semimajor_axis_a: number,
+			eccentricity_e: number,
+			inclination_in: number,
+			longitude_ascending_node_OM: number,
+			argument_periapsis_om: number,
+			longitude_periapsis_peri: number,
+			mean_anomaly_epoch_M0: number,
+			true_anomaly_epoch_N0: number,
+			eccentric_anomaly_epoch_E0: number,
+			mean_longitude_epoch_LM: number,
+			sidereal_orbital_period_tropical_years: number,
+			mean_daily_motion: number,
+			tropical_period_years: number,
+			synodic_period_days: number,
+			negative_inner_planet: number,
+			time_perihelion_passage: number,
+			perihelion_distance: number,
+			aphelion_distance: number
+		]
+	};
+
+	export function get_ayanamsa_ex_ut(tjd_ut: number, ephe_flag: number): {
+		flag: number;
+		error: number;
+		data: number;
+	}
+
+	export function get_ayanamsa_ex(tjd_et: number, ephe_flag: number): {
+		flag: number;
+		error: number;
+		data: number;
+	}
+
+	export function get_ayanamsa_ut(tjd_ut: number): number;
+
+	export function get_ayanamsa(tjd_et: number): number;
+
+	export function get_ayanamsa_name(aya: number): string;
 
 	/**
 	 * Swisseph Constants
