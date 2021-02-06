@@ -3,7 +3,9 @@
  * Definitive Swiss Ephemeris bindings for Node.js
  *
  * [Official documentation for the Swiss Ephemeris](https://www.astro.com/swisseph/swephprg.htm)
+ *
  * [Sweph on Github](https://github.com/timotejroiko/sweph)
+ *
  * [Sweph on NPM](http://npm.com/package/sweph)
  *
  * ### Usage Example
