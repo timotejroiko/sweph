@@ -167,13 +167,6 @@ declare module 'sweph' {
   ): void;
 
   /**
-   * Get Swiss Ephemeris version
-   * ```js
-   * let version = sweph.version(); // "2.10"
-   * ```
-   */
-
-  /**
    * ### Description
    * Get Swiss Ephemeris version
    *
@@ -186,11 +179,6 @@ declare module 'sweph' {
    */
 
   export function version(): string;
-
-  /**
-   * Get library path (returns the location of node.exe);
-   */
-
   /**
    * ### Description
    * Get library path (returns the location of node.exe)
@@ -206,10 +194,6 @@ declare module 'sweph' {
   export function get_library_path(): string;
 
   /**
-   * Get tidal acceleration value
-   */
-
-  /**
    * ### Description
    * Get tidal acceleration value
    *
@@ -222,14 +206,6 @@ declare module 'sweph' {
    */
 
   export function get_tid_acc(): number;
-
-  /**
-   * Get the name of a planet or object
-   * ```js
-   * let name = sweph.get_planet_name(constants.SE_MOON); // "Moon"
-   * ```
-   * @param ipl Object ID
-   */
 
   /**
    * ### Description
@@ -256,13 +232,13 @@ declare module 'sweph' {
    * ### Returns
    * {
    *
-   * 	 path: string;
+   * 		path: string;
    *
-   * 	 start: number;
+   * 		start: number;
    *
-   *      end: number;
+   * 		end: number;
    *
-   *  	denum: number;
+   * 		denum: number;
    *
    * }
    * ### Example
@@ -299,41 +275,41 @@ declare module 'sweph' {
    *
    *	 data: [
    *
-   * 		  semimajor_axis_a: number,
+   * 		semimajor_axis_a: number,
    *
-   * 		  eccentricity_e: number,
+   * 		eccentricity_e: number,
    *
-   * 		  inclination_in: number,
+   * 		inclination_in: number,
    *
-   * 		  longitude_ascending_node_OM: number,
+   * 		longitude_ascending_node_OM: number,
    *
-   * 		  argument_periapsis_om: number,
+   * 		argument_periapsis_om: number,
    *
-   *  		 longitude_periapsis_peri: number,
+   * 		longitude_periapsis_peri: number,
    *
-   *  		 mean_anomaly_epoch_M0: number,
+   * 		mean_anomaly_epoch_M0: number,
    *
-   *  		 true_anomaly_epoch_N0: number,
+   * 		true_anomaly_epoch_N0: number,
    *
-   *  		 eccentric_anomaly_epoch_E0: number,
+   * 		eccentric_anomaly_epoch_E0: number,
    *
-   *   		mean_longitude_epoch_LM: number,
+   * 		mean_longitude_epoch_LM: number,
    *
-   *  		 sidereal_orbital_period_tropical_years: number,
+   * 		sidereal_orbital_period_tropical_years: number,
    *
-   *  		 mean_daily_motion: number,
+   * 		mean_daily_motion: number,
    *
-   *  		 tropical_period_years: number,
+   * 		tropical_period_years: number,
    *
-   *  		 synodic_period_days: number,
+   * 		synodic_period_days: number,
    *
-   *  		 negative_inner_planet: number,
+   * 		negative_inner_planet: number,
    *
-   *  		 time_perihelion_passage: number,
+   * 		time_perihelion_passage: number,
    *
-   *  		 perihelion_distance: number,
+   * 		perihelion_distance: number,
    *
-   *  		 aphelion_distance: number
+   * 		aphelion_distance: number
    *
    * 		];
    *
