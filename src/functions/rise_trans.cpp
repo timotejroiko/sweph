@@ -23,8 +23,8 @@ Napi::Value sweph_rise_trans(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double ret;
-	char serr [SE_MAX_STNAME];
-	int flag = swe_rise_trans(
+	char serr [AS_MAXCH];
+	int32 flag = swe_rise_trans(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].IsString() ? (char*)info[2].As<Napi::String>().Utf8Value().c_str() : NULL,

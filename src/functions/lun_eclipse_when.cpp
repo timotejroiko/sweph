@@ -14,8 +14,8 @@ Napi::Value sweph_lun_eclipse_when(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double ret [10];
-	char serr [SE_MAX_STNAME];
-	int flag = swe_lun_eclipse_when(
+	char serr [AS_MAXCH];
+	int32 flag = swe_lun_eclipse_when(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].As<Napi::Number>().Int32Value(),

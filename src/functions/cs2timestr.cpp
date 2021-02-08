@@ -12,7 +12,7 @@ Napi::Value sweph_cs2timestr(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return env.Null();
 	}
-	char out [SE_MAX_STNAME];
+	char out [AS_MAXCH];
 	swe_cs2timestr(
 		info[0].As<Napi::Number>().Int32Value(),
 		int(info[1].As<Napi::String>().Utf8Value()[0]),

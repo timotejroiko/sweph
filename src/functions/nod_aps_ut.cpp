@@ -17,8 +17,8 @@ Napi::Value sweph_nod_aps_ut(const Napi::CallbackInfo& info) {
 	double dsc [6];
 	double per [6];
 	double aph [6];
-	char serr [SE_MAX_STNAME];
-	int flag = swe_nod_aps_ut(
+	char serr [AS_MAXCH];
+	int32 flag = swe_nod_aps_ut(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].As<Napi::Number>().Int32Value(),

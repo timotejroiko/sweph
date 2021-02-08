@@ -23,8 +23,8 @@ Napi::Value sweph_gauquelin_sector(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double sect;
-	char serr [SE_MAX_STNAME];
-	int flag = swe_gauquelin_sector(
+	char serr [AS_MAXCH];
+	int32 flag = swe_gauquelin_sector(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].IsString() ? (char*)info[2].As<Napi::String>().Utf8Value().c_str() : NULL,

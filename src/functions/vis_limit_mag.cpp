@@ -30,9 +30,9 @@ Napi::Value sweph_vis_limit_mag(const Napi::CallbackInfo& info) {
 		Napi::TypeError::New(env, args[4].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}
-	char serr [SE_MAX_STNAME];
+	char serr [AS_MAXCH];
 	double ret [8];
-	int flag = swe_vis_limit_mag(
+	int32 flag = swe_vis_limit_mag(
 		info[0].As<Napi::Number>().DoubleValue(),
 		dgeo,
 		datm,

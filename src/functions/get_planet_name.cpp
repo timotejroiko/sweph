@@ -10,7 +10,7 @@ Napi::Value sweph_get_planet_name(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return env.Null();
 	}
-	char planet [SE_MAX_STNAME];
+	char planet [AS_MAXCH];
 	swe_get_planet_name(
 		info[0].As<Napi::Number>().Int32Value(),
 		planet

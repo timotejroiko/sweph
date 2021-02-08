@@ -18,8 +18,8 @@ Napi::Value sweph_sol_eclipse_how(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double attr [20];
-	char serr [SE_MAX_STNAME];
-	int flag = swe_sol_eclipse_how(
+	char serr [AS_MAXCH];
+	int32 flag = swe_sol_eclipse_how(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
 		geopos,

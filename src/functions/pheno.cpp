@@ -13,8 +13,8 @@ Napi::Value sweph_pheno(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double attr [20];
-	char serr [SE_MAX_STNAME];
-	int flag = swe_pheno(
+	char serr [AS_MAXCH];
+	int32 flag = swe_pheno(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].As<Napi::Number>().Int32Value(),

@@ -13,8 +13,8 @@ Napi::Value sweph_fixstar2_ut(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double xx [6];
-	char serr [SE_MAX_STNAME];
-	long flag = swe_fixstar2_ut(
+	char serr [AS_MAXCH];
+	int32 flag = swe_fixstar2_ut(
 		(char*)info[0].As<Napi::String>().Utf8Value().c_str(),
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].As<Napi::Number>().Int32Value(),

@@ -19,13 +19,11 @@
 			"cflags": [
 				"-flto",
 				"-Ofast",
-				"-march=native",
 				"-pipe"
 			],
 			"cflags_cc": [
 				"-flto",
 				"-Ofast",
-				"-march=native",
 				"-pipe"
 			],
 			"msvs_settings": {

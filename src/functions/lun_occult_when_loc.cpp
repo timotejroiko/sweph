@@ -22,8 +22,8 @@ Napi::Value sweph_lun_occult_when_loc(const Napi::CallbackInfo& info) {
 	}
 	double ret [10];
 	double attr [20];
-	char serr [SE_MAX_STNAME];
-	int flag = swe_lun_occult_when_loc(
+	char serr [AS_MAXCH];
+	int32 flag = swe_lun_occult_when_loc(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].IsString() ? (char*)info[2].As<Napi::String>().Utf8Value().c_str() : NULL,

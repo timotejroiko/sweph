@@ -12,8 +12,8 @@ Napi::Value sweph_get_ayanamsa_ex(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double aya;
-	char serr [SE_MAX_STNAME];
-	int flag = swe_get_ayanamsa_ex(
+	char serr [AS_MAXCH];
+	int32 flag = swe_get_ayanamsa_ex(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
 		&aya,

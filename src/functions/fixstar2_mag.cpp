@@ -11,8 +11,8 @@ Napi::Value sweph_fixstar2_mag(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double mag;
-	char serr [SE_MAX_STNAME];
-	long flag = swe_fixstar2_mag(
+	char serr [AS_MAXCH];
+	int32 flag = swe_fixstar2_mag(
 		(char*)info[0].As<Napi::String>().Utf8Value().c_str(),
 		&mag,
 		serr

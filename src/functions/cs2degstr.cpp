@@ -10,7 +10,7 @@ Napi::Value sweph_cs2degstr(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return env.Null();
 	}
-	char out [SE_MAX_STNAME];
+	char out [AS_MAXCH];
 	swe_cs2degstr(
 		info[0].As<Napi::Number>().Int32Value(),
 		out

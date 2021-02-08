@@ -11,7 +11,7 @@ Napi::Value sweph_difcsn(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return env.Null();
 	}
-	int dif = swe_difcsn(
+	int32 dif = swe_difcsn(
 		info[0].As<Napi::Number>().Int32Value(),
 		info[1].As<Napi::Number>().Int32Value()
 	);

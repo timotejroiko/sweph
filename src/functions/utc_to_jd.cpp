@@ -17,8 +17,8 @@ Napi::Value sweph_utc_to_jd(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double ret [2];
-	char serr [SE_MAX_STNAME];
-	int flag = swe_utc_to_jd(
+	char serr [AS_MAXCH];
+	int32 flag = swe_utc_to_jd(
 		info[0].As<Napi::Number>().Int32Value(),
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].As<Napi::Number>().Int32Value(),
