@@ -3,7 +3,7 @@
 constexpr std::pair<int, const char*> args[] = {
 	{ 6, "Expecting 6 arguments: tjd_ut, calc_flag, geopos, atpress, attemp, xin" },
 	{ NUMBER, "Argument 1 should be a number - julian day in universal time" },
-	{ NUMBER, "Argument 2 should be a number - calculation flag, 0 for ECL2HOR, 1 for EQU2HOR" },
+	{ NUMBER, "Argument 2 should be a number - calculation flag, 0 for SE_ECL2HOR, 1 for SE_EQU2HOR" },
 	{ ARRAY, "Argument 3 should be an array of 3 numbers - geographic coordinates [longitude, latitude, elevation]" },
 	{ NUMBER, "Argument 4 should be a number - atmospheric pressure in mbar/hpa" },
 	{ NUMBER, "Argument 5 should be a number - atmospheric temperature in celsius" },

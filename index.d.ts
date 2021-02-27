@@ -33,8 +33,9 @@ declare module "sweph" {
 		/**
 		 * ### Description
 		 * Status flag returned by the function  
-		 * Use it to check if the function succeeded, failed or if any parameter was modified  
-		 * &nbsp;
+		 * Use it to check if the function succeeded, failed, or if any parameter was modified  
+		 * ```
+		 * ```
 		 */
 		flag: number;
 	}
@@ -44,7 +45,8 @@ declare module "sweph" {
 		 * ### Description
 		 * Error message  
 		 * An error message will be available here when the flag indicates failure  
-		 * &nbsp;
+		 * ```
+		 * ```
 		 */
 		error: string;
 	}
@@ -53,34 +55,39 @@ declare module "sweph" {
 		/**
 		 * ### Description
 		 * Path to ephemeris file  
-		 * &nbsp;
+		 * ```
+		 * ```
 		 */
 		path: string;
 		/**
 		 * ### Description
 		 * Ephemeris start date for this file  
-		 * &nbsp;
+		 * ```
+		 * ```
 		 */
 		start: number;
 		/**
 		 * ### Description
 		 * Ephemeris end date for this file  
-		 * &nbsp;
+		 * ```
+		 * ```
 		 */
 		end: number;
 		/**
 		 * ### Description
 		 * JPL ephemeris version used to generate the file  
-		 * &nbsp;
+		 * ```
+		 * ```
 		 */
 		denum: number;
-	};
+	}
 
 	interface GetOrbitalElements extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of orbital/kepler elements  
-		 * &nbsp;
+		 * ```
+		 * ```
 		 */
 		data: [
 			/**
@@ -154,6 +161,250 @@ declare module "sweph" {
 			aphelion_distance: number
 		]
 	}
+
+	interface Calc extends Error, Flag {
+		/**
+		 * ### Description
+		 * Array of values returned by the calculation  
+		 * By default the values are in ecliptic coordinates (longitude, latitude, distance)  
+		 * If `SEFLG_SPEED` or `SEFLG_SPEED3` are used, the daily speeds for each value are also retured, otherwise they are 0  
+		 * If `SEFLG_EQUATORIAL` is used, the values are in equatorial coordinates instead (right ascension, declination, distance)  
+		 * If `SELFG_XYZ` is used, the values are in cartesian coordinates instead (X, Y, Z)  
+		 * If target object ID is `SE_ECL_NUT`, then the values will contain obliquity and nutation data instead  
+		 * ```
+		 * ```
+		 */
+		data: [
+			/**
+			 * (`λ`) Ecliptic longitude  
+			 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
+			 * (`x`) Cartesian X if `SEFLG_XYZ`  
+			 * (`ε`) True obliquity of the ecliptic if object ID is `SE_ECL_NUT`
+			 */
+			lon: number,
+			/**
+			 * (`β`) Ecliptic latitude  
+			 * (`δ`) Equatorial declination if `SEFLG_EQUATORIAL`  
+			 * (`y`) Cartesian Y if `SEFLG_XYZ`  
+			 * (`ε`) Mean obliquity of the ecliptic if object ID is `SE_ECL_NUT`
+			 */
+			lat: number,
+			/**
+			 * (`au`) Distance in AU  
+			 * (`z`) Cartesian Z if `SEFLG_XYZ`  
+			 * (`Δψ`) Nutation in longitude if oject ID is `SE_ECL_NUT`
+			 */
+			dist: number,
+			/**
+			 * (`λs`) Ecliptic longitude daily speed  
+			 * (`αs`) Equatorial right ascension daily speed if `SEFLG_EQUATORIAL`  
+			 * (`xs`) Cartesian daily speed if `SEFLG_XYZ`  
+			 * (`Δε`) Nutation in obliquity if oject ID is `SE_ECL_NUT`
+			 */
+			lonSpd: number,
+			/**
+			 * (`βs`) Ecliptic latitude daily speed  
+			 * (`δs`) Equatorial declination daily speed if `SEFLG_EQUATORIAL`  
+			 * (`ys`) Cartesian Y daily speed if `SEFLG_XYZ` 
+			 */
+			latSpd: number,
+			/**
+			 * (`aus`) Distance daily speed in AU  
+			 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`  
+			 */
+			distSpd: number
+		]
+	}
+
+	type AzaltRev = [
+		/**
+		 * (λ) Ecliptic longitude if ECL  
+		 * (α) Equatorial right ascension if EQU
+		 */
+		λ_or_α: number,
+		/**
+		 * (β) Ecliptic latitude if ECL  
+		 * (δ) Equatorial declination if EQU
+		 */
+		β_or_δ: number
+	]
+
+	type Azalt = [
+		/**
+		 * Azimuth
+		 */
+		az: number,
+		/**
+		 * True altitude
+		 */
+		alt: number,
+		/**
+		 * Apparent altitude (with refraction)
+		 */
+		ap: number
+	]
+
+	/**
+	 * ### Description
+	 * Transform horizontal coordinates into ecliptic or equatorial coordinates based on the observer's location
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • calc_flag: number // Calculation flag, SE_HOR2ECL or SE_HOR2EQU
+	 * • geopos: array[3] // Geographic coordinates [longitude, latitude, elevation]
+	 * • xin: array[2] // Horizontal coordinates [azimuth, true altitude]
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number [
+	 *   λ_or_α, // (λ) Ecliptic longitude if ECL, (α) Equatorial right ascension if EQU
+	 *   β_or_δ // (β) Ecliptic latitude if ECL, (δ) Equatorial declination if EQU
+	 * ]
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = azalt_rev(2314234, constants.SE_HOR2ECL, [34, 40, 0], [75, 67]);
+	 * ```
+	 * &nbsp;
+	 */
+	export function azalt_rev(tjd_ut: number, calc_flag: number, geopos: [longitude: number, latitude: number, elevation: number], xin: [azimuth: number, true_altitude: number]): AzaltRev;
+
+	/**
+	 * ### Description
+	 * Transform ecliptic or equatorial coordinates into horizontal coordinates based on the observer's location
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • calc_flag: number // Calculation flag, SE_HOR2ECL or SE_HOR2EQU
+	 * • geopos: array[3] // Geographic coordinates [longitude, latitude, elevation]
+	 * • atpress: number // Atmospheric pressure in mbar/hpa
+	 * • attemp: number // Atmospheric temperature in celcius
+	 * • xin: array[3] // Ecliptic or equatorial coordinates [lon/ra, lat/dec, distance]
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number [
+	 *   az, // Azimuth
+	 *   alt, // True altitude
+	 *   ap // Apparent altitude (with refraction)
+	 * ]
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = azalt(2314234, constants.SE_ECL2HOR, [34, 40, 0], 0, 0, [75, 67, 0]);
+	 * ```
+	 * &nbsp;
+	 */
+	export function azalt(tjd_ut: number, calc_flag: number, geopos: [longitude: number, latitude: number, elevation: number], atpress: number, attemp: number, xin: [lon_or_ra: number, lat_or_dec: number, distance: number]): Azalt;
+
+	/**
+	 * ### Description
+	 * Compute planetocentric positions of planets as observed from a different planet, for example Jupiter-centric ephemerides
+	 * ### Params
+	 * ```
+	 * • tjd_et: number // Julian day in terrestrial/ephemeris time
+	 * • ipl: number // Target object ID
+	 * • iplctr: number // Center object ID
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * {
+	 *   flag: number, // Computed flags or ERR
+	 *   error: string, // Error message if ERR or if incompatible flags
+	 *   data: number [
+	 *     lon, // Longitude, right ascension, cartesian X, or true obliquity depending on the flags
+	 *     lat, // Latitude, declination, cartesian Y, or mean obliquity depending on the flags
+	 *     dist, // Distance in AU, cartesian Z or nutation in longitude depending on the flags
+	 *     lonSpd, // Daily speed for lon or nutation in obliquity depending on the flags
+	 *     latSpd, // Daily speed for lat
+	 *     distSpd, // Daily speed for dist
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED
+	 * const result = calc_pctr(2314234, constants.SE_EARTH, constants.SE_MARS, flags);
+	 * if(result.flag === constants.ERR) throw new Error(result.error)
+	 * if(result.flag !== flags) console.log(result.error)
+	 * console.log(`Longitude: ${result.data[0]}`)
+	 * ```
+	 * &nbsp;
+	 */
+	export function calc_pctr(tjd_et: number, ipl: number, iplctr: number, iflag: number): Calc;
+
+	/**
+	 * ### Description
+	 * Compute positions of planets, asteroids, lunar nodes and apogees from universal time
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ipl: number // Target object ID
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * {
+	 *   flag: number, // Computed flags or ERR
+	 *   error: string, // Error message if ERR or if incompatible flags
+	 *   data: number [
+	 *     lon, // Longitude, right ascension, cartesian X, or true obliquity depending on the flags
+	 *     lat, // Latitude, declination, cartesian Y, or mean obliquity depending on the flags
+	 *     dist, // Distance in AU, cartesian Z or nutation in longitude depending on the flags
+	 *     lonSpd, // Daily speed for lon or nutation in obliquity depending on the flags
+	 *     latSpd, // Daily speed for lat
+	 *     distSpd, // Daily speed for dist
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED
+	 * const result = calc_ut(2314234, constants.SE_MOON, flags);
+	 * if(result.flag === constants.ERR) throw new Error(result.error)
+	 * if(result.flag !== flags) console.log(result.error)
+	 * console.log(`Longitude: ${result.data[0]}`)
+	 * ```
+	 * &nbsp;
+	 */
+	export function calc_ut(tjd_ut: number, ipl: number, iflag: number): Calc;
+
+	/**
+	 * ### Description
+	 * Compute positions of planets, asteroids, lunar nodes and apogees from ephemeris time
+	 * ### Params
+	 * ```
+	 * • tjd_et: number // Julian day in terrestrial/ephemeris time
+	 * • ipl: number // Target object ID
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * {
+	 *   flag: number, // Computed flags or ERR
+	 *   error: string, // Error message if ERR or if incompatible flags
+	 *   data: number [
+	 *     lon, // Longitude, right ascension, cartesian X, or true obliquity depending on the flags
+	 *     lat, // Latitude, declination, cartesian Y, or mean obliquity depending on the flags
+	 *     dist, // Distance in AU, cartesian Z or nutation in longitude depending on the flags
+	 *     lonSpd, // Daily speed for lon or nutation in obliquity depending on the flags
+	 *     latSpd, // Daily speed for lat
+	 *     distSpd, // Daily speed for dist
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED
+	 * const result = calc(2314234, constants.SE_VENUS, flags);
+	 * if(result.flag === constants.ERR) throw new Error(result.error)
+	 * if(result.flag !== flags) console.log(result.error)
+	 * console.log(`Longitude: ${result.data[0]}`)
+	 * ```
+	 * &nbsp;
+	 */
+	export function calc(tjd_et: number, ipl: number, iflag: number): Calc;
 	
 	/**
 	 * ### Description
@@ -168,252 +419,216 @@ declare module "sweph" {
 	export function close(): void;
 
 	/**
-	 * ### Description
-	 * Set custom delta T
-	 * ### Params
-	 * ```
-	 * • t_acc: number // delta T value
-	 * ```
-	 * ### Example
-	 * ```
-	 * // custom delta T
-	 * set_delta_t_userdef(66.5);
-	 * // reset delta T back to auto
-	 * set_delta_t_userdef(constants.SE_DELTAT_AUTOMATIC);
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param xpo [lon, lat, dist, lonspd, latspd, distspd]
+	 * @param eps obliquity of the ecliptic in decimal degrees
 	 */
-	export function set_delta_t_userdef(t_acc: number): void;
+	export function cotrans_sp(xpo: [number,number,number,number,number,number], eps: number): [
+		number, number, number, number, number, number
+	]
 
 	/**
-	 * ### Description
-	 * Set ephemeris files location
-	 * ### Params
-	 * ```
-	 * • path: string // ephemeris path
-	 * ```
-	 * ### Example
-	 * ```
-	 * set_ephe_path("./ephemeris");
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param xpo [lon, lat, dist]
+	 * @param eps obliquity of the ecliptic in decimal degrees
 	 */
-	export function set_ephe_path(path: string): void;
+	export function cotrans(xpo: [number,number,number], eps: number): [
+		number, number, number
+	]
 
 	/**
-	 * ### Description
-	 * Set JPL file  
-	 * File must be placed in the ephemeris path
-	 * ### Params
-	 * ```
-	 * • file: string // JPL file name
-	 * ```
-	 * ### Example
-	 * ```
-	 * // use custom name
-	 * set_jpl_file("de405.eph");
-	 * // use predefined name
-	 * set_jpl_file(constants.SE_FNAME_DE405);
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param csec degrees in centiseconds
 	 */
-	export function set_jpl_file(file: string): void;
+	export function cs2deg(csec: number): string;
 
 	/**
-	 * ### Description
-	 * Set ayanamsa for sidereal mode  
-	 * For predefined ayanamsas, set second and third parameters to 0  
-	 * ### Params
-	 * ```
-	 * • sid_mode: number // Ayanamsa ID
-	 * • t0: number // Reference date in jd_ut for custom ayanamsas
-	 * • ayan_t0: number // Initial value in degrees for custom ayanamsas
-	 * ```
-	 * ### Example
-	 * ```
-	 * // set ayanamsa to Lahiri
-	 * set_sid_mode(constants.SE_SIDM_LAHIRI, 0, 0)
-	 * // define custom ayanamsa as 25 degrees at J2000
-	 * set_sid_mode(constants.SE_SIDM_USER, 2451545, 25)
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param csec degrees in centiseconds
+	 * @param pchar 1st delimiter character
+	 * @param mchar 2nd delimiter character
 	 */
-	export function set_sid_mode(sid_mode: number, t0: number, ayan_t0: number): void;
+	export function cs2lonlatstr(csec: number, pchar: string, mchar: string): string;
 
 	/**
-	 * ### Description
-	 * Set custom tidal acceleration
-	 * ### Params
-	 * ```
-	 * • t_acc: number // tidal acceleration value
-	 * ```
-	 * ### Example
-	 * ```
-	 * // set custom value
-	 * set_tid_acc(25.90);
-	 * // set predefined value
-	 * set_tid_acc(constants.SE_TIDAL_DE403);
-	 * // reset to auto
-	 * set_tid_acc(constants.SE_TIDAL_AUTOMATIC);
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param csec degrees in centiseconds
+	 * @param sep separator
+	 * @param supzero supress zero
 	 */
-	export function set_tid_acc(t_acc: number): void;
+	export function cs2timestr(csec: number, sep: string, supzero: boolean): string;
 
 	/**
-	 * ### Description
-	 * Set geographic coordinates for topocentric mode
-	 * ### Params
-	 * ```
-	 * • geolon: number // geographic longitude in decimal degrees
-	 * • geolat: number // geographic latitude in decimal degrees
-	 * • elevation: number // elevation in meters
-	 * ```
-	 * ### Example
-	 * ```
-	 * // set observer to 124'30E, 23'30N, 1250 meters above sea level;
-	 * set_topo(124.5, 23.5, 1250);
-	 * // call function with topocentric flag
-	 * let result = calc(2342341, constants.SE_MOON, constants.SEFLG_SWIEPH | constants.SEFLG_TOPOCTR)
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param csec degrees in centiseconds
 	 */
-	export function set_topo(geolon: number, geolat: number, elevation: number): void;
+	export function cs2norm(csec: number): number;
 
 	/**
-	 * ### Description
-	 * Get swisseh version
-	 * ### Returns
-	 * ```
-	 * string // swisseph version
-	 * ```
-	 * ### Example
-	 * ```
-	 * const version = version(); // "2.10"
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param csec degrees in centiseconds
 	 */
-	export function version(): string;
+	export function csroundsec(csec: number): number;
 
 	/**
-	 * ### Description
-	 * Get library path  
-	 * Returns the location of the node executable
-	 * ### Returns
-	 * ```
-	 * string // library path
-	 * ```
-	 * ### Example
-	 * ```
-	 * const path = get_library_path();
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param double double value
 	 */
-	export function get_library_path(): string;
+	export function d2l(double: number): number;
 
 	/**
-	 * ### Description
-	 * Get internal tidal acceleration value
-	 * ### Returns
-	 * ```
-	 * number // tidal acceleration
-	 * ```
-	 * ### Example
-	 * ```
-	 * const tidacc = get_tid_acc();
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param year 
+	 * @param month 
+	 * @param day 
+	 * @param hour 
+	 * @param calendar 
 	 */
-	export function get_tid_acc(): number;
+	export function date_conversion(year: number, month: number, day: number, hour: number, calendar: string): {
+		flag: number,
+		data: number
+	};
 
 	/**
-	 * ### Description
-	 * Get an object's name
-	 * ### Params
-	 * ```
-	 * • ipl: number // object ID
-	 * ```
-	 * ### Returns
-	 * ```
-	 * string // object's name
-	 * ```
-	 * ### Example
-	 * ```
-	 * const name = get_planet_name(constants.SE_PLUTO); // "Pluto"
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param jd julian day
 	 */
-	export function get_planet_name(ipl: number): string;
+	export function day_of_week(jd: number): number;
 
 	/**
-	 * ### Description
-	 * Get information from the last used ephemeris file
-	 * ### Params
-	 * ```
-	 * • ifno: number // file type
-	 * ```
-	 * ### Returns
-	 * ```
-	 * {
-	 *   path: string, // path to ephemeris file
-	 *   start: number, // ephemeris start date
-	 *   end: number, // ephemeris end date
-	 *   denum: number // JPL version used to generate the file
-	 * }
-	 * ```
-	 * ### Example
-	 * ```
-	 * // call calc to load the ephemeris file
-	 * calc(2342342, constants.SE_VENUS, constants.SEFLG_SWIEPH);
-	 * const fileinfo = get_current_file_data(0);
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param deg deg
 	 */
-	export function get_current_file_data(ifno: number): GetCurrentFileData;
+	export function degnorm(deg: number): number;
 
 	/**
-	 * ### Description
-	 * Get an object's orbital elements for a given date in ephemeris/terrestrial time
-	 * ### Params
-	 * ```
-	 * • tjd_et: number // Julian day in ephemeris/terrestrial time
-	 * • ipl: number // Object ID
-	 * • iflag: number // Calculation flags
-	 * ```
-	 * ### Returns
-	 * ```
-	 * {
-	 *   flag: number, // OK or ERR
-	 *   error: string, // error message if ERR
-	 *   data: number [
-	 *     a, // semimajor axis
-	 *     e, // eccentricity
-	 *     i, // inclination
-	 *     Ω, // longitude of ascending node
-	 *     ω, // argument of periapsis
-	 *     ϖ, // longitude of periapsis
-	 *     M0, // mean anomaly at epoch
-	 *     ν0, // true anomaly at epoch
-	 *     E0, // eccentric anomaly at epoch
-	 *     L0, // mean longitude at epoch
-	 *     sidereal_period, // sidereal orbital period in tropical years
-	 *     daily_motion, // mean daily motion
-	 *     tropical_period, // tropical period in years
-	 *     synodic_period, // synodic period in days
-	 *     perihelion_passage, // time of perihelion passage
-	 *     perihelion_distance, // perihelion distance
-	 *     aphelion_distance // aphelion distance
-	 *   ]
-	 * }
-	 * ```
-	 * ### Example
-	 * ```
-	 * const result = get_orbital_elements(2314234, constants.SE_MARS, constants.SEFLG_SWIEPH);
-	 * if(result.flag === constants.ERR) console.log(result.error);
-	 * ```
-	 * &nbsp;
+	 * 
+	 * @param tjd 
+	 * @param ephe 
 	 */
-	export function get_orbital_elements(tjd_et: number, ipl: number, iflag: number): GetOrbitalElements
+	export function deltat_ex(tjd: number, ephe: number): {
+		error: string,
+		data: number
+	};
+
+	/**
+	 * 
+	 * @param tjd 
+	 */
+	export function deltat(tjd: number): number;
+
+	/**
+	 * 
+	 * @param csec1 
+	 * @param csec2 
+	 */
+	export function difcs2n(csec1: number, csec2: number): number;
+
+	/**
+	 * 
+	 * @param csec1 
+	 * @param csec2 
+	 */
+	export function difcsn(csec1: number, csec2: number): number;
+
+	/**
+	 * 
+	 * @param deg1 
+	 * @param deg2 
+	 */
+	export function difdeg2n(deg1: number, deg2: number): number;
+
+	/**
+	 * 
+	 * @param deg1 
+	 * @param deg2 
+	 */
+	export function difdegn(deg1: number, deg2: number): number;
+
+	/**
+	 * 
+	 * @param star 
+	 */
+	export function fixstar_mag(star: string): {
+		error: string,
+		flag: number,
+		data: number
+	}
+
+	/**
+	 * 
+	 * @param star 
+	 * @param tjd_ut 
+	 * @param iflag 
+	 */
+	export function fixstar_ut(star: string, tjd_ut: number, iflag: number): {
+		error: string,
+		flag: number,
+		data: number[]
+	}
+
+	/**
+	 * 
+	 * @param star 
+	 * @param tjd_et 
+	 * @param iflag 
+	 */
+	export function fixstar(star: string, tjd_et: number, iflag: number): {
+		error: string,
+		flag: number,
+		data: number[]
+	}
+
+	/**
+	 * 
+	 * @param star 
+	 */
+	export function fixstar2_mag(star: string): {
+		error: string,
+		flag: number,
+		data: number
+	}
+
+	/**
+	 * 
+	 * @param star 
+	 * @param tjd_ut 
+	 * @param iflag 
+	 */
+	export function fixstar2_ut(star: string, tjd_ut: number, iflag: number): {
+		error: string,
+		flag: number,
+		data: number[]
+	}
+
+	/**
+	 * 
+	 * @param star 
+	 * @param tjd_et 
+	 * @param iflag 
+	 */
+	export function fixstar2(star: string, tjd_et: number, iflag: number): {
+		error: string,
+		flag: number,
+		data: number[]
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param ipl 
+	 * @param starname 
+	 * @param iflag 
+	 * @param imeth 
+	 * @param geopos 
+	 * @param atpress 
+	 * @param attemp 
+	 */
+	export function gauquelin_sector(tjd_ut: number, ipl: number, starname: string | null, iflag: number, imeth: number, geopos: [number,number,number], atpress: number, attemp: number): {
+		error: string,
+		flag: number,
+		data: number
+	}
 
 	/**
 	 * ### Description
@@ -475,6 +690,25 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
+	 * Get name of predefined ayanamsa ID
+	 * ### Params
+	 * ```
+	 * • aya: number // Predefined ayanamsa ID
+	 * ```
+	 * ### Returns
+	 * ```
+	 * string // Ayanamsa name
+	 * ```
+	 * ### Example
+	 * ```
+	 * const sidname = get_ayanamsa_name(constants.SE_SIDM_LAHIRI); // "Lahiri"
+	 * ```
+	 * &nbsp;
+	 */
+	export function get_ayanamsa_name(aya: number): string;
+
+	/**
+	 * ### Description
 	 * Get ayanamsa value from universal time without nutation
 	 * ### Params
 	 * ```
@@ -513,27 +747,407 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
-	 * Get name of predefined ayanamsa ID
+	 * Get information from the last used ephemeris file
 	 * ### Params
 	 * ```
-	 * • aya: number // Predefined ayanamsa ID
+	 * • ifno: number // file type
 	 * ```
 	 * ### Returns
 	 * ```
-	 * string // Ayanamsa name
+	 * {
+	 *   path: string, // Path to ephemeris file
+	 *   start: number, // Ephemeris start date
+	 *   end: number, // Ephemeris end date
+	 *   denum: number // JPL version used to generate the file
+	 * }
 	 * ```
 	 * ### Example
 	 * ```
-	 * const sidname = get_ayanamsa_name(constants.SE_SIDM_LAHIRI); // "Lahiri"
+	 * // call calc to load the ephemeris file
+	 * calc(2342342, constants.SE_VENUS, constants.SEFLG_SWIEPH);
+	 * const fileinfo = get_current_file_data(0);
 	 * ```
 	 * &nbsp;
 	 */
-	export function get_ayanamsa_name(aya: number): string;
+	export function get_current_file_data(ifno: number): GetCurrentFileData;
 
 	/**
 	 * ### Description
-	 * Swisseph Constants
-	 * Contains aliases for all predefined constant values
+	 * Get library path  
+	 * Returns the location of the node executable
+	 * ### Returns
+	 * ```
+	 * string // Library path
+	 * ```
+	 * ### Example
+	 * ```
+	 * const path = get_library_path();
+	 * ```
+	 * &nbsp;
+	 */
+	export function get_library_path(): string;
+
+	/**
+	 * ### Description
+	 * Get an object's orbital elements for a given date in ephemeris/terrestrial time
+	 * ### Params
+	 * ```
+	 * • tjd_et: number // Julian day in ephemeris/terrestrial time
+	 * • ipl: number // Object ID
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message if ERR
+	 *   data: number [
+	 *     a, // Semimajor axis
+	 *     e, // Eccentricity
+	 *     i, // Inclination
+	 *     Ω, // Longitude of ascending node
+	 *     ω, // Argument of periapsis
+	 *     ϖ, // Longitude of periapsis
+	 *     M0, // Mean anomaly at epoch
+	 *     ν0, // True anomaly at epoch
+	 *     E0, // Eccentric anomaly at epoch
+	 *     L0, // Mean longitude at epoch
+	 *     sidereal_period, // Sidereal orbital period in tropical years
+	 *     daily_motion, // Mean daily motion
+	 *     tropical_period, // Tropical period in years
+	 *     synodic_period, // Synodic period in days
+	 *     perihelion_passage, // Time of perihelion passage
+	 *     perihelion_distance, // Perihelion distance
+	 *     aphelion_distance // Aphelion distance
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = get_orbital_elements(2314234, constants.SE_MARS, constants.SEFLG_SWIEPH);
+	 * if(result.flag === constants.ERR) console.log(result.error);
+	 * ```
+	 * &nbsp;
+	 */
+	export function get_orbital_elements(tjd_et: number, ipl: number, iflag: number): GetOrbitalElements
+
+	/**
+	 * ### Description
+	 * Get an object's name
+	 * ### Params
+	 * ```
+	 * • ipl: number // Object ID
+	 * ```
+	 * ### Returns
+	 * ```
+	 * string // Object's name
+	 * ```
+	 * ### Example
+	 * ```
+	 * const name = get_planet_name(constants.SE_PLUTO); // "Pluto"
+	 * ```
+	 * &nbsp;
+	 */
+	export function get_planet_name(ipl: number): string;
+
+	/**
+	 * ### Description
+	 * Get internal tidal acceleration value
+	 * ### Returns
+	 * ```
+	 * number // Tidal acceleration
+	 * ```
+	 * ### Example
+	 * ```
+	 * const tidacc = get_tid_acc();
+	 * ```
+	 * &nbsp;
+	 */
+	export function get_tid_acc(): number;
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param dgeo 
+	 * @param datm 
+	 * @param dobs 
+	 * @param object_name 
+	 * @param event_type 
+	 * @param hel_flag 
+	 */
+	export function heliacal_pheno_ut(
+		tjd_ut: number,
+		dgeo: [longitude: number, latitude: number, elevation: number],
+		datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number],
+		dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number],
+		object_name: string,
+		event_type: number,
+		hel_flag: number
+	): {
+		error: string,
+		flag: number,
+		data: number[]
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param dgeo 
+	 * @param datm 
+	 * @param dobs 
+	 * @param object_name 
+	 * @param event_type 
+	 * @param hel_flag 
+	 */
+	export function heliacal_ut(
+		tjd_ut: number,
+		dgeo: [longitude: number, latitude: number, elevation: number],
+		datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number],
+		dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number],
+		object_name: string,
+		event_type: number,
+		hel_flag: number
+	): {
+		error: string,
+		flag: number,
+		data: number[]
+	}
+
+	/**
+	 * 
+	 * @param hsys ascii
+	 */
+	export function house_name(hsys: number): String;
+
+	/**
+	 * 
+	 * @param armc 
+	 * @param geolat 
+	 * @param eps 
+	 * @param hsys 
+	 * @param xpin 
+	 */
+	export function house_pos(armc: number, geolat: number, eps: number, hsys: string, xpin: [longitude: number, latitude: number]): {
+		data: number,
+		error: string
+	}
+
+	/**
+	 * 
+	 * @param armc 
+	 * @param geolat 
+	 * @param eps 
+	 * @param hsys 
+	 */
+	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: string): {
+		flag: number,
+		error: string,
+		data: {
+			houses: number[],
+			points: number[],
+			housesSpeed: number[],
+			pointsSpeed: number[]
+		}
+	}
+
+	/**
+	 * 
+	 * @param armc 
+	 * @param geolat 
+	 * @param eps 
+	 * @param hsys 
+	 */
+	export function houses_armc(armc: number, geolat: number, eps: number, hsys: string): {
+		flag: number,
+		error: string,
+		data: {
+			houses: number[],
+			points: number[]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param iflag 
+	 * @param geolat 
+	 * @param geolon 
+	 * @param hsys 
+	 */
+	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: string): {
+		flag: number,
+		data: {
+			houses: number[],
+			points: number[]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param iflag 
+	 * @param geolat 
+	 * @param geolon 
+	 * @param hsys 
+	 */
+	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: string): {
+		flag: number,
+		error: string,
+		data: {
+			houses: number[],
+			points: number[],
+			housesSpeed: number[],
+			pointsSpeed: number[]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param geolat 
+	 * @param geolon 
+	 * @param hsys 
+	 */
+	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: string): {
+		flag: number,
+		data: {
+			houses: number[],
+			points: number[]
+		}
+	}
+
+	/**
+	 * ### Description
+	 * Set custom delta T
+	 * ### Params
+	 * ```
+	 * • t_acc: number // Delta T value
+	 * ```
+	 * ### Example
+	 * ```
+	 * // custom delta T
+	 * set_delta_t_userdef(66.5);
+	 * // reset delta T back to auto
+	 * set_delta_t_userdef(constants.SE_DELTAT_AUTOMATIC);
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_delta_t_userdef(t_acc: number): void;
+
+	/**
+	 * ### Description
+	 * Set ephemeris files location
+	 * ### Params
+	 * ```
+	 * • path: string // Ephemeris path
+	 * ```
+	 * ### Example
+	 * ```
+	 * set_ephe_path("./ephemeris");
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_ephe_path(path: string): void;
+
+	/**
+	 * ### Description
+	 * Set JPL file  
+	 * File must be placed in the ephemeris path
+	 * ### Params
+	 * ```
+	 * • file: string // JPL file name
+	 * ```
+	 * ### Example
+	 * ```
+	 * // use custom name
+	 * set_jpl_file("de405.eph");
+	 * // use predefined name
+	 * set_jpl_file(constants.SE_FNAME_DE405);
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_jpl_file(file: string): void;
+
+	/**
+	 * ### Description
+	 * Set ayanamsa for sidereal mode  
+	 * For predefined ayanamsas, set second and third parameters to 0  
+	 * ### Params
+	 * ```
+	 * • sid_mode: number // Ayanamsa ID
+	 * • t0: number // Reference date in jd_ut for custom ayanamsas
+	 * • ayan_t0: number // Initial value in degrees for custom ayanamsas
+	 * ```
+	 * ### Example
+	 * ```
+	 * // set ayanamsa to Lahiri
+	 * set_sid_mode(constants.SE_SIDM_LAHIRI, 0, 0)
+	 * // define custom ayanamsa as 25 degrees at J2000
+	 * set_sid_mode(constants.SE_SIDM_USER, 2451545, 25)
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_sid_mode(sid_mode: number, t0: number, ayan_t0: number): void;
+
+	/**
+	 * ### Description
+	 * Set custom tidal acceleration
+	 * ### Params
+	 * ```
+	 * • t_acc: number // Tidal acceleration value
+	 * ```
+	 * ### Example
+	 * ```
+	 * // set custom value
+	 * set_tid_acc(25.90);
+	 * // set predefined value
+	 * set_tid_acc(constants.SE_TIDAL_DE403);
+	 * // reset to auto
+	 * set_tid_acc(constants.SE_TIDAL_AUTOMATIC);
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_tid_acc(t_acc: number): void;
+
+	/**
+	 * ### Description
+	 * Set geographic coordinates for topocentric mode
+	 * ### Params
+	 * ```
+	 * • geolon: number // Geographic longitude in decimal degrees
+	 * • geolat: number // Geographic latitude in decimal degrees
+	 * • elevation: number // Elevation in meters
+	 * ```
+	 * ### Example
+	 * ```
+	 * // set observer to 124'30E, 23'30N, 1250 meters above sea level;
+	 * set_topo(124.5, 23.5, 1250);
+	 * // call function with topocentric flag
+	 * let result = calc(2342341, constants.SE_MOON, constants.SEFLG_SWIEPH | constants.SEFLG_TOPOCTR)
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_topo(geolon: number, geolat: number, elevation: number): void;
+
+	/**
+	 * ### Description
+	 * Get swisseh version
+	 * ### Returns
+	 * ```
+	 * string // Swisseph version
+	 * ```
+	 * ### Example
+	 * ```
+	 * const version = version(); // "2.10"
+	 * ```
+	 * &nbsp;
+	 */
+	export function version(): string;
+
+	/**
+	 * ### Description
+	 * Swisseph Constants  
+	 * Contains aliases and predefined constant values used in the swiss ephemeris
 	 */
 	export const enum constants {
 		OK = 0,
