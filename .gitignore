@@ -7,8 +7,4 @@ deps/swisseph.vcxproj
 deps/swisseph.vcxproj.filters
 src/functions.cpp
 package-lock.json
-.yarn
-.pnp.js
-.yarnrc.yml
-yarn.lock
 test.ts

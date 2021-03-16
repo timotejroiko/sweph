@@ -21,7 +21,7 @@ Napi::Value sweph_lmt_to_lat(const Napi::CallbackInfo& info) {
 	);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
-	obj["serr"] = serr;
+	obj["error"] = serr;
 	obj["data"] = conv;
 	return obj;
 }

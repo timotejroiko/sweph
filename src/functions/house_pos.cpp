@@ -30,7 +30,7 @@ Napi::Value sweph_house_pos(const Napi::CallbackInfo& info) {
 		serr
 	);
 	Napi::Object obj = Napi::Object::New(env);
-	obj["data"] = house;
 	obj["error"] = serr;
+	obj["data"] = house;
 	return obj;
 }

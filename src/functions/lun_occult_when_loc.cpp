@@ -1,7 +1,7 @@
 #include <sweph.h>
 
 constexpr std::pair<int, const char*> args[] = {
-	{ 6, "Expecting 6 arguments: tjd_start, ipl, starname, ifl, ifltype, backward" },
+	{ 6, "Expecting 6 arguments: tjd_start, ipl, starname, ifl, geopos, backward" },
 	{ NUMBER, "Argument 1 should be a number - julian day in universal time" },
 	{ NUMBER, "Argument 2 should be a number - target object ID" },
 	{ STRINGNULL, "Argument 3 should be a string or NULL - target star name" },

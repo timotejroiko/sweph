@@ -19,7 +19,7 @@ Napi::Value sweph_time_equ(const Napi::CallbackInfo& info) {
 	);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
-	obj["serr"] = serr;
+	obj["error"] = serr;
 	obj["data"] = e;
 	return obj;
 }

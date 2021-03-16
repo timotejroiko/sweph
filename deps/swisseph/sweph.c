@@ -5062,8 +5062,10 @@ static void rot_back(int ipli)
   double xrot, yrot, zrot;
   double *chcfx, *chcfy, *chcfz;
   double *refepx, *refepy;
-  double seps2000 = swed.oec2000.seps;
-  double ceps2000 = swed.oec2000.ceps;
+  // epsilon as used in chopt.c
+  // double eps2000 = 0.409092804;       	// eps 2000 in radians 
+  double seps2000 = 0.39777715572793088;  	// sin(eps2000) 
+  double ceps2000 = 0.91748206215761929;	// cos(eps2000) 
   struct plan_data *pdp = &swed.pldat[ipli];
   int nco = pdp->ncoe;
   t = pdp->tseg0 + pdp->dseg / 2;
@@ -8147,7 +8149,7 @@ int32 CALL_CONV swe_calc_pctr(double tjd, int32 ipl, int32 iplctr, int32 iflag, 
   iflag = plaus_iflag(iflag, ipl, tjd, serr);
   epheflag = iflag & SEFLG_EPHMASK;
   // this fills in obliquity and nutation values in swed
-  swe_calc(tjd + swe_deltat_ex(tjd, epheflag, serr), SE_ECL_NUT, 0, xx, serr);
+  swe_calc(tjd + swe_deltat_ex(tjd, epheflag, serr), SE_ECL_NUT, iflag, xx, serr);
   iflag &= ~(SEFLG_HELCTR|SEFLG_BARYCTR);
   iflag2 = epheflag;
   iflag2 |= (SEFLG_BARYCTR|SEFLG_J2000|SEFLG_ICRS|SEFLG_TRUEPOS|SEFLG_EQUATORIAL|SEFLG_XYZ|SEFLG_SPEED);
@@ -8396,4 +8398,3 @@ const char *CALL_CONV swe_get_current_file_data(int ifno, double *tfstart, doubl
   *denum = pfp->sweph_denum;
   return pfp->fnam;
 }
-

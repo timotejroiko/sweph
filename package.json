@@ -13,7 +13,6 @@
 	"author": "Timotej Valentin Rojko",
 	"license": "GPL-2.0",
 	"devDependencies": {
-		"eslint": "^7.18.0",
-		"@yarnpkg/pnpify": "^2.4.0"
+		"eslint": "^7.21.0"
 	}
 }

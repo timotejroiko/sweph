@@ -1017,6 +1017,308 @@ declare module "sweph" {
 	}
 
 	/**
+	 * 
+	 * @param tjd_et 
+	 * @param gregflag 
+	 */
+	export function jdet_to_utc(tjd_et: number, gregflag: number): {
+		year: number;
+		month: number;
+		day: number;
+		hour: number;
+		minute: number;
+		second: number;
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param gregflag 
+	 */
+	export function jdut1_to_utc(tjd_ut: number, gregflag: number): {
+		year: number;
+		month: number;
+		day: number;
+		hour: number;
+		minute: number;
+		second: number;
+	}
+
+	/**
+	 * 
+	 * @param year 
+	 * @param month 
+	 * @param day 
+	 * @param hour 
+	 * @param gregflag 
+	 */
+	export function julday(year: number, month: number, day: number, hour: number, gregflag: number): number
+
+	/**
+	 * 
+	 * @param tjd_lat 
+	 * @param geolon 
+	 */
+	export function lat_to_lmt(tjd_lat: number, geolon: number): {
+		flag: number;
+		error: string;
+		data: number;
+	}
+
+	/**
+	 * 
+	 * @param tjd_lmt 
+	 * @param geolon 
+	 */
+	export function lmt_to_lat(tjd_lmt: number, geolon: number): {
+		flag: number;
+		error: string;
+		data: number;
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param ifL 
+	 * @param geopos 
+	 */
+	export function lun_eclipse_how(tjd_ut: number, ifL: number, geopos: [longitude: number, latitude: number, elevation: number]): {
+		flag: number;
+		error: string;
+		data: [11]
+	}
+
+	/**
+	 * 
+	 * @param tjd_start 
+	 * @param ifL 
+	 * @param geopos 
+	 * @param backwards 
+	 */
+	export function lun_eclipse_when_loc(tjd_start: number, ifL: number, geopos: [longitude: number, latitude: number, elevation: number], backwards: boolean): {
+		flag: number;
+		error: string;
+		data: {
+			time: [10],
+			attributes: [11]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_start 
+	 * @param ifL 
+	 * @param ifltype 
+	 * @param backwards 
+	 */
+	export function lun_eclipse_when(tjd_start: number, ifL: number, ifltype: number, backwards: boolean): {
+		flag: number;
+		error: string;
+		data: [8]
+	}
+
+	/**
+	 * 
+	 * @param tjd_start 
+	 * @param ipl 
+	 * @param starname 
+	 * @param ifl 
+	 * @param ifltype 
+	 * @param backward 
+	 */
+	export function lun_occult_when_glob(tjd_start: number, ipl: number, starname: string | null, ifl: number, ifltype: number, backward: boolean): {
+		flag: number;
+		error: string;
+		data: [10]
+	}
+
+	/**
+	 * 
+	 * @param tjd_start 
+	 * @param ipl 
+	 * @param starname 
+	 * @param ifl 
+	 * @param geopos 
+	 * @param backward 
+	 */
+	export function lun_occult_when_loc(tjd_start: number, ipl: number, starname: string | null, ifl: number, geopos: [longitude: number, latitude: number, elevation: number], backward: boolean): {
+		flag: number;
+		error: string;
+		data: {
+			time: [7],
+			attributes: [8]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_start 
+	 * @param ipl 
+	 * @param starname 
+	 * @param ifl 
+	 */
+	export function lun_occult_where(tjd_start: number, ipl: number, starname: string | null, ifl: number): {
+		flag: number;
+		error: string;
+		data: {
+			coordinates: [10],
+			attributes: [8]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param ipl 
+	 * @param iflag 
+	 * @param method 
+	 */
+	export function nod_aps_ut(tjd_ut: number, ipl: number, iflag: number, method: number): {
+		flag: number;
+		error: string;
+		data: {
+			ascending: [6],
+			descending: [6],
+			perihelion: [6],
+			aphelion: [6]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_et 
+	 * @param ipl 
+	 * @param iflag 
+	 * @param method 
+	 */
+	export function nod_aps(tjd_et: number, ipl: number, iflag: number, method: number): {
+		flag: number;
+		error: string;
+		data: {
+			ascending: [6],
+			descending: [6],
+			perihelion: [6],
+			aphelion: [6]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_et 
+	 * @param ipl 
+	 * @param iflag 
+	 */
+	export function orbit_max_min_true_distance(tjd_et: number, ipl: number, iflag: number): {
+		flag: number;
+		error: string;
+		data: {
+			max: number,
+			min: number,
+			true: number
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param ipl 
+	 * @param iflag 
+	 */
+	export function pheno_ut(tjd_ut: number, ipl: number, iflag: number): {
+		flag: number;
+		error: string;
+		data: [5];
+	}
+
+	/**
+	 * 
+	 * @param tjd_et 
+	 * @param ipl 
+	 * @param iflag 
+	 */
+	export function pheno(tjd_et: number, ipl: number, iflag: number): {
+		flag: number;
+		error: string;
+		data: [5];
+	}
+
+	/**
+	 * 
+	 * @param rad 
+	 */
+	export function radnorm(drad: number): number;
+
+	/**
+	 * 
+	 * @param inalt 
+	 * @param geoalt 
+	 * @param atpress 
+	 * @param lapse_rate 
+	 * @param attemp 
+	 * @param calc_flag 
+	 */
+	export function refrac_extended(inalt: number, geoalt: number, atpress: number, lapse_rate: number, attemp: number, calc_flag: number): {
+		data: number,
+		extended: [4]
+	}
+
+	/**
+	 * 
+	 * @param inalt 
+	 * @param atpress 
+	 * @param attemp 
+	 * @param calc_flag 
+	 */
+	export function refrac(inalt: number, atpress: number, attemp: number, calc_flag: number): number;
+
+	/**
+	 * 
+	 * @param tjd 
+	 * @param gregflag 
+	 */
+	export function revjul(tjd: number, gregflag: number): {
+		year: number,
+		month: number,
+		day: number,
+		hour: number
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param ipl 
+	 * @param starname 
+	 * @param epheflag 
+	 * @param rsmi 
+	 * @param geopos 
+	 * @param atpress 
+	 * @param attemp 
+	 * @param horhgt 
+	 */
+	export function rise_trans_true_hor(tjd_ut: number, ipl: number, starname: string | null, epheflag: number, rsmi: number, geopos: [longitude: number, latitude: number, elevation: number], atpress: number, attemp: number, horhgt: number): {
+		flag: number;
+		error: string;
+		data: number;
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param ipl 
+	 * @param starname 
+	 * @param epheflag 
+	 * @param rsmi 
+	 * @param geopos 
+	 * @param atpress 
+	 * @param attemp 
+	 */
+	export function rise_trans(tjd_ut: number, ipl: number, starname: string | null, epheflag: number, rsmi: number, geopos: [longitude: number, latitude: number, elevation: number], atpress: number, attemp: number): {
+		flag: number;
+		error: string;
+		data: number;
+	}
+
+	/**
 	 * ### Description
 	 * Set custom delta T
 	 * ### Params
@@ -1130,8 +1432,136 @@ declare module "sweph" {
 	export function set_topo(geolon: number, geolat: number, elevation: number): void;
 
 	/**
+	 * 
+	 * @param tjd_ut 
+	 */
+	export function sidtime(tjd_ut: number): number;
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param eps 
+	 * @param nut 
+	 */
+	export function sidtime0(tjd_ut: number, eps: number, nut: number): number;
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param ifl 
+	 * @param geopos 
+	 */
+	export function sol_eclipse_how(tjd_ut: number, ifl: number, geopos: [longitude: number, latitude: number, elevation: number]): {
+		flag: number;
+		error: string;
+		data: [11]
+	}
+
+	/**
+	 * 
+	 * @param tjd_start 
+	 * @param ifl 
+	 * @param iftype 
+	 * @param backward 
+	 */
+	export function sol_eclipse_when_glob(tjd_start: number, ifl: number, iftype: number, backward: number): {
+		flag: number;
+		error: string;
+		data: [10]
+	}
+
+	/**
+	 * 
+	 * @param tjd_start 
+	 * @param ifL 
+	 * @param geopos 
+	 * @param backwards 
+	 */
+	export function sol_eclipse_when_loc(tjd_start: number, ifL: number, geopos: [longitude: number, latitude: number, elevation: number], backwards: boolean): {
+		flag: number;
+		error: string;
+		data: {
+			time: [7],
+			attributes: [11]
+		}
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 * @param ifl 
+	 */
+	export function sol_eclipse_where(tjd_ut: number, ifl: number): {
+		flag: number;
+		error: string;
+		data: {
+			coordinates: [10],
+			attributes: [11]
+		}
+	}
+
+	/**
+	 * 
+	 * @param ddeg 
+	 * @param roundflag 
+	 */
+	export function split_deg(ddeg: number, roundflag: number): {
+		degree: number,
+		minute: number,
+		second: number,
+		fraction: number,
+		sign: number
+	}
+
+	/**
+	 * 
+	 * @param tjd_ut 
+	 */
+	export function time_equ(tjd_ut: number): {
+		flag: number,
+		error: string,
+		data: number
+	}
+
+	/**
+	 * 
+	 * @param iyear 
+	 * @param imonth 
+	 * @param iday 
+	 * @param ihour 
+	 * @param imin 
+	 * @param dsec 
+	 * @param d_timezone 
+	 */
+	export function utc_time_zone(iyear: number, imonth: number, iday: number, ihour: number, imin: number, dsec: number, d_timezone: number): {
+		year: number;
+		month: number;
+		day: number;
+		hour: number;
+		minute: number;
+		seconds: number;
+	}
+
+	/**
+	 * 
+	 * @param iyear 
+	 * @param imonth 
+	 * @param iday 
+	 * @param ihour 
+	 * @param imin 
+	 * @param dsec 
+	 * @param gregflag 
+	 */
+	export function utc_to_jd(iyear: number, imonth: number, iday: number, ihour: number, imin: number, dsec: number, gregflag: number): {
+		flag: number,
+		error: string,
+		data: [2]
+	}
+
+
+	/**
 	 * ### Description
-	 * Get swisseh version
+	 * Get current swisseph version
 	 * ### Returns
 	 * ```
 	 * string // Swisseph version
@@ -1143,6 +1573,12 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function version(): string;
+
+	export function vis_limit_mag(tjd_ut: number, dgeo: [longitude: number, latitude: number, elevation: number], datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], objectname: string, helflag: number): {
+		flag: number,
+		error: string,
+		data: [8]
+	}
 
 	/**
 	 * ### Description

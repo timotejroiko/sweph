@@ -39,6 +39,6 @@ Napi::Value sweph_rise_trans(const Napi::CallbackInfo& info) {
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
 	obj["error"] = serr;
-	obj["time"] = ret;
+	obj["data"] = ret;
 	return obj;
 }

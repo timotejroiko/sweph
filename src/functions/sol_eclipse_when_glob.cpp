@@ -24,8 +24,8 @@ Napi::Value sweph_sol_eclipse_when_glob(const Napi::CallbackInfo& info) {
 		serr
 	);
 	Napi::Object obj = Napi::Object::New(env);
-	obj["data"] = sweph_js_array_converter(ret, 10, env);
 	obj["flag"] = flag;
 	obj["error"] = serr;
+	obj["data"] = sweph_js_array_converter(ret, 10, env);
 	return obj;
 }
