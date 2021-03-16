@@ -3,8 +3,8 @@
 constexpr std::pair<int, const char*> args[] = {
 	{ 3, "Expecting 3 arguments: csec, sep, supzero" },
 	{ NUMBER, "Argument 1 should be a number - degrees in centiseconds" },
-	{ STRING, "Argument 2 should be a string - separator" },
-	{ TRUEFALSE, "Argument 3 should be a boolean - suppress zero" }
+	{ STRING, "Argument 2 should be a string - separator character" },
+	{ TRUEFALSE, "Argument 3 should be a boolean - omit seconds if they are zero" }
 };
 
 Napi::Value sweph_cs2timestr(const Napi::CallbackInfo& info) {

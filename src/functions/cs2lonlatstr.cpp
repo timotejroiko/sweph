@@ -3,8 +3,8 @@
 constexpr std::pair<int, const char*> args[] = {
 	{ 3, "Expecting 3 arguments: csec, pchar, mchar" },
 	{ NUMBER, "Argument 1 should be a number - degrees in centiseconds" },
-	{ STRING, "Argument 2 should be a string - 1st delimiter character" },
-	{ STRING, "Argument 3 should be a string - 2nd delimiter character" }
+	{ STRING, "Argument 2 should be a string - sign character for positive values" },
+	{ STRING, "Argument 3 should be a string - sign character for negative values" }
 };
 
 Napi::Value sweph_cs2lonlatstr(const Napi::CallbackInfo& info) {

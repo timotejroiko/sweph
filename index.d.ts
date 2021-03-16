@@ -216,17 +216,24 @@ declare module "sweph" {
 		]
 	}
 
+	interface TimeConversion extends Flag {
+		/**
+		 * Julian day value
+		 */
+		data: number
+	}
+
 	type AzaltRev = [
 		/**
-		 * (λ) Ecliptic longitude if ECL  
-		 * (α) Equatorial right ascension if EQU
+		 * (λ) Ecliptic longitude if SE_HOR2ECL  
+		 * (α) Equatorial right ascension if SE_HOR2EQU
 		 */
-		λ_or_α: number,
+		lon: number,
 		/**
-		 * (β) Ecliptic latitude if ECL  
-		 * (δ) Equatorial declination if EQU
+		 * (β) Ecliptic latitude if SE_HOR2ECL  
+		 * (δ) Equatorial declination if SE_HOR2EQU
 		 */
-		β_or_δ: number
+		lat: number
 	]
 
 	type Azalt = [
@@ -244,6 +251,37 @@ declare module "sweph" {
 		ap: number
 	]
 
+	type CoTransSp = [
+		...cotrans: CoTrans,
+		/**
+		 * Daily speed for lon
+		 */
+		lonSpd: number,
+		/**
+		 * Daily speed for lat
+		 */
+		latSpd: number,
+		/**
+		 * Daily speed for dist (unchanged)
+		 */
+		distSpd: number
+	]
+
+	type CoTrans = [
+		/**
+		 * (λ) Ecliptic longitude or (α) Equatorial right ascension
+		 */
+		lon: number,
+		/**
+		 * (β) Ecliptic latitude or (δ) Equatorial declination
+		 */
+		lat: number,
+		/**
+		 * Distance in AU (unchanged)
+		 */
+		dist: number,
+	]
+
 	/**
 	 * ### Description
 	 * Transform horizontal coordinates into ecliptic or equatorial coordinates based on the observer's location
@@ -251,19 +289,20 @@ declare module "sweph" {
 	 * ```
 	 * • tjd_ut: number // Julian day in universal time
 	 * • calc_flag: number // Calculation flag, SE_HOR2ECL or SE_HOR2EQU
-	 * • geopos: array[3] // Geographic coordinates [longitude, latitude, elevation]
-	 * • xin: array[2] // Horizontal coordinates [azimuth, true altitude]
+	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * • xin: Array<number> // Horizontal coordinates [azimuth, true altitude]
 	 * ```
 	 * ### Returns
 	 * ```
-	 * number [
-	 *   λ_or_α, // (λ) Ecliptic longitude if ECL, (α) Equatorial right ascension if EQU
-	 *   β_or_δ // (β) Ecliptic latitude if ECL, (δ) Equatorial declination if EQU
+	 * Array<number> [
+	 *   lon, // (λ) Ecliptic longitude if SE_HOR2ECL, (α) Equatorial right ascension if SE_HOR2EQU
+	 *   lat // (β) Ecliptic latitude if SE_HOR2ECL, (δ) Equatorial declination if SE_HOR2EQU
 	 * ]
 	 * ```
 	 * ### Example
 	 * ```
 	 * const result = azalt_rev(2314234, constants.SE_HOR2ECL, [34, 40, 0], [75, 67]);
+	 * console.log(`Longitude: ${result[0]}`);
 	 * ```
 	 * &nbsp;
 	 */
@@ -276,14 +315,14 @@ declare module "sweph" {
 	 * ```
 	 * • tjd_ut: number // Julian day in universal time
 	 * • calc_flag: number // Calculation flag, SE_HOR2ECL or SE_HOR2EQU
-	 * • geopos: array[3] // Geographic coordinates [longitude, latitude, elevation]
+	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
 	 * • atpress: number // Atmospheric pressure in mbar/hpa
 	 * • attemp: number // Atmospheric temperature in celcius
-	 * • xin: array[3] // Ecliptic or equatorial coordinates [lon/ra, lat/dec, distance]
+	 * • xin: Array<number> // Ecliptic or equatorial coordinates [lon/ra, lat/dec, distance]
 	 * ```
 	 * ### Returns
 	 * ```
-	 * number [
+	 * Array<number> [
 	 *   az, // Azimuth
 	 *   alt, // True altitude
 	 *   ap // Apparent altitude (with refraction)
@@ -292,6 +331,7 @@ declare module "sweph" {
 	 * ### Example
 	 * ```
 	 * const result = azalt(2314234, constants.SE_ECL2HOR, [34, 40, 0], 0, 0, [75, 67, 0]);
+	 * console.log(`Azimuth: ${result[0]}`);
 	 * ```
 	 * &nbsp;
 	 */
@@ -309,10 +349,10 @@ declare module "sweph" {
 	 * ```
 	 * ### Returns
 	 * ```
-	 * {
+	 * Object {
 	 *   flag: number, // Computed flags or ERR
 	 *   error: string, // Error message if ERR or if incompatible flags
-	 *   data: number [
+	 *   data: Array<number> [
 	 *     lon, // Longitude, right ascension, cartesian X, or true obliquity depending on the flags
 	 *     lat, // Latitude, declination, cartesian Y, or mean obliquity depending on the flags
 	 *     dist, // Distance in AU, cartesian Z or nutation in longitude depending on the flags
@@ -324,11 +364,11 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = calc_pctr(2314234, constants.SE_EARTH, constants.SE_MARS, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error)
-	 * if(result.flag !== flags) console.log(result.error)
-	 * console.log(`Longitude: ${result.data[0]}`)
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== flags) console.log(result.error);
+	 * console.log(`Longitude: ${result.data[0]}`);
 	 * ```
 	 * &nbsp;
 	 */
@@ -345,10 +385,10 @@ declare module "sweph" {
 	 * ```
 	 * ### Returns
 	 * ```
-	 * {
+	 * Object {
 	 *   flag: number, // Computed flags or ERR
 	 *   error: string, // Error message if ERR or if incompatible flags
-	 *   data: number [
+	 *   data: Array<number> [
 	 *     lon, // Longitude, right ascension, cartesian X, or true obliquity depending on the flags
 	 *     lat, // Latitude, declination, cartesian Y, or mean obliquity depending on the flags
 	 *     dist, // Distance in AU, cartesian Z or nutation in longitude depending on the flags
@@ -360,11 +400,11 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = calc_ut(2314234, constants.SE_MOON, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error)
-	 * if(result.flag !== flags) console.log(result.error)
-	 * console.log(`Longitude: ${result.data[0]}`)
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== flags) console.log(result.error);
+	 * console.log(`Longitude: ${result.data[0]}`);
 	 * ```
 	 * &nbsp;
 	 */
@@ -381,10 +421,10 @@ declare module "sweph" {
 	 * ```
 	 * ### Returns
 	 * ```
-	 * {
+	 * Object {
 	 *   flag: number, // Computed flags or ERR
 	 *   error: string, // Error message if ERR or if incompatible flags
-	 *   data: number [
+	 *   data: Array<number> [
 	 *     lon, // Longitude, right ascension, cartesian X, or true obliquity depending on the flags
 	 *     lat, // Latitude, declination, cartesian Y, or mean obliquity depending on the flags
 	 *     dist, // Distance in AU, cartesian Z or nutation in longitude depending on the flags
@@ -396,11 +436,11 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = calc(2314234, constants.SE_VENUS, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error)
-	 * if(result.flag !== flags) console.log(result.error)
-	 * console.log(`Longitude: ${result.data[0]}`)
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== flags) console.log(result.error);
+	 * console.log(`Longitude: ${result.data[0]}`);
 	 * ```
 	 * &nbsp;
 	 */
@@ -419,75 +459,211 @@ declare module "sweph" {
 	export function close(): void;
 
 	/**
-	 * 
-	 * @param xpo [lon, lat, dist, lonspd, latspd, distspd]
-	 * @param eps obliquity of the ecliptic in decimal degrees
+	 * ### Description
+	 * Transform between ecliptic and equatorial coordinate systems including motion speeds  
+	 * From equatorial to ecliptic, obliquity must be positive  
+	 * From ecliptic to equatorial, obliquity must be negative  
+	 * Distances are not affected and can be 0
+	 * ### Params
+	 * ```
+	 * • xpo: Array<number> // Input coordinates in ecliptic or equatorial coordinates [lon, lat, dist, lonSpd, latSpd, distSpd]
+	 * • eps: number // Positive or negative obliquity of the ecliptic
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Array<number> [
+	 *   lon, // (λ) Ecliptic longitude or (α) Equatorial right ascension
+	 *   lat // (β) Ecliptic latitude or (δ) Equatorial declination
+	 *   dist, // Distance in AU (unchanged)
+	 *   lonSpd, // Daily speed for lon
+	 *   latSpd, // Daily speed for lat
+	 *   distSpd, // Daily speed for dist (unchanged)
+	 * ]
+	 * ```
+	 * ### Example
+	 * ```
+	 * const obliquity = calc(2314234, constants.SE_ECL_NUT, constants.SEFLG_SWIEPH).data[0];
+	 * const result = cotrans_sp([345, 10, 0, 1.5, 0.01, 0], -obliquity);
+	 * console.log(`Right Ascension: ${result[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function cotrans_sp(xpo: [number,number,number,number,number,number], eps: number): [
-		number, number, number, number, number, number
-	]
+	export function cotrans_sp(xpo: [lon: number, lat: number, dist: number, lonSpd: number, latSpd: number, distSpd: number], eps: number): CoTransSp;
 
 	/**
-	 * 
-	 * @param xpo [lon, lat, dist]
-	 * @param eps obliquity of the ecliptic in decimal degrees
+	 * ### Description
+	 * Transform between ecliptic and equatorial coordinate systems  
+	 * From equatorial to ecliptic, obliquity must be positive  
+	 * From ecliptic to equatorial, obliquity must be negative  
+	 * Distance is not affected and can be 0
+	 * ### Params
+	 * ```
+	 * • xpo: Array<number> // Input coordinates in ecliptic or equatorial coordinates [lon, lat, dist]
+	 * • eps: number // Positive or negative obliquity of the ecliptic
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Array<number> [
+	 *   lon, // Longitude or right ascension
+	 *   lat, // Latitude or declination
+	 *   dist, // Distance in AU (unchanged)
+	 * ]
+	 * ```
+	 * ### Example
+	 * ```
+	 * const obliquity = calc(2314234, constants.SE_ECL_NUT, constants.SEFLG_SWIEPH).data[0];
+	 * const result = cotrans([345, 10, 0], -obliquity);
+	 * console.log(`Right Ascension: ${result[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function cotrans(xpo: [number,number,number], eps: number): [
-		number, number, number
-	]
+	export function cotrans(xpo: [lon: number, lat: number, dist: number], eps: number): CoTrans;
 
 	/**
-	 * 
-	 * @param csec degrees in centiseconds
+	 * ### Description
+	 * Convert centiseconds to degrees string
+	 * ### Params
+	 * ```
+	 * • csec: number // Centiseconds value
+	 * ```
+	 * ### Returns
+	 * ```
+	 * string
+	 * ```
+	 * ### Example
+	 * ```
+	 * const deg = cs2degstr(2345464); // " 6°30'54"
+	 * ```
+	 * &nbsp;
 	 */
-	export function cs2deg(csec: number): string;
+	export function cs2degstr(csec: number): string;
 
 	/**
-	 * 
-	 * @param csec degrees in centiseconds
-	 * @param pchar 1st delimiter character
-	 * @param mchar 2nd delimiter character
+	 * ### Description
+	 * Convert centiseconds to longitude or latitude string with user defined sign character
+	 * ### Params
+	 * ```
+	 * • csec: number // Centiseconds value
+	 * • pchar: string // Sign character for positive values
+	 * • mchar: string // Sign character for negative values
+	 * ```
+	 * ### Returns
+	 * ```
+	 * string
+	 * ```
+	 * ### Example
+	 * ```
+	 * const lon = cs2lonlatstr(2345464, "+", "-"); // "6+30'55"
+	 * ```
+	 * &nbsp;
 	 */
 	export function cs2lonlatstr(csec: number, pchar: string, mchar: string): string;
 
 	/**
-	 * 
-	 * @param csec degrees in centiseconds
-	 * @param sep separator
-	 * @param supzero supress zero
+	 * ### Description
+	 * Convert centiseconds to time string
+	 * ### Params
+	 * ```
+	 * • csec: number // Centiseconds value
+	 * • sep: string // Separator character
+	 * • supzero: boolean // Omit seconds if they are zero
+	 * ```
+	 * ### Returns
+	 * ```
+	 * string
+	 * ```
+	 * ### Example
+	 * ```
+	 * const time = cs2timestr(2345464, ":", true); // "6:30:55"
+	 * ```
+	 * &nbsp;
 	 */
 	export function cs2timestr(csec: number, sep: string, supzero: boolean): string;
 
 	/**
-	 * 
-	 * @param csec degrees in centiseconds
+	 * ### Description
+	 * Normalize centiseconds to 360 degrees range
+	 * ### Params
+	 * ```
+	 * • csec: number // Centiseconds value
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number
+	 * ```
+	 * ### Example
+	 * ```
+	 * const cs = csnorm(234546424235); // 8022955
+	 * ```
+	 * &nbsp;
 	 */
-	export function cs2norm(csec: number): number;
+	export function csnorm(csec: number): number;
 
 	/**
-	 * 
-	 * @param csec degrees in centiseconds
+	 * ### Description
+	 * Round centiseconds to nearest second
+	 * ### Params
+	 * ```
+	 * • csec: number // Centiseconds value
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number
+	 * ```
+	 * ### Example
+	 * ```
+	 * const cs = csroundsec(14235235); // 14235200
+	 * ```
+	 * &nbsp;
 	 */
 	export function csroundsec(csec: number): number;
 
 	/**
-	 * 
-	 * @param double double value
+	 * ### Description
+	 * Round double precision value to long integer
+	 * ### Params
+	 * ```
+	 * • double: number // Double value
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number
+	 * ```
+	 * ### Example
+	 * ```
+	 * const long = d2l(546546.7868); // 546547
+	 * ```
+	 * &nbsp;
 	 */
 	export function d2l(double: number): number;
 
 	/**
-	 * 
-	 * @param year 
-	 * @param month 
-	 * @param day 
-	 * @param hour 
-	 * @param calendar 
+	 * ### Description
+	 * Calculate julian day and check if the date is valid
+	 * ### Params
+	 * ```
+	 * • year: number // Full year
+	 * • month: number // Month (1-12)
+	 * • day: number // Day (1-31)
+	 * • hour: number // Hour with decimal fraction (0-23.999)
+	 * • calendar: string // Calendar system, 'g' for GREG_CAL, 'j' for JUL_CAL
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   data: number // Julian day value
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const jd = date_conversion(1995, 5, 15, 13.75, "g");
+	 * if(jd.flag === constants.ERR) { throw new Error("Invalid date"); }
+	 * console.log(`Julian Day: ${jd.data}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function date_conversion(year: number, month: number, day: number, hour: number, calendar: string): {
-		flag: number,
-		data: number
-	};
+	export function date_conversion(year: number, month: number, day: number, hour: number, calendar: string): TimeConversion;
 
 	/**
 	 * 
@@ -1590,7 +1766,7 @@ declare module "sweph" {
 		ERR = -1,
 		SE_AUNIT_TO_KM = 149597870.7,
 		SE_AUNIT_TO_LIGHTYEAR = 0.000015812507409819728,
-		SE_AUNIT_TO_PARSEC = 0.000004848136811095274,   
+		SE_AUNIT_TO_PARSEC = 0.000004848136811095274,
 		SE_JUL_CAL = 0,
 		SE_GREG_CAL = 1,
 		SE_ECL_NUT = -1,
