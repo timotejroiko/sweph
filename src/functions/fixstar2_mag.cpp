@@ -12,14 +12,17 @@ Napi::Value sweph_fixstar2_mag(const Napi::CallbackInfo& info) {
 	}
 	double mag;
 	char serr [AS_MAXCH];
+	char star [AS_MAXCH];
+	strcpy(star, info[0].As<Napi::String>().Utf8Value().c_str());
 	int32 flag = swe_fixstar2_mag(
-		(char*)info[0].As<Napi::String>().Utf8Value().c_str(),
+		star,
 		&mag,
 		serr
 	);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
 	obj["error"] = serr;
+	obj["name"] = star;
 	obj["data"] = mag;
 	return obj;
 }

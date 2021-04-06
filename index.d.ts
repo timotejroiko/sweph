@@ -51,6 +51,17 @@ declare module "sweph" {
 		error: string;
 	}
 
+	interface Name {
+		/**
+		 * ### Description
+		 * Star name  
+		 * The full star name as it appears in the sefstars.txt file  
+		 * ```
+		 * ```
+		 */
+		name: string;
+	}
+
 	interface GetCurrentFileData {
 		/**
 		 * ### Description
@@ -216,9 +227,86 @@ declare module "sweph" {
 		]
 	}
 
-	interface TimeConversion extends Flag {
+	interface DateConversion extends Flag {
 		/**
 		 * Julian day value
+		 */
+		data: number
+	}
+
+	interface DeltaT extends Error {
+		/**
+		 * Delta T value
+		 */
+		data: number
+	}
+
+	interface FixStar extends Flag, Name, Error {
+		/**
+		 * ### Description
+		 * Array of values returned by the calculation  
+		 * By default the values are in ecliptic coordinates (longitude, latitude, distance)  
+		 * If `SEFLG_SPEED` or `SEFLG_SPEED3` are used, the daily speeds for each value are also retured, otherwise they are 0  
+		 * If `SEFLG_EQUATORIAL` is used, the values are in equatorial coordinates instead (right ascension, declination, distance)  
+		 * If `SELFG_XYZ` is used, the values are in cartesian coordinates instead (X, Y, Z)  
+		 * ```
+		 * ```
+		 */
+		 data: [
+			/**
+			 * (`λ`) Ecliptic longitude  
+			 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
+			 * (`x`) Cartesian X if `SEFLG_XYZ`  
+			 */
+			lon: number,
+			/**
+			 * (`β`) Ecliptic latitude  
+			 * (`δ`) Equatorial declination if `SEFLG_EQUATORIAL`  
+			 * (`y`) Cartesian Y if `SEFLG_XYZ`  
+			 */
+			lat: number,
+			/**
+			 * (`au`) Distance in AU  
+			 * (`z`) Cartesian Z if `SEFLG_XYZ`  
+			 */
+			dist: number,
+			/**
+			 * (`λs`) Ecliptic longitude daily speed  
+			 * (`αs`) Equatorial right ascension daily speed if `SEFLG_EQUATORIAL`  
+			 * (`xs`) Cartesian daily speed if `SEFLG_XYZ`  
+			 */
+			lonSpd: number,
+			/**
+			 * (`βs`) Ecliptic latitude daily speed  
+			 * (`δs`) Equatorial declination daily speed if `SEFLG_EQUATORIAL`  
+			 * (`ys`) Cartesian Y daily speed if `SEFLG_XYZ` 
+			 */
+			latSpd: number,
+			/**
+			 * (`aus`) Distance daily speed in AU  
+			 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`  
+			 */
+			distSpd: number
+		]
+	}
+
+	interface FixStarMag extends Flag, Name, Error {
+		/**
+		 * Magnitude value
+		 */
+		data: number
+	}
+
+	interface GauquelinSector extends Flag, Error {
+		/**
+		 * Gauquelin Sector
+		 */
+		data: number
+	}
+
+	interface Ayanamsa extends Flag, Error {
+		/**
+		 * Ayanamsa Value
 		 */
 		data: number
 	}
@@ -663,131 +751,385 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function date_conversion(year: number, month: number, day: number, hour: number, calendar: string): TimeConversion;
+	export function date_conversion(year: number, month: number, day: number, hour: number, calendar: string): DateConversion;
 
 	/**
-	 * 
-	 * @param jd julian day
+	 * ### Description
+	 * Find which day of the week a particular date is.  
+	 * ### Params
+	 * ```
+	 * • jd: number // Julian day value in universal time
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // 0 = monday, ... 6 = sunday;
+	 * ```
+	 * ### Example
+	 * ```
+	 * const day = day_of_week(2459311); // 1 (tuesday)
+	 * ```
+	 * &nbsp;
 	 */
 	export function day_of_week(jd: number): number;
 
 	/**
-	 * 
-	 * @param deg deg
+	 * ### Description
+	 * Normalize degree value to 0-360 range
+	 * ### Params
+	 * ```
+	 * • deg: number // degree value
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Normalized degree value;
+	 * ```
+	 * ### Example
+	 * ```
+	 * const deg = degnorm(523.546); // 163.546
+	 * ```
+	 * &nbsp;
 	 */
 	export function degnorm(deg: number): number;
 
 	/**
-	 * 
-	 * @param tjd 
-	 * @param ephe 
+	 * ### Description
+	 * Obtain the Delta T value for a date using a particular ephemeris system
+	 * ### Params
+	 * ```
+	 * • tjd: number // Julian day value in Universal Time
+	 * • ephe: number // Ephemeris flag (SEFLG_SWIEPH, SEFLG_JPLEPH or SEFLG_MOSEPH)
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   error: string // Warning message if any
+	 *   data: number // Delta T value
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const deltaT = deltat_ex(2431232, constants.SEFLG_MOSEPH); // 0.00032552915335235926
+	 * ```
+	 * &nbsp;
 	 */
-	export function deltat_ex(tjd: number, ephe: number): {
-		error: string,
-		data: number
-	};
+	export function deltat_ex(tjd: number, ephe: number): DeltaT;
 
 	/**
-	 * 
-	 * @param tjd 
+	 * ### Description
+	 * Obtain the Delta T value for a particular date
+	 * ### Params
+	 * ```
+	 * • tjd: number // Julian day value in Universal Time
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Delta T value
+	 * ```
+	 * ### Example
+	 * ```
+	 * const deltaT = deltat(2431232); // 0.00032554160173271644
+	 * ```
+	 * &nbsp;
 	 */
 	export function deltat(tjd: number): number;
 
 	/**
-	 * 
-	 * @param csec1 
-	 * @param csec2 
+	 * ### Description
+	 * Arc distance between two points in centiseconds
+	 * ### Params
+	 * ```
+	 * • csec1: number // First point in centiseconds
+	 * • csec2: number // Second point in centiseconds
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Distance in centiseconds from -64800000 to 64800000 (negative if second point is ahead of the first)
+	 * ```
+	 * ### Example
+	 * ```
+	 * const distance = difcs2n(155, 160); // -5
+	 * ```
+	 * &nbsp;
 	 */
 	export function difcs2n(csec1: number, csec2: number): number;
 
 	/**
-	 * 
-	 * @param csec1 
-	 * @param csec2 
+	 * ### Description
+	 * Arc distance between two points in centiseconds in a single direction
+	 * ### Params
+	 * ```
+	 * • csec1: number // First point in centiseconds
+	 * • csec2: number // Second point in centiseconds
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Distance in centiseconds from 0 to 129600000
+	 * ```
+	 * ### Example
+	 * ```
+	 * const distance = difcsn(155, 160); // 129599995
+	 * ```
+	 * &nbsp;
 	 */
 	export function difcsn(csec1: number, csec2: number): number;
 
 	/**
-	 * 
-	 * @param deg1 
-	 * @param deg2 
+	 * ### Description
+	 * Arc distance between two points in degrees
+	 * ### Params
+	 * ```
+	 * • deg1: number // First point in degrees
+	 * • deg2: number // Second point in degrees
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Distance in degrees from -180 to 180 (negative if second point is ahead of the first)
+	 * ```
+	 * ### Example
+	 * ```
+	 * const distance = difdeg2n(120, 130); // -10
+	 * ```
+	 * &nbsp;
 	 */
 	export function difdeg2n(deg1: number, deg2: number): number;
 
 	/**
-	 * 
-	 * @param deg1 
-	 * @param deg2 
+	 * ### Description
+	 * Arc distance between two points in degrees in a single direction
+	 * ### Params
+	 * ```
+	 * • deg1: number // First point in degrees
+	 * • deg2: number // Second point in degrees
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Distance in degrees from 0 to 360
+	 * ```
+	 * ### Example
+	 * ```
+	 * const distance = difdeg2n(120, 130); // 350
+	 * ```
+	 * &nbsp;
 	 */
 	export function difdegn(deg1: number, deg2: number): number;
 
 	/**
-	 * 
-	 * @param star 
+	 * ### Description
+	 * Get the visual magnitude (brightness) of a fixed star
+	 * ### Params
+	 * ```
+	 * • star: string // Name of the star to search for in the sefstars.txt file
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR
+	 *   name: string, // The name of the matched star from the sefstars.txt file
+	 *   data: number // The star's magnitude value
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = fixStar_mag("Aldebaran");
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * console.log(`
+	 *   Star: ${result.name}
+	 *   Magnitude: ${result.data}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function fixstar_mag(star: string): {
-		error: string,
-		flag: number,
-		data: number
-	}
+	export function fixstar_mag(star: string): FixStarMag;
 
 	/**
-	 * 
-	 * @param star 
-	 * @param tjd_ut 
-	 * @param iflag 
+	 * ### Description
+	 * Calculate the positions of a star from universal time
+	 * ### Params
+	 * ```
+	 * • star: string // Name of the star to search for in the sefstars.txt file
+	 * • tjd_ut: number // Julian day in universal time
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR
+	 *   name: string, // The name of the matched star from the sefstars.txt file
+	 *   data: Array<number> [
+	 *     lon, // Longitude, right ascension or cartesian X
+	 *     lat, // Latitude, declination or cartesian Y
+	 *     dist, // Distance in AU or cartesian Z
+	 *     lonSpd, // Daily speed for lon
+	 *     latSpd, // Daily speed for lat
+	 *     distSpd, // Daily speed for dist
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
+	 * const result = fixstar_ut("Aldebaran", 2413256, flags);
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== flags) console.log(result.error);
+	 * console.log(`
+	 *   Name: ${result.name}
+	 *   Longitude: ${result.data[0]}
+	 * `);
+	 * ```
+	 * &nbsp;
 	 */
-	export function fixstar_ut(star: string, tjd_ut: number, iflag: number): {
-		error: string,
-		flag: number,
-		data: number[]
-	}
+	export function fixstar_ut(star: string, tjd_ut: number, iflag: number): FixStar;
 
 	/**
-	 * 
-	 * @param star 
-	 * @param tjd_et 
-	 * @param iflag 
+	 * ### Description
+	 * Calculate the positions of a star from ephemeris/terrestrial time
+	 * ### Params
+	 * ```
+	 * • star: string // Name of the star to search for in the sefstars.txt file
+	 * • tjd_et: number // Julian day in ephemeris/terrestrial time
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR
+	 *   name: string, // The name of the matched star from the sefstars.txt file
+	 *   data: Array<number> [
+	 *     lon, // Longitude, right ascension or cartesian X
+	 *     lat, // Latitude, declination or cartesian Y
+	 *     dist, // Distance in AU or cartesian Z
+	 *     lonSpd, // Daily speed for lon
+	 *     latSpd, // Daily speed for lat
+	 *     distSpd, // Daily speed for dist
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
+	 * const result = fixstar("Aldebaran", 2413256, flags);
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== flags) console.log(result.error);
+	 * console.log(`
+	 *   Name: ${result.name}
+	 *   Longitude: ${result.data[0]}
+	 * `);
+	 * ```
+	 * &nbsp;
 	 */
-	export function fixstar(star: string, tjd_et: number, iflag: number): {
-		error: string,
-		flag: number,
-		data: number[]
-	}
+	export function fixstar(star: string, tjd_et: number, iflag: number): FixStar;
 
 	/**
-	 * 
-	 * @param star 
+	 * ### Description
+	 * Get the visual magnitude (brightness) of a fixed star
+	 * ### Params
+	 * ```
+	 * • star: string // Name of the star to search for in the sefstars.txt file
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR
+	 *   name: string, // The name of the matched star from the sefstars.txt file
+	 *   data: number // The star's magnitude value
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = fixStar2_mag("Aldebaran");
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * console.log(`
+	 *   Star: ${result.name}
+	 *   Magnitude: ${result.data}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function fixstar2_mag(star: string): {
-		error: string,
-		flag: number,
-		data: number
-	}
+	export function fixstar2_mag(star: string): FixStarMag;
 
 	/**
-	 * 
-	 * @param star 
-	 * @param tjd_ut 
-	 * @param iflag 
+	 * ### Description
+	 * Calculate the positions of a star from universal time
+	 * ### Params
+	 * ```
+	 * • star: string // Name of the star to search for in the sefstars.txt file
+	 * • tjd_ut: number // Julian day in universal time
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR
+	 *   name: string, // The name of the matched star from the sefstars.txt file
+	 *   data: Array<number> [
+	 *     lon, // Longitude, right ascension or cartesian X
+	 *     lat, // Latitude, declination or cartesian Y
+	 *     dist, // Distance in AU or cartesian Z
+	 *     lonSpd, // Daily speed for lon
+	 *     latSpd, // Daily speed for lat
+	 *     distSpd, // Daily speed for dist
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
+	 * const result = fixstar2_ut("Aldebaran", 2413256, flags);
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== flags) console.log(result.error);
+	 * console.log(`
+	 *   Name: ${result.name}
+	 *   Longitude: ${result.data[0]}
+	 * `);
+	 * ```
+	 * &nbsp;
 	 */
-	export function fixstar2_ut(star: string, tjd_ut: number, iflag: number): {
-		error: string,
-		flag: number,
-		data: number[]
-	}
+	export function fixstar2_ut(star: string, tjd_ut: number, iflag: number): FixStar;
 
 	/**
-	 * 
-	 * @param star 
-	 * @param tjd_et 
-	 * @param iflag 
+	 * ### Description
+	 * Calculate the positions of a star from ephemeris/terrestrial time
+	 * ### Params
+	 * ```
+	 * • star: string // Name of the star to search for in the sefstars.txt file
+	 * • tjd_et: number // Julian day in ephemeris/terrestrial time
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR
+	 *   name: string, // The name of the matched star from the sefstars.txt file
+	 *   data: Array<number> [
+	 *     lon, // Longitude, right ascension or cartesian X
+	 *     lat, // Latitude, declination or cartesian Y
+	 *     dist, // Distance in AU or cartesian Z
+	 *     lonSpd, // Daily speed for lon
+	 *     latSpd, // Daily speed for lat
+	 *     distSpd, // Daily speed for dist
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
+	 * const result = fixstar2("Aldebaran", 2413256, flags);
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== flags) console.log(result.error);
+	 * console.log(`
+	 *   Name: ${result.name}
+	 *   Longitude: ${result.data[0]}
+	 * `);
+	 * ```
+	 * &nbsp;
 	 */
-	export function fixstar2(star: string, tjd_et: number, iflag: number): {
-		error: string,
-		flag: number,
-		data: number[]
-	}
+	export function fixstar2(star: string, tjd_et: number, iflag: number): FixStar;
 
 	/**
 	 * 
@@ -800,11 +1142,39 @@ declare module "sweph" {
 	 * @param atpress 
 	 * @param attemp 
 	 */
-	export function gauquelin_sector(tjd_ut: number, ipl: number, starname: string | null, iflag: number, imeth: number, geopos: [number,number,number], atpress: number, attemp: number): {
-		error: string,
-		flag: number,
-		data: number
-	}
+
+	/**
+	 * ### Description
+	 * Calculate the Gauquelin Sector position of an object
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time time
+	 * • ipl: number // Object ID (This is ignored if starname is not null)
+	 * • starname: string | null // Star name if star
+	 * • iflag: number // Calculation flags
+	 * • imeth: number // Gauquelin sector calculation method
+	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * • atpress: number // Atmospheric pressure in mbar/hpa
+	 * • attemp: number // Atmospheric temperature in celcius
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR or other warnings
+	 *   data: number // The gauquelin sector with fraction
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = gauquelin_sector(2413256, constants.SE_MOON, null, constants.SEFLG_SWIEPH, 0, [15,10,0], 0, 0);
+	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.error) console.log(result.error);
+	 * console.log(`Sector: ${Math.floor(result.data)}`);
+	 * ```
+	 * &nbsp;
+	 */
+	export function gauquelin_sector(tjd_ut: number, ipl: number, starname: string | null, iflag: number, imeth: number, geopos: [number,number,number], atpress: number, attemp: number): GauquelinSector;
 
 	/**
 	 * ### Description
@@ -829,11 +1199,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function get_ayanamsa_ex_ut(tjd_ut: number, ephe_flag: number): {
-		flag: number;
-		error: string;
-		data: number;
-	}
+	export function get_ayanamsa_ex_ut(tjd_ut: number, ephe_flag: number): Ayanamsa;
 
 	/**
 	 * ### Description
@@ -858,11 +1224,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function get_ayanamsa_ex(tjd_et: number, ephe_flag: number): {
-		flag: number;
-		error: string;
-		data: number;
-	}
+	export function get_ayanamsa_ex(tjd_et: number, ephe_flag: number): Ayanamsa;
 
 	/**
 	 * ### Description
@@ -1592,8 +1954,8 @@ declare module "sweph" {
 	 * Set geographic coordinates for topocentric mode
 	 * ### Params
 	 * ```
-	 * • geolon: number // Geographic longitude in decimal degrees
-	 * • geolat: number // Geographic latitude in decimal degrees
+	 * • geolon: number // Geographic longitude in degrees
+	 * • geolat: number // Geographic latitude in degrees
 	 * • elevation: number // Elevation in meters
 	 * ```
 	 * ### Example

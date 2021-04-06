@@ -14,8 +14,10 @@ Napi::Value sweph_fixstar_ut(const Napi::CallbackInfo& info) {
 	}
 	double xx [6];
 	char serr [AS_MAXCH];
+	char star [AS_MAXCH];
+	strcpy(star, info[0].As<Napi::String>().Utf8Value().c_str());
 	int32 flag = swe_fixstar_ut(
-		(char*)info[0].As<Napi::String>().Utf8Value().c_str(),
+		star,
 		info[1].As<Napi::Number>().Int32Value(),
 		info[2].As<Napi::Number>().Int32Value(),
 		xx,
@@ -24,6 +26,7 @@ Napi::Value sweph_fixstar_ut(const Napi::CallbackInfo& info) {
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
 	obj["error"] = serr;
+	obj["name"] = star;
 	obj["data"] = sweph_js_array_converter(xx, 6, env);
 	return obj;
 }
