@@ -6,7 +6,7 @@ constexpr std::pair<int, const char*> args[] = {
 	{ ARRAY, "Argument 2 should be an array of 3 numbers - geographic coordinates [longitude, latitude, elevation]" },
 	{ ARRAY, "Argument 3 should be an array of 4 numbers - atmospheric conditions [pressure, temperature, humidity, meteorological range]" },
 	{ ARRAY, "Argument 4 should be an array of 6 numbers - observer description [age, sellen ratio, optical type, optical magnification, optical aperture, optical transmission]" },
-	{ STRING, "Argument 5 should be a string - object name" },
+	{ STRING, "Argument 5 should be a string - name of fixed star or planet" },
 	{ NUMBER, "Argument 6 should be a number - event type" },
 	{ NUMBER, "Argument 7 should be a number - calculation flag" }
 };

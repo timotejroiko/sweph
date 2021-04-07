@@ -14,7 +14,7 @@
  * set_ephe_path("./ephemeris"); // folder containing your ephemeris files;
  *
  * const date = utc_to_jd(2020, 1, 25, 15, 35, 0, constants.SE_GREG_CAL);
- * if(date.flag === constants.ERR) { throw new Error(date.error); }
+ * if(date.flag !== constants.OK) { throw new Error(date.error); }
  *
  * const [ jd_et, jd_ut ] = date.data;
  * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
@@ -22,7 +22,7 @@
  * if(planets.flag !== flags) { console.log(planets.error); }
  *
  * const houses = houses_ex2(jd_ut, 0, 37, 54, "P");
- * if(houses.flag === constants.ERR) { console.log(houses.error) }
+ * if(houses.flag !== constants.OK) { console.log(houses.error) }
  *
  * console.log(planets.data, houses.data)
  * ```
@@ -311,6 +311,160 @@ declare module "sweph" {
 		data: number
 	}
 
+	interface HeliacalPheno extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of values used by heliacal calculations  
+		 * ```
+		 * ```
+		 */
+		data: [
+			/**
+			 * Topocentric altitude of object in degrees (unrefracted)
+			 */
+			AltO: number,
+			/**
+			 * Apparent altitude of object in degrees (refracted)
+			 */
+			AppAltO: number,
+			/**
+			 * Geocentric altitude of object in degrees
+			 */
+			GeoAltO: number,
+			/**
+			 * Azimuth of object in degrees
+			 */
+			AziO: number,
+			/**
+			 * Topocentric altitude of Sun in degrees
+			 */
+			AltS: number,
+			/**
+			 * Azimuth of Sun in degrees
+			 */
+			AziS:number,
+			/**
+			 * Actual topocentric arcus visionis in degrees
+			 */
+			TAVact: number,
+			/**
+			 * Actual (geocentric) arcus visionis in degrees
+			 */
+			ARCVact: number,
+			/**
+			 * Actual difference between object's and sun's azimuth in degrees
+			 */
+			DAZact: number,
+			/**
+			 * Actual longitude difference between object and sun in degrees
+			 */
+			ARCLact: number,
+			/**
+			 * Extinction coefficient
+			 */
+			kact: number,
+			/**
+			 * Smallest topocentric arcus visionis in degrees
+			 */
+			minTAV: number,
+			/**
+			 * First time object is visible:number, according to VR in JD
+			 */
+			TfistVR: number,
+			/**
+			 * optimum time the object is visible:number, according to VR in JD
+			 */
+			TbVR: number,
+			/**
+			 * last time object is visible:number, according to VR in JD
+			 */
+			TlastVR: number,
+			/**
+			 * best time the object is visible:number, according to Yallop in JD
+			 */
+			TbYallop: number,
+			/**
+			 * crescent width of Moon in degrees
+			 */
+			WMoon: number,
+			/**
+			 * q-test value of Yallop
+			 */
+			qYal: number,
+			/**
+			 * q-test criterion of Yallop
+			 */
+			qCrit: number,
+			/**
+			 * parallax of object in degrees
+			 */
+			ParO: number,
+			/**
+			 * magnitude of object
+			 */
+			Magn: number,
+			/**
+			 * rise/set time of object in JD
+			 */
+			RiseO: number,
+			/**
+			 * rise/set time of Sun in JD
+			 */
+			RiseS: number,
+			/**
+			 * rise/set time of object minus rise/set time of Sun in JD
+			 */
+			Lag: number,
+			/**
+			 * visibility duration in JD
+			 */
+			TvisVR: number,
+			/**
+			 * crescent length of Moon in degrees
+			 */
+			LMoon: number,
+			/**
+			 * CVAact in degrees
+			 */
+			CVAact: number,
+			/**
+			 * Illum in percentage
+			 */
+			Illum: number,
+			/**
+			 * CVAact in degrees
+			 */
+			CVAact: number,
+			/**
+			 * MSk
+			 */
+			MSk: number
+		]
+	}
+
+	interface Heliacal extends Flag, Error {
+		/**
+		 * ### Description
+		 * Event times of the heliacal phenomenon  
+		 * ```
+		 * ```
+		 */
+		data: [
+			/**
+			 * Start visibility in JD
+			 */
+			vis_start: number,
+			/**
+			 * Optimum visibility in JD (zero if hel_flag >= SE_HELFLAG_AV)
+			 */
+			vis_opt: number,
+			/**
+			 * End of visibility in JD (zero if hel_flag >= SE_HELFLAG_AV)
+			 */
+			vis_end: number
+		]
+	}
+
 	type AzaltRev = [
 		/**
 		 * (λ) Ecliptic longitude if SE_HOR2ECL  
@@ -490,8 +644,8 @@ declare module "sweph" {
 	 * ```
 	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = calc_ut(2314234, constants.SE_MOON, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
-	 * if(result.flag !== flags) console.log(result.error);
+	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
+	 * if(result.flag !== flags) { console.log(result.error); }
 	 * console.log(`Longitude: ${result.data[0]}`);
 	 * ```
 	 * &nbsp;
@@ -526,8 +680,8 @@ declare module "sweph" {
 	 * ```
 	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = calc(2314234, constants.SE_VENUS, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
-	 * if(result.flag !== flags) console.log(result.error);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * if(result.flag !== flags) { console.log(result.error); }
 	 * console.log(`Longitude: ${result.data[0]}`);
 	 * ```
 	 * &nbsp;
@@ -746,7 +900,7 @@ declare module "sweph" {
 	 * ### Example
 	 * ```
 	 * const jd = date_conversion(1995, 5, 15, 13.75, "g");
-	 * if(jd.flag === constants.ERR) { throw new Error("Invalid date"); }
+	 * if(jd.flag !== constants.OK) { throw new Error("Invalid date"); }
 	 * console.log(`Julian Day: ${jd.data}`);
 	 * ```
 	 * &nbsp;
@@ -932,7 +1086,7 @@ declare module "sweph" {
 	 * ### Example
 	 * ```
 	 * const result = fixStar_mag("Aldebaran");
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
 	 * console.log(`
 	 *   Star: ${result.name}
 	 *   Magnitude: ${result.data}
@@ -971,8 +1125,8 @@ declare module "sweph" {
 	 * ```
 	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = fixstar_ut("Aldebaran", 2413256, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
-	 * if(result.flag !== flags) console.log(result.error);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * if(result.flag !== flags) { console.log(result.error); }
 	 * console.log(`
 	 *   Name: ${result.name}
 	 *   Longitude: ${result.data[0]}
@@ -1011,8 +1165,8 @@ declare module "sweph" {
 	 * ```
 	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = fixstar("Aldebaran", 2413256, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
-	 * if(result.flag !== flags) console.log(result.error);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * if(result.flag !== flags) { console.log(result.error); }
 	 * console.log(`
 	 *   Name: ${result.name}
 	 *   Longitude: ${result.data[0]}
@@ -1041,7 +1195,7 @@ declare module "sweph" {
 	 * ### Example
 	 * ```
 	 * const result = fixStar2_mag("Aldebaran");
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
+	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
 	 * console.log(`
 	 *   Star: ${result.name}
 	 *   Magnitude: ${result.data}
@@ -1080,8 +1234,8 @@ declare module "sweph" {
 	 * ```
 	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = fixstar2_ut("Aldebaran", 2413256, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
-	 * if(result.flag !== flags) console.log(result.error);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * if(result.flag !== flags) { console.log(result.error); }
 	 * console.log(`
 	 *   Name: ${result.name}
 	 *   Longitude: ${result.data[0]}
@@ -1120,8 +1274,8 @@ declare module "sweph" {
 	 * ```
 	 * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
 	 * const result = fixstar2("Aldebaran", 2413256, flags);
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
-	 * if(result.flag !== flags) console.log(result.error);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * if(result.flag !== flags) { console.log(result.error); }
 	 * console.log(`
 	 *   Name: ${result.name}
 	 *   Longitude: ${result.data[0]}
@@ -1168,8 +1322,8 @@ declare module "sweph" {
 	 * ### Example
 	 * ```
 	 * const result = gauquelin_sector(2413256, constants.SE_MOON, null, constants.SEFLG_SWIEPH, 0, [15,10,0], 0, 0);
-	 * if(result.flag === constants.ERR) throw new Error(result.error);
-	 * if(result.error) console.log(result.error);
+	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
+	 * if(result.error) { console.log(result.error); }
 	 * console.log(`Sector: ${Math.floor(result.data)}`);
 	 * ```
 	 * &nbsp;
@@ -1186,7 +1340,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Returns
 	 * ```
-	 * {
+	 * Object {
 	 *   flag: number, // Computed ephemeris flag or ERR
 	 *   error: string, // Error message if ERR
 	 *   data: number // Ayanamsa value
@@ -1195,7 +1349,7 @@ declare module "sweph" {
 	 * ### Example
 	 * ```
 	 * const result = get_ayanamsa_ex_ut(2314234, constants.SEFLG_SWIEPH);
-	 * if(result.flag === constants.ERR) console.log(result.error);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
 	 * ```
 	 * &nbsp;
 	 */
@@ -1211,7 +1365,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Returns
 	 * ```
-	 * {
+	 * Object {
 	 *   flag: number, // Computed ephemeris flag or ERR
 	 *   error: string, // Error message if ERR
 	 *   data: number // Ayanamsa value
@@ -1220,7 +1374,7 @@ declare module "sweph" {
 	 * ### Example
 	 * ```
 	 * const result = get_ayanamsa_ex(2314234, constants.SEFLG_SWIEPH);
-	 * if(result.flag === constants.ERR) console.log(result.error);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
 	 * ```
 	 * &nbsp;
 	 */
@@ -1292,7 +1446,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Returns
 	 * ```
-	 * {
+	 * Object {
 	 *   path: string, // Path to ephemeris file
 	 *   start: number, // Ephemeris start date
 	 *   end: number, // Ephemeris end date
@@ -1336,7 +1490,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Returns
 	 * ```
-	 * {
+	 * Object {
 	 *   flag: number, // OK or ERR
 	 *   error: string, // Error message if ERR
 	 *   data: number [
@@ -1363,7 +1517,7 @@ declare module "sweph" {
 	 * ### Example
 	 * ```
 	 * const result = get_orbital_elements(2314234, constants.SE_MARS, constants.SEFLG_SWIEPH);
-	 * if(result.flag === constants.ERR) console.log(result.error);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
 	 * ```
 	 * &nbsp;
 	 */
@@ -1404,52 +1558,102 @@ declare module "sweph" {
 	export function get_tid_acc(): number;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param dgeo 
-	 * @param datm 
-	 * @param dobs 
-	 * @param object_name 
-	 * @param event_type 
-	 * @param hel_flag 
+	 * ### Description
+	 * Obtain additional data used for calculation of heliacal risings and settings
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • dgeo: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * • datm: Array<number> // Atmospheric conditions [pressure, temperature, humidity, meteorological range]
+	 * • dobs: Array<number> // Observer description [age, sellen ratio, optical type, optical magnification, optical aperture, optical transmission]
+	 * • object_name: string // Name of fixed star or planet
+	 * • event_type: number // Event type
+	 * • hel_flag: number // Calculation flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message if ERR
+	 *   data: number [
+	 *     AltO, // topocentric altitude of object in degrees (unrefracted)
+	 *     AppAltO, // apparent altitude of object in degrees (refracted)
+	 *     GeoAltO, // geocentric altitude of object in degrees
+	 *     AziO, // azimuth of object in degrees
+	 *     AltS, // topocentric altitude of Sun in degrees
+	 *     AziS, // azimuth of Sun in degrees
+	 *     TAVact, // actual topocentric arcus visionis in degrees
+	 *     ARCVact, // actual (geocentric) arcus visionis in degrees
+	 *     DAZact, // actual difference between object's and sun's azimuth in degrees
+	 *     ARCLact, // actual longitude difference between object and sun in degrees
+	 *     kact, // extinction coefficient
+	 *     minTAV, // smallest topocentric arcus visionis in degrees
+	 *     TfistVR, // first time object is visible, according to VR in JD
+	 *     TbVR, // optimum time the object is visible, according to VR in JD
+	 *     TlastVR, // last time object is visible, according to VR in JD
+	 *     TbYallop, // best time the object is visible, according to Yallop in JD
+	 *     WMoon, // crescent width of Moon in degrees
+	 *     qYal, // q-test value of Yallop
+	 *     qCrit, // q-test criterion of Yallop
+	 *     ParO, // parallax of object in degrees
+	 *     Magn, // magnitude of object
+	 *     RiseO, // rise/set time of object in JD
+	 *     RiseS, // rise/set time of Sun in JD
+	 *     Lag, // rise/set time of object minus rise/set time of Sun in JD
+	 *     TvisVR, // visibility duration in JD
+	 *     LMoon, //  crescent length of Moon in degrees
+	 *     CVAact, // CVAact in degrees
+	 *     Illum, // Illum in percentage
+	 *     CVAact, // CVAact in degrees
+	 *     MSk // MSk
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = heliacal_pheno_ut(2415362, [8,47,900], [1000,10,50,-0.15], [21,0,0,0,0,0], "moon", 0, 0);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
+	 * console.log(result.data);
+	 * ```
+	 * &nbsp;
 	 */
-	export function heliacal_pheno_ut(
-		tjd_ut: number,
-		dgeo: [longitude: number, latitude: number, elevation: number],
-		datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number],
-		dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number],
-		object_name: string,
-		event_type: number,
-		hel_flag: number
-	): {
-		error: string,
-		flag: number,
-		data: number[]
-	}
+	export function heliacal_pheno_ut(tjd_ut: number, dgeo: [longitude: number, latitude: number, elevation: number], datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], object_name: string, event_type: number, hel_flag: number): HeliacalPheno;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param dgeo 
-	 * @param datm 
-	 * @param dobs 
-	 * @param object_name 
-	 * @param event_type 
-	 * @param hel_flag 
+	 * ### Description
+	 * Calculate the next heliacal phenomenon after a given start date  
+	 * It works between geographic latitudes -60 and 60
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • dgeo: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * • datm: Array<number> // Atmospheric conditions [pressure, temperature, humidity, meteorological range]
+	 * • dobs: Array<number> // Observer description [age, sellen ratio, optical type, optical magnification, optical aperture, optical transmission]
+	 * • object_name: string // Name of fixed star or planet
+	 * • event_type: number // Event type
+	 * • hel_flag: number // Calculation flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message if ERR
+	 *   data: number [
+	 *     vis_start, // Start visibility in JD
+	 *     vis_opt, // Optimum visibility in JD (zero if hel_flag >= SE_HELFLAG_AV)
+	 *     vis_end // End of visibility in JD (zero if hel_flag >= SE_HELFLAG_AV)
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = heliacal_ut(2415362, [8,47,900], [1000,10,50,-0.15], [21,0,0,0,0,0], "venus", 0, 0);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
+	 * console.log(`Visibility Start: ${result.data[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function heliacal_ut(
-		tjd_ut: number,
-		dgeo: [longitude: number, latitude: number, elevation: number],
-		datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number],
-		dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number],
-		object_name: string,
-		event_type: number,
-		hel_flag: number
-	): {
-		error: string,
-		flag: number,
-		data: number[]
-	}
+	export function heliacal_ut(tjd_ut: number,	dgeo: [longitude: number, latitude: number, elevation: number],	datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], object_name: string,	event_type: number,	hel_flag: number): Heliacal;
 
 	/**
 	 * 
