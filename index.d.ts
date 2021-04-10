@@ -229,14 +229,20 @@ declare module "sweph" {
 
 	interface DateConversion extends Flag {
 		/**
+		 * ### Description
 		 * Julian day value
+		 * ```
+		 * ```
 		 */
 		data: number
 	}
 
 	interface DeltaT extends Error {
 		/**
+		 * ### Description
 		 * Delta T value
+		 * ```
+		 * ```
 		 */
 		data: number
 	}
@@ -292,21 +298,30 @@ declare module "sweph" {
 
 	interface FixStarMag extends Flag, Name, Error {
 		/**
+		 * ### Description
 		 * Magnitude value
+		 * ```
+		 * ```
 		 */
 		data: number
 	}
 
 	interface GauquelinSector extends Flag, Error {
 		/**
+		 * ### Description
 		 * Gauquelin Sector
+		 * ```
+		 * ```
 		 */
 		data: number
 	}
 
 	interface Ayanamsa extends Flag, Error {
 		/**
+		 * ### Description
 		 * Ayanamsa Value
+		 * ```
+		 * ```
 		 */
 		data: number
 	}
@@ -465,6 +480,139 @@ declare module "sweph" {
 		]
 	}
 
+	interface HousePosition extends Error {
+		/**
+		 * ### Description
+		 * House position including fraction  
+		 * From 1.0 to 12.999999 for normal houses and 1.0 to 36.9999999 for gauquelin sectors  
+		 * ```
+		 * ```
+		 */
+		data: number
+	}
+
+	interface Houses<T> extends Flag {
+		/**
+		 * ### Description
+		 * Calculated positions for the houses and other points  
+		 * ```
+		 * ```
+		 */
+		data: HouseData<T>
+	}
+
+	interface HousesEx<T> extends Flag, Error {
+		/**
+		 * ### Description
+		 * Calculated positions for the houses and other points  
+		 * Also includes momentary motion speeds  
+		 * ```
+		 * ```
+		 */
+		data: HouseExData<T>
+	}
+
+	interface HouseData<T> {
+		/**
+		 * ### Description
+		 * Longitude positions for the houses  
+		 * 36 houses for gauquelin sectors, 12 houses for all other systems  
+		 * ```
+		 * ```
+		 */
+		houses: T extends 36 ? GauquelinHousesList : HousesList,
+		/**
+		 * ### Description
+		 * Longitude positions for other points of interest in the great circles  
+		 * ```
+		 * ```
+		 */
+		points: [
+			/**
+			 * Longitude of the Ascendant
+			 */
+			asc: number,
+			/**
+			 * Longitude of the Midheaven
+			 */
+			mc: number,
+			/**
+			 * Right Ascension of the Midheaven
+			 */
+			armc: number,
+			/**
+			 * Longitude of the Vertex
+			 */
+			vertex: number,
+			/**
+			 * Longitude of the Equatorial Ascendant
+			 */
+			equasc: number,
+			/**
+			 * Longitude of Walter Koch's Co-Ascendant
+			 */
+			coasc1: number,
+			/**
+			 * Longitude of Michael Munkasey's Co-Ascendant
+			 */
+			coasc2: number,
+			/**
+			 * Longitude of Michael Munkasey's Polar Ascendant
+			 */
+			polasc: number
+		]
+	}
+
+	interface HouseExData<T> extends HouseData<T> {
+		/**
+		 * ### Description
+		 * Momentary motion speeds of the houses  
+		 * ```
+		 * ```
+		 */
+		housesSpeed: T extends 36 ? GauquelinHousesSpeeds : HousesSpeeds,
+		/**
+		 * ### Description
+		 * Momentary motion speeds of other points of interest  
+		 * ```
+		 * ```
+		 */
+		pointsSpeed: [
+			/**
+			 * Momentary speed of the Ascendant
+			 */
+			 asc_speed: number,
+			 /**
+			  * Momentary speed of the Midheaven
+			  */
+			 mc_speed: number,
+			 /**
+			  * Momentary speed in Right Ascension of the Midheaven
+			  */
+			 armc_speed: number,
+			 /**
+			  * Momentary speed of the Vertex
+			  */
+			 vertex_speed: number,
+			 /**
+			  * Momentary speed of the Equatorial Ascendant
+			  */
+			 equasc_speed: number,
+			 /**
+			  * Momentary speed of Walter Koch's Co-Ascendant
+			  */
+			 coasc1_speed: number,
+			 /**
+			  * Momentary speed of Michael Munkasey's Co-Ascendant
+			  */
+			 coasc2_speed: number,
+			 /**
+			  * Momentary speed of Michael Munkasey's Polar Ascendant
+			  */
+			 polasc_speed: number
+		]
+	}
+
 	type AzaltRev = [
 		/**
 		 * (λ) Ecliptic longitude if SE_HOR2ECL  
@@ -522,6 +670,310 @@ declare module "sweph" {
 		 * Distance in AU (unchanged)
 		 */
 		dist: number,
+	]
+
+	type HouseSystems = "B" | "Y" | "X" | "H" | "C" | "F" | "A" | "E" | "D" | "N" | "G" | "I" | "i" | "K" | "U" | "M" | "P" | "T" | "O" | "L" | "Q" | "R" | "S" | "V" | "W";
+
+	type HousesList = [
+		/**
+		 * 1st House
+		 */
+		house_1: number,
+		/**
+		 * 2nd House
+		 */
+		house_2: number,
+		/**
+		 * 3rd House
+		 */
+		house_3: number,
+		/**
+		 * 4th House
+		 */
+		house_4: number,
+		/**
+		 * 5th House
+		 */
+		house_5: number,
+		/**
+		 * 6th House
+		 */
+		house_6: number,
+		/**
+		 * 7th House
+		 */
+		house_7: number,
+		/**
+		 * 8th House
+		 */
+		house_8: number,
+		/**
+		 * 9th House
+		 */
+		house_9: number,
+		/**
+		 * 10th House
+		 */
+		house_10: number,
+		/**
+		 * 11th House
+		 */
+		house_11: number,
+		/**
+		 * 12th House
+		 */
+		house_12: number,
+	]
+
+	type HousesSpeeds = [
+		/**
+		 * Momentary speed for the 1st House
+		 */
+		house_1_speed: number,
+		/**
+		 * Momentary speed for the 2nd House
+		 */
+		house_2_speed: number,
+		/**
+		 * Momentary speed for the 3rd House
+		 */
+		house_3_speed: number,
+		/**
+		 * Momentary speed for the 4th House
+		 */
+		house_4_speed: number,
+		/**
+		 * Momentary speed for the 5th House
+		 */
+		house_5_speed: number,
+		/**
+		 * Momentary speed for the 6th House
+		 */
+		house_6_speed: number,
+		/**
+		 * Momentary speed for the 7th House
+		 */
+		house_7_speed: number,
+		/**
+		 * Momentary speed for the 8th House
+		 */
+		house_8_speed: number,
+		/**
+		 * Momentary speed for the 9th House
+		 */
+		house_9_speed: number,
+		/**
+		 * Momentary speed for the 10th House
+		 */
+		house_10_speed: number,
+		/**
+		 * Momentary speed for the 11th House
+		 */
+		house_11_speed: number,
+		/**
+		 * Momentary speed for the 12th House
+		 */
+		house_12_speed: number,
+	]
+
+	type GauquelinHousesList = [
+		...houses: HousesList,
+		/**
+		 * 13th House
+		 */
+		house_13: number,
+		/**
+		 * 14th House
+		 */
+		house_14: number,
+		/**
+		 * 15th House
+		 */
+		house_15: number,
+		/**
+		 * 16th House
+		 */
+		house_16: number,
+		/**
+		 * 17th House
+		 */
+		house_17: number,
+		/**
+		 * 18th House
+		 */
+		house_18: number,
+		/**
+		 * 19th House
+		 */
+		house_19: number,
+		/**
+		 * 20th House
+		 */
+		house_20: number,
+		/**
+		 * 21th House
+		 */
+		house_21: number,
+		/**
+		 * 22th House
+		 */
+		house_22: number,
+		/**
+		 * 23th House
+		 */
+		house_23: number,
+		/**
+		 * 24th House
+		 */
+		house_24: number,
+		/**
+		 * 25th House
+		 */
+		house_25: number,
+		/**
+		 * 26th House
+		 */
+		house_26: number,
+		/**
+		 * 27th House
+		 */
+		house_27: number,
+		/**
+		 * 28th House
+		 */
+		house_28: number,
+		/**
+		 * 29th House
+		 */
+		house_29: number,
+		/**
+		 * 30th House
+		 */
+		house_30: number,
+		/**
+		 * 31th House
+		 */
+		house_31: number,
+		/**
+		 * 32th House
+		 */
+		house_32: number,
+		/**
+		 * 33th House
+		 */
+		house_33: number,
+		/**
+		 * 34th House
+		 */
+		house_34: number,
+		/**
+		 * 35th House
+		 */
+		house_35: number,
+		/**
+		 * 36th House
+		 */
+		house_36: number,
+	]
+
+	type GauquelinHousesSpeeds = [
+		...houses: HousesSpeeds,
+		/**
+		 * Momentary speed for the 13th House
+		 */
+		house_13_speed: number,
+		/**
+		 * Momentary speed for the 14th House
+		 */
+		house_14_speed: number,
+		/**
+		 * Momentary speed for the 15th House
+		 */
+		house_15_speed: number,
+		/**
+		 * Momentary speed for the 16th House
+		 */
+		house_16_speed: number,
+		/**
+		 * Momentary speed for the 17th House
+		 */
+		house_17_speed: number,
+		/**
+		 * Momentary speed for the 18th House
+		 */
+		house_18_speed: number,
+		/**
+		 * Momentary speed for the 19th House
+		 */
+		house_19_speed: number,
+		/**
+		 * Momentary speed for the 20th House
+		 */
+		house_20_speed: number,
+		/**
+		 * Momentary speed for the 21th House
+		 */
+		house_21_speed: number,
+		/**
+		 * Momentary speed for the 22th House
+		 */
+		house_22_speed: number,
+		/**
+		 * Momentary speed for the 23th House
+		 */
+		house_23_speed: number,
+		/**
+		 * Momentary speed for the 24th House
+		 */
+		house_24_speed: number,
+		/**
+		 * Momentary speed for the 25th House
+		 */
+		house_25_speed: number,
+		/**
+		 * Momentary speed for the 26th House
+		 */
+		house_26_speed: number,
+		/**
+		 * Momentary speed for the 27th House
+		 */
+		house_27_speed: number,
+		/**
+		 * Momentary speed for the 28th House
+		 */
+		house_28_speed: number,
+		/**
+		 * Momentary speed for the 29th House
+		 */
+		house_29_speed: number,
+		/**
+		 * Momentary speed for the 30th House
+		 */
+		house_30_speed: number,
+		/**
+		 * Momentary speed for the 31th House
+		 */
+		house_31_speed: number,
+		/**
+		 * Momentary speed for the 32th House
+		 */
+		house_32_speed: number,
+		/**
+		 * Momentary speed for the 33th House
+		 */
+		house_33_speed: number,
+		/**
+		 * Momentary speed for the 34th House
+		 */
+		house_34_speed: number,
+		/**
+		 * Momentary speed for the 35th House
+		 */
+		house_35_speed: number,
+		/**
+		 * Momentary speed for the 36th House
+		 */
+		house_36_speed: number,
 	]
 
 	/**
@@ -1656,107 +2108,299 @@ declare module "sweph" {
 	export function heliacal_ut(tjd_ut: number,	dgeo: [longitude: number, latitude: number, elevation: number],	datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], object_name: string,	event_type: number,	hel_flag: number): Heliacal;
 
 	/**
-	 * 
-	 * @param hsys ascii
+	 * ### Description
+	 * Get the name of a house system
+	 * ### Params
+	 * ```
+	 * • hsys: string // House system ID
+	 * ```
+	 * ### Returns
+	 * ```
+	 * string // House system name
+	 * ```
+	 * ### Example
+	 * ```
+	 * const name = house_name("p"); // "Placidus"
+	 * ```
+	 * &nbsp;
 	 */
-	export function house_name(hsys: number): String;
+	export function house_name(hsys: number): string;
 
 	/**
-	 * 
-	 * @param armc 
-	 * @param geolat 
-	 * @param eps 
-	 * @param hsys 
-	 * @param xpin 
+	 * ### Description
+	 * Calculate the house position of an object  
+	 * This function attempts to obtain a visually accurate house position by also taking latitude/declination into account
+	 * ### Params
+	 * ```
+	 * • armc: number // Right ascension
+	 * • geolat: number // Geographic latitude
+	 * • eps: number // Obliquity of the ecliptic
+	 * • hsys: string // House system ID
+	 * • xpin: Array<number> // Object position in ecliptic tropical coordinates [longitude, latitude]
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   error: string, // Error message if any
+	 *   data: number // House position including fraction
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = house_pos(50, 45, 23, "p", [256, 2]);
+	 * if(result.error) { throw new Error(result.error); }
+	 * console.log(`House: ${Math.floor(result.data)}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function house_pos(armc: number, geolat: number, eps: number, hsys: string, xpin: [longitude: number, latitude: number]): {
-		data: number,
-		error: string
-	}
+	export function house_pos(armc: number, geolat: number, eps: number, hsys: string, xpin: [longitude: number, latitude: number]): HousePosition;
 
 	/**
-	 * 
-	 * @param armc 
-	 * @param geolat 
-	 * @param eps 
-	 * @param hsys 
+	 * ### Description
+	 * Calculate houses and other points from right ascension and obliquity including momentary motion speeds  
+	 * This function can be used to calculate houses without a date, such as composite houses  
+	 * It also returns an error message in case something goes wrong
+	 * ### Params
+	 * ```
+	 * • armc: number // Right ascension of the midheaven
+	 * • geolat: number // Geographic latitude
+	 * • eps: number // Obliquity of the ecliptic
+	 * • hsys: string // House system ID
+	 * • decl?: number // Declination of the Sun (sunshine/makransky houses only)
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR
+	 *   data: Object {
+	 *     houses: Array<number> [
+	 *       house_1: number, // Longitude of the first house
+	 *       house_2: number, // Longitude of the second house
+	 *       house_3: number, // Longitude of the third house
+	 *       ... // 36 houses if gauquelin sectors, 12 houses otherwise
+	 *     ],
+	 *     points: Array<number> [
+	 *       asc: number, // Ascendant
+	 *       mc: number, // Midheaven
+	 *       armc: number, // Right Ascension of the midheaven
+	 *       vertex: number, // Vertex
+	 *       equasc: number, // Equatorial Ascendant
+	 *       coasc1: number, // Co-Ascendant (Walter Koch)
+	 *       coasc2: number, // Co-Ascendant (Michael Munkasey)
+	 *       polasc: number, // Polar Ascendant (Michael Munkasey)
+	 *     ],
+	 *     housesSpeed: Array<number> [
+	 *       ... // Longitude speeds for the houses
+	 *     ],
+	 *     pointsSpeed: Array<number> [
+	 *       ... // Longitude speeds for the points
+	 *     ]
+	 *   }
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = houses_armc_ex2(34, 10, 23, "P");
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
+	 * console.log(`Ascendant: ${result.data.points[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: string): {
-		flag: number,
-		error: string,
-		data: {
-			houses: number[],
-			points: number[],
-			housesSpeed: number[],
-			pointsSpeed: number[]
-		}
-	}
+	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): HousesEx<12>;
+	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: "G", decl?: number): HousesEx<36>;
 
 	/**
-	 * 
-	 * @param armc 
-	 * @param geolat 
-	 * @param eps 
-	 * @param hsys 
+	 * ### Description
+	 * Calculate houses and other points from right ascension and obliquity  
+	 * This function can be used to calculate houses without a date, such as composite houses
+	 * ### Params
+	 * ```
+	 * • armc: number // Right ascension of the midheaven
+	 * • geolat: number // Geographic latitude
+	 * • eps: number // Obliquity of the ecliptic
+	 * • hsys: string // House system ID
+	 * • decl?: number // Declination of the Sun (sunshine/makransky houses only)
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   data: Object {
+	 *     houses: Array<number> [
+	 *       house_1: number, // Longitude of the first house
+	 *       house_2: number, // Longitude of the second house
+	 *       house_3: number, // Longitude of the third house
+	 *       ... // 36 houses if gauquelin sectors, 12 houses otherwise
+	 *     ],
+	 *     points: Array<number> [
+	 *       asc: number, // Ascendant
+	 *       mc: number, // Midheaven
+	 *       armc: number, // Right Ascension of the midheaven
+	 *       vertex: number, // Vertex
+	 *       equasc: number, // Equatorial Ascendant
+	 *       coasc1: number, // Co-Ascendant (Walter Koch)
+	 *       coasc2: number, // Co-Ascendant (Michael Munkasey)
+	 *       polasc: number, // Polar Ascendant (Michael Munkasey)
+	 *     ]
+	 *   }
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = houses_armc(34, 10, 23, "P");
+	 * if(result.flag !== constants.OK) { console.log("something went wrong, check output") }
+	 * console.log(`Ascendant: ${result.data.points[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function houses_armc(armc: number, geolat: number, eps: number, hsys: string): {
-		flag: number,
-		error: string,
-		data: {
-			houses: number[],
-			points: number[]
-		}
-	}
+	export function houses_armc(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): Houses<12>;
+	export function houses_armc(armc: number, geolat: number, eps: number, hsys: "G", decl?: number): Houses<36>;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param iflag 
-	 * @param geolat 
-	 * @param geolon 
-	 * @param hsys 
+	 * ### Description
+	 * Calculate houses and other points with support for calculation flags
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • iflag: number // Calculation flags
+	 * • geolat: number // Geographic latitude
+	 * • geolon: number // Geographic longitude
+	 * • hsys: string // House system ID
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   data: Object {
+	 *     houses: Array<number> [
+	 *       house_1: number, // Longitude of the first house
+	 *       house_2: number, // Longitude of the second house
+	 *       house_3: number, // Longitude of the third house
+	 *       ... // 36 houses if gauquelin sectors, 12 houses otherwise
+	 *     ],
+	 *     points: Array<number> [
+	 *       asc: number, // Ascendant
+	 *       mc: number, // Midheaven
+	 *       armc: number, // Right Ascension of the midheaven
+	 *       vertex: number, // Vertex
+	 *       equasc: number, // Equatorial Ascendant
+	 *       coasc1: number, // Co-Ascendant (Walter Koch)
+	 *       coasc2: number, // Co-Ascendant (Michael Munkasey)
+	 *       polasc: number, // Polar Ascendant (Michael Munkasey)
+	 *     ]
+	 *   }
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = houses_ex(2413654, 0, 35.234, 45.324, "P");
+	 * if(result.flag !== constants.OK) { console.log("something went wrong, check output") }
+	 * console.log(`Ascendant: ${result.data.points[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: string): {
-		flag: number,
-		data: {
-			houses: number[],
-			points: number[]
-		}
-	}
+	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
+	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: "G"): Houses<36>;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param iflag 
-	 * @param geolat 
-	 * @param geolon 
-	 * @param hsys 
+	 * ### Description
+	 * Calculate the houses and other points with support for calculation flags and including momentary motion speeds  
+	 * This function also outputs an error message in case something goes wrong
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • iflag: number // Calculation flags
+	 * • geolat: number // Geographic latitude
+	 * • geolon: number // Geographic longitude
+	 * • hsys: string // House system ID
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of ERR
+	 *   data: Object {
+	 *     houses: Array<number> [
+	 *       house_1: number, // Longitude of the first house
+	 *       house_2: number, // Longitude of the second house
+	 *       house_3: number, // Longitude of the third house
+	 *       ... // 36 houses if gauquelin sectors, 12 houses otherwise
+	 *     ],
+	 *     points: Array<number> [
+	 *       asc: number, // Ascendant
+	 *       mc: number, // Midheaven
+	 *       armc: number, // Right Ascension of the midheaven
+	 *       vertex: number, // Vertex
+	 *       equasc: number, // Equatorial Ascendant
+	 *       coasc1: number, // Co-Ascendant (Walter Koch)
+	 *       coasc2: number, // Co-Ascendant (Michael Munkasey)
+	 *       polasc: number, // Polar Ascendant (Michael Munkasey)
+	 *     ],
+	 *     housesSpeed: Array<number> [
+	 *       ... // Longitude speeds for the houses
+	 *     ],
+	 *     pointsSpeed: Array<number> [
+	 *       ... // Longitude speeds for the points
+	 *     ]
+	 *   }
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = houses_ex2(2413654, 0, 35.234, 45.324, "P");
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
+	 * console.log(`Ascendant: ${result.data.points[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: string): {
-		flag: number,
-		error: string,
-		data: {
-			houses: number[],
-			points: number[],
-			housesSpeed: number[],
-			pointsSpeed: number[]
-		}
-	}
+	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): HousesEx<12>;
+	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: "G"): HousesEx<36>;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param geolat 
-	 * @param geolon 
-	 * @param hsys 
+	 * ### Description
+	 * Calculate houses and other points
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • geolat: number // Geographic latitude
+	 * • geolon: number // Geographic longitude
+	 * • hsys: string // House system ID
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   data: Object {
+	 *     houses: Array<number> [
+	 *       house_1: number, // Longitude of the first house
+	 *       house_2: number, // Longitude of the second house
+	 *       house_3: number, // Longitude of the third house
+	 *       ... // 36 houses if gauquelin sectors, 12 houses otherwise
+	 *     ],
+	 *     points: Array<number> [
+	 *       asc: number, // Ascendant
+	 *       mc: number, // Midheaven
+	 *       armc: number, // Right Ascension of the midheaven
+	 *       vertex: number, // Vertex
+	 *       equasc: number, // Equatorial Ascendant
+	 *       coasc1: number, // Co-Ascendant (Walter Koch)
+	 *       coasc2: number, // Co-Ascendant (Michael Munkasey)
+	 *       polasc: number, // Polar Ascendant (Michael Munkasey)
+	 *     ]
+	 *   }
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = houses(2413654, 35.234, 45.324, "P");
+	 * if(result.flag !== constants.OK) { console.log("something went wrong, check output") }
+	 * console.log(`Ascendant: ${result.data.points[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: string): {
-		flag: number,
-		data: {
-			houses: number[],
-			points: number[]
-		}
-	}
+	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
+	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: "G"): Houses<36>;
 
 	/**
 	 * 

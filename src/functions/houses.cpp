@@ -26,7 +26,7 @@ Napi::Value sweph_houses(const Napi::CallbackInfo& info) {
 		points
 	);
 	Napi::Object data = Napi::Object::New(env);
-	data["houses"] = sweph_js_array_converter(cusps, g, env);
+	data["houses"] = sweph_js_array_converter(&cusps[1], g-1, env);
 	data["points"] = sweph_js_array_converter(points, 8, env);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;

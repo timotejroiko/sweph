@@ -15,6 +15,9 @@ Napi::Value sweph_houses_armc_ex2(const Napi::CallbackInfo& info) {
 	}
 	double cusps [37];
 	double points [10];
+	if(info[4].IsNumber()) {
+		points[9] = info[4].As<Napi::Number>().DoubleValue();
+	}
 	double cspeed [37];
 	double pspeed [10];
 	char serr [AS_MAXCH];
@@ -32,9 +35,9 @@ Napi::Value sweph_houses_armc_ex2(const Napi::CallbackInfo& info) {
 		serr
 	);
 	Napi::Object data = Napi::Object::New(env);
-	data["houses"] = sweph_js_array_converter(cusps, g, env);
+	data["houses"] = sweph_js_array_converter(&cusps[1], g-1, env);
 	data["points"] = sweph_js_array_converter(points, 8, env);
-	data["housesSpeed"] = sweph_js_array_converter(cspeed, g, env);
+	data["housesSpeed"] = sweph_js_array_converter(&cspeed[1], g-1, env);
 	data["pointsSpeed"] = sweph_js_array_converter(pspeed, 8, env);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;

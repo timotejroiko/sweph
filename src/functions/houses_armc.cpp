@@ -15,6 +15,9 @@ Napi::Value sweph_houses_armc(const Napi::CallbackInfo& info) {
 	}
 	double cusps [37];
 	double points [10];
+	if(info[4].IsNumber()) {
+		points[9] = info[4].As<Napi::Number>().DoubleValue();
+	}
 	char sys = info[3].As<Napi::String>().Utf8Value()[0];
 	int g = sys == 'G' ? 37 : 13;
 	int flag = swe_houses_armc(
@@ -26,7 +29,7 @@ Napi::Value sweph_houses_armc(const Napi::CallbackInfo& info) {
 		points
 	);
 	Napi::Object data = Napi::Object::New(env);
-	data["houses"] = sweph_js_array_converter(cusps, g, env);
+	data["houses"] = sweph_js_array_converter(&cusps[1], g-1, env);
 	data["points"] = sweph_js_array_converter(points, 8, env);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
