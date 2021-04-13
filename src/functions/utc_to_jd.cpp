@@ -8,7 +8,7 @@ constexpr std::pair<int, const char*> args[] = {
 	{ NUMBER, "Argument 4 should be a number - hour 0-23" },
 	{ NUMBER, "Argument 5 should be a number - minutes 0-59" },
 	{ NUMBER, "Argument 6 should be a number - seconds 0-59.999" },
-	{ NUMBER, "Argument 7 should be a number - calendar system, 1 for GREG_CAL, 0 for JUL_CAL" }
+	{ NUMBER, "Argument 7 should be a number - calendar system, 1 for SE_GREG_CAL, 0 for SE_JUL_CAL" }
 };
 
 Napi::Value sweph_utc_to_jd(const Napi::CallbackInfo& info) {

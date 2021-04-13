@@ -6,7 +6,7 @@ constexpr std::pair<int, const char*> args[] = {
 	{ NUMBER, "Argument 2 should be a number - month 1-12" },
 	{ NUMBER, "Argument 3 should be a number - day 1-31" },
 	{ NUMBER, "Argument 4 should be a number - decimal hour 0-23.999" },
-	{ NUMBER, "Argument 5 should be a number - calendar system, 1 for GREG_CAL, 0 for JUL_CAL" }
+	{ NUMBER, "Argument 5 should be a number - calendar system, 1 for SE_GREG_CAL, 0 for SE_JUL_CAL" }
 };
 
 Napi::Value sweph_julday(const Napi::CallbackInfo& info) {

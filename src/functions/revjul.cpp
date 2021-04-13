@@ -4,7 +4,7 @@
 constexpr std::pair<int, const char*> args[] = {
 	{ 2, "Expecting 2 arguments: tjd, gregflag" },
 	{ NUMBER, "Argument 1 should be a number - julian day number" },
-	{ NUMBER, "Argument 2 should be a number - calendar system, 1 for GREG_CAL, 0 for JUL_CAL" }
+	{ NUMBER, "Argument 2 should be a number - calendar system, 1 for SE_GREG_CAL, 0 for SE_JUL_CAL" }
 };
 
 Napi::Value sweph_revjul(const Napi::CallbackInfo& info) {

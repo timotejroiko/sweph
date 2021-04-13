@@ -613,6 +613,47 @@ declare module "sweph" {
 		]
 	}
 
+	interface DateObject {
+		/**
+		 * Full year
+		 */
+		year: number;
+		/**
+		 * Month (1-12)
+		 */
+		month: number;
+		/**
+		 * Day (1-31)
+		 */
+		day: number;
+		/**
+		 * Hour (0-23)
+		 */
+		hour: number;
+		/**
+		 * Minute (0-59)
+		 */
+		minute: number;
+		/**
+		 * Second including fraction (0-59.999999)
+		 */
+		second: number;
+	}
+
+	interface LocalApparentTime extends Flag, Error {
+		/**
+		 * Local apparent time in julian day in universal time
+		 */
+		data: number
+	}
+
+	interface LocalMeanTime extends Flag, Error {
+		/**
+		 * Local mean time in julian day in universal time
+		 */
+		data: number
+	}
+
 	type AzaltRev = [
 		/**
 		 * (λ) Ecliptic longitude if SE_HOR2ECL  
@@ -1340,7 +1381,7 @@ declare module "sweph" {
 	 * • month: number // Month (1-12)
 	 * • day: number // Day (1-31)
 	 * • hour: number // Hour with decimal fraction (0-23.999)
-	 * • calendar: string // Calendar system, 'g' for GREG_CAL, 'j' for JUL_CAL
+	 * • calendar: string // Calendar system, 'g' for gregorian calendar, 'j' for julian calendar
 	 * ```
 	 * ### Returns
 	 * ```
@@ -2403,64 +2444,135 @@ declare module "sweph" {
 	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: "G"): Houses<36>;
 
 	/**
-	 * 
-	 * @param tjd_et 
-	 * @param gregflag 
+	 * ### Description
+	 * Convert julian day in ephemeris/terrestrial time to calendar date
+	 * ### Params
+	 * ```
+	 * • tjd_et: number // Julian day in ephemeris/terrestrial time
+	 * • gregflag: number // Calendar system, SE_GREG_CAL for gregorian calendar, SE_JUL_CAL for julian calendar
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   year: number; // Full year
+	 *   month: number; // Month (1-12)
+	 *   day: number; // Day (1-31)
+	 *   hour: number; // Hour (0-23)
+	 *   minute: number; // Minute (0-59)
+	 *   second: number; // Second including fraction (0-59.999999)
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const date = jdet_to_utc(2415423, constants.GREG_CAL);
+	 * console.log(date);
+	 * ```
+	 * &nbsp;
 	 */
-	export function jdet_to_utc(tjd_et: number, gregflag: number): {
-		year: number;
-		month: number;
-		day: number;
-		hour: number;
-		minute: number;
-		second: number;
-	}
+	export function jdet_to_utc(tjd_et: number, gregflag: number): DateObject
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param gregflag 
+	 * ### Description
+	 * Convert julian day in universal time to calendar date
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • gregflag: number // Calendar system, SE_GREG_CAL for gregorian calendar, SE_JUL_CAL for julian calendar
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   year: number; // Full year
+	 *   month: number; // Month (1-12)
+	 *   day: number; // Day (1-31)
+	 *   hour: number; // Hour (0-23)
+	 *   minute: number; // Minute (0-59)
+	 *   second: number; // Second including fraction (0-59.999999)
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const date = jdut1_to_utc(2415423, constants.GREG_CAL);
+	 * console.log(date);
+	 * ```
+	 * &nbsp;
 	 */
-	export function jdut1_to_utc(tjd_ut: number, gregflag: number): {
-		year: number;
-		month: number;
-		day: number;
-		hour: number;
-		minute: number;
-		second: number;
-	}
+	export function jdut1_to_utc(tjd_ut: number, gregflag: number): DateObject;
 
 	/**
-	 * 
-	 * @param year 
-	 * @param month 
-	 * @param day 
-	 * @param hour 
-	 * @param gregflag 
+	 * ### Description
+	 * Convert a calendar date to julian day in universal time
+	 * ### Params
+	 * ```
+	 * • year: number // Full year
+	 * • month: number // Month (1-12)
+	 * • day: number // Day (1-31)
+	 * • hour: number // Hour with fraction (0-23.999999)
+	 * • gregflag: number // Calendar system, SE_GREG_CAL for gregorian calendar, SE_JUL_CAL for julian calendar
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Julian day value in universal time
+	 * ```
+	 * ### Example
+	 * ```
+	 * const jd = julday(2010, 5, 25, 14.5, constants.SE_GREG_CAL); // 2455342.1041666665
+	 * ```
+	 * &nbsp;
 	 */
 	export function julday(year: number, month: number, day: number, hour: number, gregflag: number): number
 
 	/**
-	 * 
-	 * @param tjd_lat 
-	 * @param geolon 
+	 * ### Description
+	 * Transform local apparent time to local mean time
+	 * ### Params
+	 * ```
+	 * • tjd_lat: number // Local apparent time in julian day in universal time
+	 * • geolon: number // Geographic longitude
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of error
+	 *   data: number // Local mean time in julian day in universal time
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = lat_to_lmt(2416547, -115.156);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
+	 * console.log(`LMT: ${result.data}`)
+	 * ```
+	 * &nbsp;
 	 */
-	export function lat_to_lmt(tjd_lat: number, geolon: number): {
-		flag: number;
-		error: string;
-		data: number;
-	}
+	export function lat_to_lmt(tjd_lat: number, geolon: number): LocalMeanTime;
 
 	/**
-	 * 
-	 * @param tjd_lmt 
-	 * @param geolon 
+	 * ### Description
+	 * Transform local mean time to local apparent time
+	 * ### Params
+	 * ```
+	 * • tjd_lmt: number // Local mean time in julian day in universal time
+	 * • geolon: number // Geographic longitude
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message in case of error
+	 *   data: number // Local apparent time in julian day in universal time
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = lmt_to_lat(2416547, -115.156);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
+	 * console.log(`LMT: ${result.data}`)
+	 * ```
+	 * &nbsp;
 	 */
-	export function lmt_to_lat(tjd_lmt: number, geolon: number): {
-		flag: number;
-		error: string;
-		data: number;
-	}
+	export function lmt_to_lat(tjd_lmt: number, geolon: number): LocalApparentTime;
 
 	/**
 	 * 
