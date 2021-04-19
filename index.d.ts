@@ -33,7 +33,7 @@ declare module "sweph" {
 		/**
 		 * ### Description
 		 * Status flag returned by the function  
-		 * Use it to check if the function succeeded, failed, or if any parameter was modified  
+		 * Use it to check if the function succeeded, failed, or to check output type  
 		 * ```
 		 * ```
 		 */
@@ -613,45 +613,102 @@ declare module "sweph" {
 		]
 	}
 
-	interface DateObject {
-		/**
-		 * Full year
-		 */
-		year: number;
-		/**
-		 * Month (1-12)
-		 */
-		month: number;
-		/**
-		 * Day (1-31)
-		 */
-		day: number;
-		/**
-		 * Hour (0-23)
-		 */
-		hour: number;
-		/**
-		 * Minute (0-59)
-		 */
-		minute: number;
-		/**
-		 * Second including fraction (0-59.999999)
-		 */
-		second: number;
-	}
-
 	interface LocalApparentTime extends Flag, Error {
 		/**
+		 * ### Description
 		 * Local apparent time in julian day in universal time
+		 * ```
+		 * ```
 		 */
 		data: number
 	}
 
 	interface LocalMeanTime extends Flag, Error {
 		/**
+		 * ### Description
 		 * Local mean time in julian day in universal time
+		 * ```
+		 * ```
 		 */
 		data: number
+	}
+
+	interface OrbitMaxMinTrueDistance extends Flag, Error {
+		/**
+		 * ### Description
+		 * Orbital maximum and minimum possible distances
+		 * ```
+		 * ```
+		 */
+		data: {
+			/**
+			 * Maximum possible distance
+			 */
+			max: number,
+			/**
+			 * Minimum possible distance
+			 */
+			min: number,
+			/**
+			 * Current true distance
+			 */
+			true: number
+		}
+	}
+
+	interface LunEclipseHow extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of data about the lunar eclipse  
+		 * ```
+		 * ```
+		 */
+		data: [
+			/**
+			 * Umbral magnitude at jd
+			 */
+			umbral: number,
+			/**
+			 * Penumbral magnitude
+			 */
+			penumbral: number,
+			/**
+			 * Unused
+			 */
+			_: number,
+			/**
+			 * Unused
+			 */
+			_: number,
+			/**
+			 * Azimuth of the moon at jd
+			 */
+			azimuth: number,
+			/**
+			 * True altitude of the moon above horizon at jd
+			 */
+			true_altitude: number,
+			/**
+			 * Apparent altitude of the moon above horizon at jd
+			 */
+			apparent_altitude: number,
+			/**
+			 * Distance of the moon from opposition in degrees
+			 */
+			distance: number,
+			/**
+			 * Eclipse magnitude (same as umbral magnitude)
+			 */
+			mag: number,
+			/**
+			 * Saros series number (if available, otherwise -99999999)
+			 */
+			saros: number,
+			/**
+			 * Saros series member number (if available, otherwise -99999999)
+			 */
+			saros_member: number
+		]
 	}
 
 	type AzaltRev = [
@@ -1016,6 +1073,33 @@ declare module "sweph" {
 		 */
 		house_36_speed: number,
 	]
+
+	type DateObject = {
+		/**
+		 * Full year
+		 */
+		year: number;
+		/**
+		 * Month (1-12)
+		 */
+		month: number;
+		/**
+		 * Day (1-31)
+		 */
+		day: number;
+		/**
+		 * Hour (0-23)
+		 */
+		hour: number;
+		/**
+		 * Minute (0-59)
+		 */
+		minute: number;
+		/**
+		 * Second including fraction (0-59.999999)
+		 */
+		second: number;
+	}
 
 	/**
 	 * ### Description
@@ -2577,14 +2661,51 @@ declare module "sweph" {
 	/**
 	 * 
 	 * @param tjd_ut 
-	 * @param ifL 
+	 * @param ifl 
 	 * @param geopos 
 	 */
-	export function lun_eclipse_how(tjd_ut: number, ifL: number, geopos: [longitude: number, latitude: number, elevation: number]): {
-		flag: number;
-		error: string;
-		data: [11]
-	}
+
+	/**
+	 * ### Description
+	 * Get lunar eclipse data for a given date
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ifl: number // ephemeris flag
+	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse type (SE_ECL_TOTAL, SE_ECL_PENUMBRAL, SE_ECL_PARTIAL) or 0 if no eclipse
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *      umbral_mag, // Umbral magnitude at jd
+	 *      penumbral_mag, // Penumbral magnitude
+	 *      -, // Unused
+	 *      -, // Unused
+	 *      azimuth, // Azimuth of the moon at jd (not implemented yet)
+	 *      true_altitude, // True altitude of the moon above horizon at jd (not implemented yet)
+	 *      apparent_altitude, // Apparent altitude of the moon above horizon at jd (not implemented yet)
+	 *      distance, // Distance of the moon from opposition in degrees
+	 *      eclipse_mag, // Eclipse magnitude (same as umbral magnitude)
+	 *      saros_number, // Saros series number (if available, otherwise -99999999)
+	 *      saros_member // Saros series member number (if available, otherwise -99999999)
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = lun_eclipse_how(2416547, constants.SEFLG_SWIEPH, [10,45,500]);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   magnitude: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
+	 */
+	export function lun_eclipse_how(tjd_ut: number, ifl: number, geopos: [longitude: number, latitude: number, elevation: number]): LunEclipseHow;
 
 	/**
 	 * 
@@ -2706,15 +2827,37 @@ declare module "sweph" {
 	 * @param ipl 
 	 * @param iflag 
 	 */
-	export function orbit_max_min_true_distance(tjd_et: number, ipl: number, iflag: number): {
-		flag: number;
-		error: string;
-		data: {
-			max: number,
-			min: number,
-			true: number
-		}
-	}
+
+	/**
+	 * ### Description
+	 * Get orbital maximum and minimum possible distances
+	 * ### Params
+	 * ```
+	 * • tjd_et: number // Julian day in ephemeris/terrestrial time
+	 * • ipl: number // Object ID
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message or warning if any
+	 *   data: Object {
+	 *     max: number, // maximum possible distance
+	 *     min: number, // minimum possible distance
+	 *     true: number // current true distance
+	 *   }
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = orbit_max_min_true_distance(2416547, constants.SE_MOON, constants.SEFLG_SWIEPH);
+	 * if(result.error) { console.log(result.error); }
+	 * console.log(`Max: ${result.data.max}`)
+	 * ```
+	 * &nbsp;
+	 */
+	export function orbit_max_min_true_distance(tjd_et: number, ipl: number, iflag: number): OrbitMaxMinTrueDistance;
 
 	/**
 	 * 
@@ -2741,8 +2884,21 @@ declare module "sweph" {
 	}
 
 	/**
-	 * 
-	 * @param rad 
+	 * ### Description
+	 * Normalize radians to 0π-2π range
+	 * ### Params
+	 * ```
+	 * • drad: number // Degree value in radians
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Normalized radian value
+	 * ```
+	 * ### Example
+	 * ```
+	 * const rad = radnorm(8.525) // 2.241814692820414
+	 * ```
+	 * &nbsp;
 	 */
 	export function radnorm(drad: number): number;
 
