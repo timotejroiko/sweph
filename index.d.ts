@@ -13,21 +13,27 @@
  *
  * set_ephe_path("./ephemeris"); // folder containing your ephemeris files;
  *
- * const date = utc_to_jd(2020, 1, 25, 15, 35, 0, constants.SE_GREG_CAL);
+ * const date = utc_to_jd(2020, 1, 25, 15, 35, 0, constants.SE_GREG_CAL); // 1 Jan 2020, 15:35:00
  * if(date.flag !== constants.OK) { throw new Error(date.error); }
  *
- * const [ jd_et, jd_ut ] = date.data;
- * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED;
+ * const [ jd_et, jd_ut ] = date.data; // et for planets, ut for houses
+ * const flags = constants.SEFLG_SWIEPH | constants.SEFLG_SPEED; // use the ephemeris files and enable speeds
  * const planets = calc(jd_et, constants.SE_SUN, flags);
- * if(planets.flag !== flags) { console.log(planets.error); }
+ * if(planets.flag !== flags) { console.log(planets.error); } // if the flags are not the same then something went wrong
  *
- * const houses = houses_ex2(jd_ut, 0, 37, 54, "P");
- * if(houses.flag !== constants.OK) { console.log(houses.error) }
+ * const houses = houses_ex2(jd_ut, 0, 37, 54, "P"); // placidus houses on latitude 37 longitude 54
+ * if(houses.flag !== constants.OK) { console.log(houses.error) } // if flag is not equal to OK then something went wrong
  *
  * console.log(planets.data, houses.data)
  * ```
  */
 declare module "sweph" {
+
+	/*
+	┌──────────────────────────────────────────────────┬────────────┬──────────────────────────────────────────────────┐
+	│┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│ Interfaces │┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│
+	└──────────────────────────────────────────────────┴────────────┴──────────────────────────────────────────────────┘
+	*/
 
 	interface Flag {
 		/**
@@ -100,77 +106,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: [
-			/**
-			 * Semimajor axis
-			 */
-			a: number,
-			/**
-			 * Eccentricity
-			 */
-			e: number,
-			/**
-			 * Inclination
-			 */
-			i: number,
-			/**
-			 * Longitude of ascending node
-			 */
-			Ω: number,
-			/**
-			 * Argument of periapsis
-			 */
-			ω: number,
-			/**
-			 * Longitude of periapsis
-			 */
-			ϖ: number,
-			/**
-			 * Mean anomaly at epoch
-			 */
-			M0: number,
-			/**
-			 * True anomaly at epoch
-			 */
-			v0: number,
-			/**
-			 * Eccentric anomaly at epoch
-			 */
-			E0: number,
-			/**
-			 * Mean longitude at epoch
-			 */
-			L0: number,
-			/**
-			 * Sidereal orbital period in tropical years
-			 */
-			sidereal_period: number,
-			/**
-			 * Mean daily motion
-			 */
-			daily_motion: number,
-			/**
-			 * Tropical period in years
-			 */
-			tropical_period: number,
-			/**
-			 * Synodic period in days  
-			 * Negative, if inner planet (Venus, Mercury, Aten asteroids) or Moon
-			 */
-			synodic_period: number,
-			/**
-			 * Time of perihelion passage
-			 */
-			perihelion_passage: number,
-			/**
-			 * Perihelion distance
-			 */
-			perihelion_distance: number,
-			/**
-			 * Aphelion distance
-			 */
-			aphelion_distance: number
-		]
+		data: OrbitalElementsData;
 	}
 
 	interface Calc extends Error, Flag {
@@ -185,46 +121,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: [
-			/**
-			 * (`λ`) Ecliptic longitude  
-			 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
-			 * (`x`) Cartesian X if `SEFLG_XYZ`  
-			 * (`ε`) True obliquity of the ecliptic if object ID is `SE_ECL_NUT`
-			 */
-			lon: number,
-			/**
-			 * (`β`) Ecliptic latitude  
-			 * (`δ`) Equatorial declination if `SEFLG_EQUATORIAL`  
-			 * (`y`) Cartesian Y if `SEFLG_XYZ`  
-			 * (`ε`) Mean obliquity of the ecliptic if object ID is `SE_ECL_NUT`
-			 */
-			lat: number,
-			/**
-			 * (`au`) Distance in AU  
-			 * (`z`) Cartesian Z if `SEFLG_XYZ`  
-			 * (`Δψ`) Nutation in longitude if oject ID is `SE_ECL_NUT`
-			 */
-			dist: number,
-			/**
-			 * (`λs`) Ecliptic longitude daily speed  
-			 * (`αs`) Equatorial right ascension daily speed if `SEFLG_EQUATORIAL`  
-			 * (`xs`) Cartesian daily speed if `SEFLG_XYZ`  
-			 * (`Δε`) Nutation in obliquity if oject ID is `SE_ECL_NUT`
-			 */
-			lonSpd: number,
-			/**
-			 * (`βs`) Ecliptic latitude daily speed  
-			 * (`δs`) Equatorial declination daily speed if `SEFLG_EQUATORIAL`  
-			 * (`ys`) Cartesian Y daily speed if `SEFLG_XYZ` 
-			 */
-			latSpd: number,
-			/**
-			 * (`aus`) Distance daily speed in AU  
-			 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`  
-			 */
-			distSpd: number
-		]
+		data: CalcData;
 	}
 
 	interface DateConversion extends Flag {
@@ -234,7 +131,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: number
+		data: number;
 	}
 
 	interface DeltaT extends Error {
@@ -244,7 +141,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: number
+		data: number;
 	}
 
 	interface FixStar extends Flag, Name, Error {
@@ -258,42 +155,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		 data: [
-			/**
-			 * (`λ`) Ecliptic longitude  
-			 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
-			 * (`x`) Cartesian X if `SEFLG_XYZ`  
-			 */
-			lon: number,
-			/**
-			 * (`β`) Ecliptic latitude  
-			 * (`δ`) Equatorial declination if `SEFLG_EQUATORIAL`  
-			 * (`y`) Cartesian Y if `SEFLG_XYZ`  
-			 */
-			lat: number,
-			/**
-			 * (`au`) Distance in AU  
-			 * (`z`) Cartesian Z if `SEFLG_XYZ`  
-			 */
-			dist: number,
-			/**
-			 * (`λs`) Ecliptic longitude daily speed  
-			 * (`αs`) Equatorial right ascension daily speed if `SEFLG_EQUATORIAL`  
-			 * (`xs`) Cartesian daily speed if `SEFLG_XYZ`  
-			 */
-			lonSpd: number,
-			/**
-			 * (`βs`) Ecliptic latitude daily speed  
-			 * (`δs`) Equatorial declination daily speed if `SEFLG_EQUATORIAL`  
-			 * (`ys`) Cartesian Y daily speed if `SEFLG_XYZ` 
-			 */
-			latSpd: number,
-			/**
-			 * (`aus`) Distance daily speed in AU  
-			 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`  
-			 */
-			distSpd: number
-		]
+		 data: FixStarData;
 	}
 
 	interface FixStarMag extends Flag, Name, Error {
@@ -303,7 +165,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: number
+		data: number;
 	}
 
 	interface GauquelinSector extends Flag, Error {
@@ -313,7 +175,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: number
+		data: number;
 	}
 
 	interface Ayanamsa extends Flag, Error {
@@ -323,7 +185,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: number
+		data: number;
 	}
 
 	interface HeliacalPheno extends Flag, Error {
@@ -333,128 +195,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: [
-			/**
-			 * Topocentric altitude of object in degrees (unrefracted)
-			 */
-			AltO: number,
-			/**
-			 * Apparent altitude of object in degrees (refracted)
-			 */
-			AppAltO: number,
-			/**
-			 * Geocentric altitude of object in degrees
-			 */
-			GeoAltO: number,
-			/**
-			 * Azimuth of object in degrees
-			 */
-			AziO: number,
-			/**
-			 * Topocentric altitude of Sun in degrees
-			 */
-			AltS: number,
-			/**
-			 * Azimuth of Sun in degrees
-			 */
-			AziS:number,
-			/**
-			 * Actual topocentric arcus visionis in degrees
-			 */
-			TAVact: number,
-			/**
-			 * Actual (geocentric) arcus visionis in degrees
-			 */
-			ARCVact: number,
-			/**
-			 * Actual difference between object's and sun's azimuth in degrees
-			 */
-			DAZact: number,
-			/**
-			 * Actual longitude difference between object and sun in degrees
-			 */
-			ARCLact: number,
-			/**
-			 * Extinction coefficient
-			 */
-			kact: number,
-			/**
-			 * Smallest topocentric arcus visionis in degrees
-			 */
-			minTAV: number,
-			/**
-			 * First time object is visible:number, according to VR in JD
-			 */
-			TfistVR: number,
-			/**
-			 * optimum time the object is visible:number, according to VR in JD
-			 */
-			TbVR: number,
-			/**
-			 * last time object is visible:number, according to VR in JD
-			 */
-			TlastVR: number,
-			/**
-			 * best time the object is visible:number, according to Yallop in JD
-			 */
-			TbYallop: number,
-			/**
-			 * crescent width of Moon in degrees
-			 */
-			WMoon: number,
-			/**
-			 * q-test value of Yallop
-			 */
-			qYal: number,
-			/**
-			 * q-test criterion of Yallop
-			 */
-			qCrit: number,
-			/**
-			 * parallax of object in degrees
-			 */
-			ParO: number,
-			/**
-			 * magnitude of object
-			 */
-			Magn: number,
-			/**
-			 * rise/set time of object in JD
-			 */
-			RiseO: number,
-			/**
-			 * rise/set time of Sun in JD
-			 */
-			RiseS: number,
-			/**
-			 * rise/set time of object minus rise/set time of Sun in JD
-			 */
-			Lag: number,
-			/**
-			 * visibility duration in JD
-			 */
-			TvisVR: number,
-			/**
-			 * crescent length of Moon in degrees
-			 */
-			LMoon: number,
-			/**
-			 * CVAact in degrees
-			 */
-			CVAact: number,
-			/**
-			 * Illum in percentage
-			 */
-			Illum: number,
-			/**
-			 * CVAact in degrees
-			 */
-			CVAact: number,
-			/**
-			 * MSk
-			 */
-			MSk: number
-		]
+		data: HeliacalPhenoData;
 	}
 
 	interface Heliacal extends Flag, Error {
@@ -464,20 +205,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: [
-			/**
-			 * Start visibility in JD
-			 */
-			vis_start: number,
-			/**
-			 * Optimum visibility in JD (zero if hel_flag >= SE_HELFLAG_AV)
-			 */
-			vis_opt: number,
-			/**
-			 * End of visibility in JD (zero if hel_flag >= SE_HELFLAG_AV)
-			 */
-			vis_end: number
-		]
+		data: HeliacalData;
 	}
 
 	interface HousePosition extends Error {
@@ -527,40 +255,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		points: [
-			/**
-			 * Longitude of the Ascendant
-			 */
-			asc: number,
-			/**
-			 * Longitude of the Midheaven
-			 */
-			mc: number,
-			/**
-			 * Right Ascension of the Midheaven
-			 */
-			armc: number,
-			/**
-			 * Longitude of the Vertex
-			 */
-			vertex: number,
-			/**
-			 * Longitude of the Equatorial Ascendant
-			 */
-			equasc: number,
-			/**
-			 * Longitude of Walter Koch's Co-Ascendant
-			 */
-			coasc1: number,
-			/**
-			 * Longitude of Michael Munkasey's Co-Ascendant
-			 */
-			coasc2: number,
-			/**
-			 * Longitude of Michael Munkasey's Polar Ascendant
-			 */
-			polasc: number
-		]
+		points: PointsList
 	}
 
 	interface HouseExData<T> extends HouseData<T> {
@@ -577,40 +272,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		pointsSpeed: [
-			/**
-			 * Momentary speed of the Ascendant
-			 */
-			 asc_speed: number,
-			 /**
-			  * Momentary speed of the Midheaven
-			  */
-			 mc_speed: number,
-			 /**
-			  * Momentary speed in Right Ascension of the Midheaven
-			  */
-			 armc_speed: number,
-			 /**
-			  * Momentary speed of the Vertex
-			  */
-			 vertex_speed: number,
-			 /**
-			  * Momentary speed of the Equatorial Ascendant
-			  */
-			 equasc_speed: number,
-			 /**
-			  * Momentary speed of Walter Koch's Co-Ascendant
-			  */
-			 coasc1_speed: number,
-			 /**
-			  * Momentary speed of Michael Munkasey's Co-Ascendant
-			  */
-			 coasc2_speed: number,
-			 /**
-			  * Momentary speed of Michael Munkasey's Polar Ascendant
-			  */
-			 polasc_speed: number
-		]
+		pointsSpeed: PointsSpeeds
 	}
 
 	interface LocalApparentTime extends Flag, Error {
@@ -663,53 +325,377 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: [
-			/**
-			 * Umbral magnitude at jd
-			 */
-			umbral: number,
-			/**
-			 * Penumbral magnitude
-			 */
-			penumbral: number,
-			/**
-			 * Unused
-			 */
-			_: number,
-			/**
-			 * Unused
-			 */
-			_: number,
-			/**
-			 * Azimuth of the moon at jd
-			 */
-			azimuth: number,
-			/**
-			 * True altitude of the moon above horizon at jd
-			 */
-			true_altitude: number,
-			/**
-			 * Apparent altitude of the moon above horizon at jd
-			 */
-			apparent_altitude: number,
-			/**
-			 * Distance of the moon from opposition in degrees
-			 */
-			distance: number,
-			/**
-			 * Eclipse magnitude (same as umbral magnitude)
-			 */
-			mag: number,
-			/**
-			 * Saros series number (if available, otherwise -99999999)
-			 */
-			saros: number,
-			/**
-			 * Saros series member number (if available, otherwise -99999999)
-			 */
-			saros_member: number
-		]
+		data: LunEclipseAttributes
 	}
+
+	interface LunEclipseWhenLoc extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of eclipse timings  
+		 * ```
+		 * ```
+		 */
+		data: [
+			...times: EclipseTimes,
+			rise: number, // time of moonrise, if it occurs during the eclipse
+			set: number, // time of moonset, if it occurs during the eclipse
+		],
+		/**
+		 * ### Description
+		 * Array of additional data about the lunar eclipse  
+		 * ```
+		 * ```
+		 */
+		attributes: LunEclipseAttributes
+	}
+
+	interface LunEclipseWhen extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of eclipse timings  
+		 * ```
+		 * ```
+		 */
+		data: EclipseTimes
+	}
+
+	interface LunOccultWhenGlob extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of eclipse timings  
+		 * ```
+		 * ```
+		 */
+		 data: EclipseTimes2
+	}
+
+	interface LunOccultWhenLoc extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of eclipse timings  
+		 * ```
+		 * ```
+		 */
+		data: EclipseTimes3,
+		/**
+		 * ### Description
+		 * Array of additional data about the lunar eclipse  
+		 * ```
+		 * ```
+		 */
+		attributes: LunEclipseAttributes2
+	}
+
+	interface LunOccultWhere extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of eclipse coordinates  
+		 * ```
+		 * ```
+		 */
+		data: EclipseCoords,
+		/**
+		 * ### Description
+		 * Array of additional data about the eclipse  
+		 * ```
+		 * ```
+		 */
+		attributes: LunEclipseAttributes3
+	}
+
+	/*
+	┌──────────────────────────────────────────────────┬───────────┬──────────────────────────────────────────────────┐
+	│┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│   Types   │┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│
+	└──────────────────────────────────────────────────┴───────────┴──────────────────────────────────────────────────┘
+	*/
+
+	type OrbitalElementsData = [
+		/**
+		 * Semimajor axis
+		 */
+		a: number,
+		/**
+		 * Eccentricity
+		 */
+		e: number,
+		/**
+		 * Inclination
+		 */
+		i: number,
+		/**
+		 * Longitude of ascending node
+		 */
+		Ω: number,
+		/**
+		 * Argument of periapsis
+		 */
+		ω: number,
+		/**
+		 * Longitude of periapsis
+		 */
+		ϖ: number,
+		/**
+		 * Mean anomaly at epoch
+		 */
+		M0: number,
+		/**
+		 * True anomaly at epoch
+		 */
+		v0: number,
+		/**
+		 * Eccentric anomaly at epoch
+		 */
+		E0: number,
+		/**
+		 * Mean longitude at epoch
+		 */
+		L0: number,
+		/**
+		 * Sidereal orbital period in tropical years
+		 */
+		sidereal_period: number,
+		/**
+		 * Mean daily motion
+		 */
+		daily_motion: number,
+		/**
+		 * Tropical period in years
+		 */
+		tropical_period: number,
+		/**
+		 * Synodic period in days  
+		 * Negative, if inner planet (Venus, Mercury, Aten asteroids) or Moon
+		 */
+		synodic_period: number,
+		/**
+		 * Time of perihelion passage
+		 */
+		perihelion_passage: number,
+		/**
+		 * Perihelion distance
+		 */
+		perihelion_distance: number,
+		/**
+		 * Aphelion distance
+		 */
+		aphelion_distance: number
+	]
+
+	type CalcData = [
+		/**
+		 * (`λ`) Ecliptic longitude  
+		 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
+		 * (`x`) Cartesian X if `SEFLG_XYZ`  
+		 * (`ε`) True obliquity of the ecliptic if object ID is `SE_ECL_NUT`
+		 */
+		lon: number,
+		/**
+		 * (`β`) Ecliptic latitude  
+		 * (`δ`) Equatorial declination if `SEFLG_EQUATORIAL`  
+		 * (`y`) Cartesian Y if `SEFLG_XYZ`  
+		 * (`ε`) Mean obliquity of the ecliptic if object ID is `SE_ECL_NUT`
+		 */
+		lat: number,
+		/**
+		 * (`au`) Distance in AU  
+		 * (`z`) Cartesian Z if `SEFLG_XYZ`  
+		 * (`Δψ`) Nutation in longitude if oject ID is `SE_ECL_NUT`
+		 */
+		dist: number,
+		/**
+		 * (`λs`) Ecliptic longitude daily speed  
+		 * (`αs`) Equatorial right ascension daily speed if `SEFLG_EQUATORIAL`  
+		 * (`xs`) Cartesian daily speed if `SEFLG_XYZ`  
+		 * (`Δε`) Nutation in obliquity if oject ID is `SE_ECL_NUT`
+		 */
+		lonSpd: number,
+		/**
+		 * (`βs`) Ecliptic latitude daily speed  
+		 * (`δs`) Equatorial declination daily speed if `SEFLG_EQUATORIAL`  
+		 * (`ys`) Cartesian Y daily speed if `SEFLG_XYZ` 
+		 */
+		latSpd: number,
+		/**
+		 * (`aus`) Distance daily speed in AU  
+		 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`  
+		 */
+		distSpd: number
+	]
+
+	type FixStarData = [
+		/**
+		 * (`λ`) Ecliptic longitude  
+		 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
+		 * (`x`) Cartesian X if `SEFLG_XYZ`  
+		 */
+		lon: number,
+		/**
+		 * (`β`) Ecliptic latitude  
+		 * (`δ`) Equatorial declination if `SEFLG_EQUATORIAL`  
+		 * (`y`) Cartesian Y if `SEFLG_XYZ`  
+		 */
+		lat: number,
+		/**
+		 * (`au`) Distance in AU  
+		 * (`z`) Cartesian Z if `SEFLG_XYZ`  
+		 */
+		dist: number,
+		/**
+		 * (`λs`) Ecliptic longitude daily speed  
+		 * (`αs`) Equatorial right ascension daily speed if `SEFLG_EQUATORIAL`  
+		 * (`xs`) Cartesian daily speed if `SEFLG_XYZ`  
+		 */
+		lonSpd: number,
+		/**
+		 * (`βs`) Ecliptic latitude daily speed  
+		 * (`δs`) Equatorial declination daily speed if `SEFLG_EQUATORIAL`  
+		 * (`ys`) Cartesian Y daily speed if `SEFLG_XYZ` 
+		 */
+		latSpd: number,
+		/**
+		 * (`aus`) Distance daily speed in AU  
+		 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`  
+		 */
+		distSpd: number
+	]
+
+	type HeliacalPhenoData = [
+		/**
+		 * Topocentric altitude of object in degrees (unrefracted)
+		 */
+		AltO: number,
+		/**
+		 * Apparent altitude of object in degrees (refracted)
+		 */
+		AppAltO: number,
+		/**
+		 * Geocentric altitude of object in degrees
+		 */
+		GeoAltO: number,
+		/**
+		 * Azimuth of object in degrees
+		 */
+		AziO: number,
+		/**
+		 * Topocentric altitude of Sun in degrees
+		 */
+		AltS: number,
+		/**
+		 * Azimuth of Sun in degrees
+		 */
+		AziS:number,
+		/**
+		 * Actual topocentric arcus visionis in degrees
+		 */
+		TAVact: number,
+		/**
+		 * Actual (geocentric) arcus visionis in degrees
+		 */
+		ARCVact: number,
+		/**
+		 * Actual difference between object's and sun's azimuth in degrees
+		 */
+		DAZact: number,
+		/**
+		 * Actual longitude difference between object and sun in degrees
+		 */
+		ARCLact: number,
+		/**
+		 * Extinction coefficient
+		 */
+		kact: number,
+		/**
+		 * Smallest topocentric arcus visionis in degrees
+		 */
+		minTAV: number,
+		/**
+		 * First time object is visible:number, according to VR in JD
+		 */
+		TfistVR: number,
+		/**
+		 * optimum time the object is visible:number, according to VR in JD
+		 */
+		TbVR: number,
+		/**
+		 * last time object is visible:number, according to VR in JD
+		 */
+		TlastVR: number,
+		/**
+		 * best time the object is visible:number, according to Yallop in JD
+		 */
+		TbYallop: number,
+		/**
+		 * crescent width of Moon in degrees
+		 */
+		WMoon: number,
+		/**
+		 * q-test value of Yallop
+		 */
+		qYal: number,
+		/**
+		 * q-test criterion of Yallop
+		 */
+		qCrit: number,
+		/**
+		 * parallax of object in degrees
+		 */
+		ParO: number,
+		/**
+		 * magnitude of object
+		 */
+		Magn: number,
+		/**
+		 * rise/set time of object in JD
+		 */
+		RiseO: number,
+		/**
+		 * rise/set time of Sun in JD
+		 */
+		RiseS: number,
+		/**
+		 * rise/set time of object minus rise/set time of Sun in JD
+		 */
+		Lag: number,
+		/**
+		 * visibility duration in JD
+		 */
+		TvisVR: number,
+		/**
+		 * crescent length of Moon in degrees
+		 */
+		LMoon: number,
+		/**
+		 * CVAact in degrees
+		 */
+		CVAact: number,
+		/**
+		 * Illum in percentage
+		 */
+		Illum: number,
+		/**
+		 * CVAact in degrees
+		 */
+		CVAact: number,
+		/**
+		 * MSk
+		 */
+		MSk: number
+	]
+
+	type HeliacalData = [
+		/**
+		 * Start visibility in JD
+		 */
+		vis_start: number,
+		/**
+		 * Optimum visibility in JD (zero if hel_flag >= SE_HELFLAG_AV)
+		 */
+		vis_opt: number,
+		/**
+		 * End of visibility in JD (zero if hel_flag >= SE_HELFLAG_AV)
+		 */
+		vis_end: number
+	]
 
 	type AzaltRev = [
 		/**
@@ -823,6 +809,41 @@ declare module "sweph" {
 		house_12: number,
 	]
 
+	type PointsList = [
+		/**
+		 * Longitude of the Ascendant
+		 */
+		asc: number,
+		/**
+		 * Longitude of the Midheaven
+		 */
+		mc: number,
+		/**
+		 * Right Ascension of the Midheaven
+		 */
+		armc: number,
+		/**
+		 * Longitude of the Vertex
+		 */
+		vertex: number,
+		/**
+		 * Longitude of the Equatorial Ascendant
+		 */
+		equasc: number,
+		/**
+		 * Longitude of Walter Koch's Co-Ascendant
+		 */
+		coasc1: number,
+		/**
+		 * Longitude of Michael Munkasey's Co-Ascendant
+		 */
+		coasc2: number,
+		/**
+		 * Longitude of Michael Munkasey's Polar Ascendant
+		 */
+		polasc: number
+	]
+
 	type HousesSpeeds = [
 		/**
 		 * Momentary speed for the 1st House
@@ -872,6 +893,41 @@ declare module "sweph" {
 		 * Momentary speed for the 12th House
 		 */
 		house_12_speed: number,
+	]
+
+	type PointsSpeeds = [
+		/**
+		 * Momentary speed of the Ascendant
+		 */
+		 asc_speed: number,
+		 /**
+		  * Momentary speed of the Midheaven
+		  */
+		 mc_speed: number,
+		 /**
+		  * Momentary speed in Right Ascension of the Midheaven
+		  */
+		 armc_speed: number,
+		 /**
+		  * Momentary speed of the Vertex
+		  */
+		 vertex_speed: number,
+		 /**
+		  * Momentary speed of the Equatorial Ascendant
+		  */
+		 equasc_speed: number,
+		 /**
+		  * Momentary speed of Walter Koch's Co-Ascendant
+		  */
+		 coasc1_speed: number,
+		 /**
+		  * Momentary speed of Michael Munkasey's Co-Ascendant
+		  */
+		 coasc2_speed: number,
+		 /**
+		  * Momentary speed of Michael Munkasey's Polar Ascendant
+		  */
+		 polasc_speed: number
 	]
 
 	type GauquelinHousesList = [
@@ -1100,6 +1156,281 @@ declare module "sweph" {
 		 */
 		second: number;
 	}
+
+	type EclipseTimes = [
+		/**
+		 * time of maximum eclipse in jd
+		 */
+		eclipse_max: number,
+		/**
+		 * Unused
+		 */
+		_: number,
+		/**
+		 * time of partial phase start
+		 */
+		partial_start: number,
+		/**
+		 * time of partial phase end
+		 */
+		partial_end: number,
+		/**
+		 * time of totality start
+		 */
+		total_start: number,
+		/**
+		 * time of totality end
+		 */
+		total_end: number,
+		/**
+		 * time of penumbral phase start
+		 */
+		penumbral_start: number,
+		/**
+		 * time of penumbral phase end
+		 */
+		penumbral_end: number
+	]
+
+	type EclipseTimes2 = [
+		/**
+		 * time of maximum eclipse in jd
+		 */
+		eclipse_max: number,
+		/**
+		 * time when eclipse takes place at local apparent noon
+		 */
+		local_noon: number,
+		/**
+		 * time of eclipse start
+		 */
+		eclipse_start: number,
+		/**
+		 * time of eclipse end
+		 */
+		eclipse_end: number,
+		/**
+		 * time of totality start
+		 */
+		total_start: number,
+		/**
+		 * time of totality end
+		 */
+		total_end: number,
+		/**
+		 * time of center line start
+		 */
+		center_start: number,
+		/**
+		 * time of center line end
+		 */
+		center_end: number,
+		/**
+		 * time when annular-total eclipse becomes total (not implemented)
+		 */
+		annular_total: number,
+		/**
+		 * time when annular-total eclipse becomes annular again (not implemented)
+		 */
+		total_annular: number
+	]
+
+	type EclipseTimes3 = [
+		/**
+		 * Time of maximum eclipse
+		 */
+		max_eclipse: number,
+		/**
+		 * Time of first contact
+		 */
+		first_contact: number,
+		/**
+		 * Time of second contact
+		 */
+		second_contact: number,
+		/**
+		 * Time of third contact
+		 */
+		third_contact: number,
+		 /**
+		 * Time of fourth contact
+		 */
+		fourth_contact: number,
+		/**
+		 * Time of sunrise between first and forth contact (not implemented)
+		 */
+		sunrise: number,
+		/**
+		 * Time of sunset between first and forth contact (not implemented)
+		 */
+		sunset: number  
+	]
+
+	type EclipseCoords = [
+		/**
+		 * Geographic longitude of central line
+		 */
+		central_long: number,
+		/**
+		 * Geographic latitude of central line
+		 */
+		central_lat: number,
+		/**
+		 * Geographic longitude of northern limit of umbra
+		 */
+		north_umbra_long: number,
+		/**
+		 * Geographic latitude of northern limit of umbra
+		 */
+		north_umbra_lat: number,
+		/**
+		 * Geographic longitude of southern limit of umbra
+		 */
+		south_umbra_long: number,
+		/**
+		 * Geographic latitude of southern limit of umbra
+		 */
+		south_umbra_lat: number,
+		/**
+		 * Geographic longitude of northern limit of penumbra
+		 */
+		north_penumbra_long: number,
+		/**
+		 * Geographic latitude of northern limit of penumbra
+		 */
+		north_penumbra_lat: number,
+		/**
+		 * Geographic longitude of southern limit of penumbra
+		 */
+		south_penumbra_long: number,
+		/**
+		 * Geographic latitude of southern limit of penumbra
+		 */
+		south_penumbra_lat: number
+	]
+
+	type LunEclipseAttributes = [
+		/**
+		 * Umbral magnitude at jd
+		 */
+		umbral: number,
+		/**
+		 * Penumbral magnitude
+		 */
+		penumbral: number,
+		/**
+		 * Unused
+		 */
+		_: number,
+		/**
+		 * Unused
+		 */
+		_: number,
+		/**
+		 * Azimuth of the moon at jd
+		 */
+		azimuth: number,
+		/**
+		 * True altitude of the moon above horizon at jd
+		 */
+		true_altitude: number,
+		/**
+		 * Apparent altitude of the moon above horizon at jd
+		 */
+		apparent_altitude: number,
+		/**
+		 * Distance of the moon from opposition in degrees
+		 */
+		distance: number,
+		/**
+		 * Eclipse magnitude (same as umbral magnitude)
+		 */
+		mag: number,
+		/**
+		 * Saros series number (if available, otherwise -99999999)
+		 */
+		saros: number,
+		/**
+		 * Saros series member number (if available, otherwise -99999999)
+		 */
+		saros_member: number
+	]
+
+	type LunEclipseAttributes2 = [
+		/**
+		 * Fraction of solar diameter covered by moon (magnitude)
+		 */
+		solar_diameter: number,
+		/**
+		 * Ratio of lunar diameter to solar one
+		 */
+		lunar_diameter: number,
+		/**
+		 * Fraction of solar disc covered by moon (obscuration)
+		 */
+		solar_disc: number,
+		/**
+		 * Diameter of core shadow in km
+		 */
+		core_shadow: number,
+		/**
+		 * Azimuth of sun at tjd
+		 */
+		sun_azimuth: number,
+		/**
+		 * True altitude of sun above horizon at tjd
+		 */
+		true_altitude: number,
+		/**
+		 * Apparent altitude of sun above horizon at tjd
+		 */
+		mean_altitude: number,
+		/**
+		 * Elongation of moon in degrees
+		 */
+		elongation: number
+	]
+
+	type LunEclipseAttributes3 = [
+		/**
+		 * Fraction of object's diameter covered by moon (magnitude)
+		 */
+		object_diameter: number,
+		/**
+		 * Ratio of lunar diameter to object's diameter
+		 */
+		lunar_diameter: number,
+		/**
+		 * Fraction of object's disc covered by moon (obscuration)
+		 */
+		object_disc: number,
+		/**
+		 * Diameter of core shadow in km
+		 */
+		core_shadow: number,
+		/**
+		 * Azimuth of object at tjd
+		 */
+		object_azimuth: number,
+		/**
+		 * True altitude of object above horizon at tjd
+		 */
+		true_altitude: number,
+		/**
+		 * Apparent altitude of object above horizon at tjd
+		 */
+		apparent_altitude: number,
+		/**
+		 * Angular distance of moon from object in degrees
+		 */
+		angular_distance: number,
+	]
+
+	/*
+	┌──────────────────────────────────────────────────┬───────────┬──────────────────────────────────────────────────┐
+	│┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│ Functions │┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│
+	└──────────────────────────────────────────────────┴───────────┴──────────────────────────────────────────────────┘
+	*/
 
 	/**
 	 * ### Description
@@ -1861,18 +2192,6 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function fixstar2(star: string, tjd_et: number, iflag: number): FixStar;
-
-	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param ipl 
-	 * @param starname 
-	 * @param iflag 
-	 * @param imeth 
-	 * @param geopos 
-	 * @param atpress 
-	 * @param attemp 
-	 */
 
 	/**
 	 * ### Description
@@ -2659,19 +2978,12 @@ declare module "sweph" {
 	export function lmt_to_lat(tjd_lmt: number, geolon: number): LocalApparentTime;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param ifl 
-	 * @param geopos 
-	 */
-
-	/**
 	 * ### Description
 	 * Get lunar eclipse data for a given date
 	 * ### Params
 	 * ```
 	 * • tjd_ut: number // Julian day in universal time
-	 * • ifl: number // ephemeris flag
+	 * • ifl: number // Ephemeris flag
 	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
 	 * ```
 	 * ### Returns
@@ -2680,17 +2992,17 @@ declare module "sweph" {
 	 *   flag: number, // ERR, eclipse type (SE_ECL_TOTAL, SE_ECL_PENUMBRAL, SE_ECL_PARTIAL) or 0 if no eclipse
 	 *   error: string, // Error message in case of error
 	 *   data: Array<number> [
-	 *      umbral_mag, // Umbral magnitude at jd
-	 *      penumbral_mag, // Penumbral magnitude
-	 *      -, // Unused
-	 *      -, // Unused
-	 *      azimuth, // Azimuth of the moon at jd (not implemented yet)
-	 *      true_altitude, // True altitude of the moon above horizon at jd (not implemented yet)
-	 *      apparent_altitude, // Apparent altitude of the moon above horizon at jd (not implemented yet)
-	 *      distance, // Distance of the moon from opposition in degrees
-	 *      eclipse_mag, // Eclipse magnitude (same as umbral magnitude)
-	 *      saros_number, // Saros series number (if available, otherwise -99999999)
-	 *      saros_member // Saros series member number (if available, otherwise -99999999)
+	 *     umbral_mag, // Umbral magnitude at jd
+	 *     penumbral_mag, // Penumbral magnitude
+	 *     -, // Unused
+	 *     -, // Unused
+	 *     azimuth, // Azimuth of the moon at jd
+	 *     true_altitude, // True altitude of the moon above horizon at jd
+	 *     apparent_altitude, // Apparent altitude of the moon above horizon at jd
+	 *     distance, // Distance of the moon from opposition in degrees
+	 *     eclipse_mag, // Eclipse magnitude (same as umbral magnitude)
+	 *     saros_number, // Saros series number (if available, otherwise -99999999)
+	 *     saros_member // Saros series member number (if available, otherwise -99999999)
 	 *   ]
 	 * }
 	 * ```
@@ -2708,82 +3020,246 @@ declare module "sweph" {
 	export function lun_eclipse_how(tjd_ut: number, ifl: number, geopos: [longitude: number, latitude: number, elevation: number]): LunEclipseHow;
 
 	/**
-	 * 
-	 * @param tjd_start 
-	 * @param ifL 
-	 * @param geopos 
-	 * @param backwards 
+	 * ### Description
+	 * Search for lunar eclipses at a given location
+	 * ### Params
+	 * ```
+	 * • tjd_start: number // Julian day in universal time to start searching from
+	 * • ifl: number // Ephemeris flag
+	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * • backwards: boolean // Search backwards in time instead
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse type (SE_ECL_TOTAL, SE_ECL_PENUMBRAL, SE_ECL_PARTIAL) or 0 if no eclipse found
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     eclipse_max, // Time of maximum eclipse in jd
+	 *     -, // Unused
+	 *     partial_start, // Time of partial phase start
+	 *     partial_end, // Time of partial phase end
+	 *     total_start, // Time of totality start
+	 *     total_end, // Time of totality end
+	 *     penumbral_start, // Time of penumbral phase start
+	 *     penumbral_end, // Time of penumbral phase end
+	 *     rise, // Time of moonrise, if it occurs during the eclipse
+	 *     set, // Time of moonset, if it occurs during the eclipse
+	 *   ],
+	 *   attributes: Array<number> [
+	 *     umbral_mag, // Umbral magnitude at jd
+	 *     penumbral_mag, // Penumbral magnitude
+	 *     -, // Unused
+	 *     -, // Unused
+	 *     azimuth, // Azimuth of the moon at jd
+	 *     true_altitude, // True altitude of the moon above horizon at jd
+	 *     apparent_altitude, // Apparent altitude of the moon above horizon at jd
+	 *     distance, // Distance of the moon from opposition in degrees
+	 *     eclipse_mag, // Eclipse magnitude (same as umbral magnitude)
+	 *     saros_number, // Saros series number (if available, otherwise -99999999)
+	 *     saros_member // Saros series member number (if available, otherwise -99999999)
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = lun_eclipse_when_loc(2416547, constants.SEFLG_SWIEPH, [10,45,500], false);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   eclipse_max: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function lun_eclipse_when_loc(tjd_start: number, ifL: number, geopos: [longitude: number, latitude: number, elevation: number], backwards: boolean): {
-		flag: number;
-		error: string;
-		data: {
-			time: [10],
-			attributes: [11]
-		}
-	}
+	export function lun_eclipse_when_loc(tjd_start: number, ifl: number, geopos: [longitude: number, latitude: number, elevation: number], backwards: boolean): LunEclipseWhenLoc;
 
 	/**
-	 * 
-	 * @param tjd_start 
-	 * @param ifL 
-	 * @param ifltype 
-	 * @param backwards 
+	 * ### Description
+	 * Search for lunar eclipses
+	 * ### Params
+	 * ```
+	 * • tjd_start: number // Julian day in universal time to start searching from
+	 * • ifl: number // Ephemeris flag
+	 * • ifltype: number // Eclipse type (SE_ECL_TOTAL, SE_ECL_PENUMBRAL, SE_ECL_PARTIAL or 0 for any)
+	 * • backwards: boolean // Search backwards in time instead
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse type (SE_ECL_TOTAL, SE_ECL_PENUMBRAL, SE_ECL_PARTIAL) or 0 if no eclipse found
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     eclipse_max, // Time of maximum eclipse in jd
+	 *     -, // Unused
+	 *     partial_start, // Time of partial phase start
+	 *     partial_end, // Time of partial phase end
+	 *     total_start, // Time of totality start
+	 *     total_end, // Time of totality end
+	 *     penumbral_start, // Time of penumbral phase start
+	 *     penumbral_end, // Time of penumbral phase end
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = lun_eclipse_when(2416547, constants.SEFLG_SWIEPH, 0, false);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   eclipse_max: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function lun_eclipse_when(tjd_start: number, ifL: number, ifltype: number, backwards: boolean): {
-		flag: number;
-		error: string;
-		data: [8]
-	}
+	export function lun_eclipse_when(tjd_start: number, ifl: number, ifltype: number, backwards: boolean): LunEclipseWhen;
 
 	/**
-	 * 
-	 * @param tjd_start 
-	 * @param ipl 
-	 * @param starname 
-	 * @param ifl 
-	 * @param ifltype 
-	 * @param backward 
+	 * ### Description
+	 * Search for lunar eclipses globally
+	 * ### Params
+	 * ```
+	 * • tjd_start: number // Julian day in universal time to start searching from
+	 * • ipl: number // Object ID
+	 * • starname: string | null // Star name if star, otherwise set to null
+	 * • ifl: number // Ephemeris flag
+	 * • ifltype: number // Eclipse type (SE_ECL_TOTAL, SE_ECL_ANNULAR, SE_ECL_PARTIAL, SE_ECL_ANNULAR_TOTAL, SE_ECL_CENTRAL, SE_ECL_NONCENTRAL or 0 for any)
+	 * • backwards: boolean // Search backwards in time instead
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse type (SE_ECL_TOTAL, SE_ECL_ANNULAR, SE_ECL_PARTIAL, SE_ECL_ANNULAR_TOTAL, SE_ECL_CENTRAL, SE_ECL_NONCENTRAL) or 0 if no eclipse found
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     eclipse_max, // Time of maximum eclipse in jd
+	 *     local_noon, // Time when eclipse takes place at local apparent noon
+	 *     eclipse_start, // Time of eclipse start
+	 *     eclipse_end, // Time of eclipse end
+	 *     total_start, // Time of totality start
+	 *     total_end, // Time of totality end
+	 *     center_start, // Time of center line start
+	 *     center_end, // Time of center line end
+	 *     annular_total, // Time when annular-total eclipse becomes total
+	 *     total_annular // Time when annular-total eclipse becomes annular again
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = lun_occult_when_glob(2416547, constants.SE_MARS, null, constants.SEFLG_SWIEPH, 0, false);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   eclipse_max: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function lun_occult_when_glob(tjd_start: number, ipl: number, starname: string | null, ifl: number, ifltype: number, backward: boolean): {
-		flag: number;
-		error: string;
-		data: [10]
-	}
+	export function lun_occult_when_glob(tjd_start: number, ipl: number, starname: string | null, ifl: number, ifltype: number, backwards: boolean): LunOccultWhenGlob;
 
 	/**
-	 * 
-	 * @param tjd_start 
-	 * @param ipl 
-	 * @param starname 
-	 * @param ifl 
-	 * @param geopos 
-	 * @param backward 
+	 * ### Description
+	 * Search for lunar eclipses locally
+	 * ### Params
+	 * ```
+	 * • tjd_start: number // Julian day in universal time to start searching from
+	 * • ipl: number // Object ID
+	 * • starname: string | null // Star name if star, otherwise set to null
+	 * • ifl: number // Ephemeris flag
+	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * • backwards: boolean // Search backwards in time instead
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse/occulation type or 0 if none found
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     max_eclipse: number, // Time of maximum eclipse
+	 *     first_contact: number, // Time of first contact
+	 *     second_contact: number, // Time of second contact
+	 *     third_contact: number, // Time of third contact
+	 *     fourth_contact: number, // Time of fourth contact
+	 *     sunrise: number, // Time of sunrise between first and forth contact
+	 *     sunset: number // Time of sunset between first and forth contact
+	 *   ],
+	 *   attributes: Array<number> [
+	 *     solar_diameter: number, // Fraction of solar diameter covered by moon (magnitude)
+	 *     lunar_diameter: number, // Ratio of lunar diameter to solar one
+	 *     solar_disc: number, // Fraction of solar disc covered by moon (obscuration)
+	 *     core_shadow: number, // Diameter of core shadow in km
+	 *     sun_azimuth: number, // Azimuth of sun at tjd
+	 *     true_altitude: number, // True altitude of sun above horizon at tjd
+	 *     mean_altitude: number, // Apparent altitude of sun above horizon at tjd
+	 *     elongation: number // Elongation of moon in degrees
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = lun_occult_when_loc(2416547, constants.SE_MARS, null, constants.SEFLG_SWIEPH, [135, 45, 0], false);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   eclipse_max: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function lun_occult_when_loc(tjd_start: number, ipl: number, starname: string | null, ifl: number, geopos: [longitude: number, latitude: number, elevation: number], backward: boolean): {
-		flag: number;
-		error: string;
-		data: {
-			time: [7],
-			attributes: [8]
-		}
-	}
+	export function lun_occult_when_loc(tjd_start: number, ipl: number, starname: string | null, ifl: number, geopos: [longitude: number, latitude: number, elevation: number], backwards: boolean): LunOccultWhenLoc;
 
 	/**
-	 * 
-	 * @param tjd_start 
-	 * @param ipl 
-	 * @param starname 
-	 * @param ifl 
+	 * ### Description
+	 * Get geographical coordinates for an eclipse
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ipl: number // Object ID
+	 * • starname: string | null // Star name if star, otherwise set to null
+	 * • ifl: number // Ephemeris flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse/occulation type or 0 if none found
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     central_long: number, // Geographic longitude of central line
+	 *     central_lat: number, // Geographic latitude of central line
+	 *     north_umbra_long: number, // Geographic longitude of northern limit of umbra
+	 *     north_umbra_lat: number, // Geographic latitude of northern limit of umbra
+	 *     south_umbra_long: number, // Geographic longitude of southern limit of umbra
+	 *     south_umbra_lat: number, // Geographic latitude of southern limit of umbra
+	 *     north_penumbra_long: number, // Geographic longitude of northern limit of penumbra
+	 *     north_penumbra_lat: number, // Geographic latitude of northern limit of penumbra
+	 *     south_penumbra_long: number, // Geographic longitude of southern limit of penumbra
+	 *     south_penumbra_lat: number // Geographic latitude of southern limit of penumbra
+	 *   ],
+	 *   attributes: Array<number> [
+	 *     diameter_fraction: number, // Fraction of object's diameter covered by moon (magnitude)
+	 *     diameter_ratio: number, // Ratio of lunar diameter to object's diameter
+	 *     disc_fraction: number, // Fraction of object's disc covered by moon (obscuration)
+	 *     core_shadow: number, // Diameter of core shadow in km
+	 *     azimuth: number, // Azimuth of object at tjd
+	 *     true_altitude: number, // True altitude of object above horizon at tjd
+	 *     apparent_altitude: number, // Apparent altitude of object above horizon at tjd
+	 *     angular_distance: number, // Angular distance of moon from object in degrees
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = lun_occult_where(2416547, constants.SE_MARS, null, constants.SEFLG_SWIEPH);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   longitude: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function lun_occult_where(tjd_start: number, ipl: number, starname: string | null, ifl: number): {
-		flag: number;
-		error: string;
-		data: {
-			coordinates: [10],
-			attributes: [8]
-		}
-	}
+	export function lun_occult_where(tjd_ut: number, ipl: number, starname: string | null, ifl: number): LunOccultWhere;
 
 	/**
 	 * 
@@ -2820,13 +3296,6 @@ declare module "sweph" {
 			aphelion: [6]
 		}
 	}
-
-	/**
-	 * 
-	 * @param tjd_et 
-	 * @param ipl 
-	 * @param iflag 
-	 */
 
 	/**
 	 * ### Description
@@ -3233,6 +3702,12 @@ declare module "sweph" {
 		error: string,
 		data: [8]
 	}
+
+	/*
+	┌──────────────────────────────────────────────────┬───────────┬──────────────────────────────────────────────────┐
+	│┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│ Constants │┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│
+	└──────────────────────────────────────────────────┴───────────┴──────────────────────────────────────────────────┘
+	*/
 
 	/**
 	 * ### Description

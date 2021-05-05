@@ -34,12 +34,10 @@ Napi::Value sweph_lun_occult_when_loc(const Napi::CallbackInfo& info) {
 		info[5].As<Napi::Boolean>(),
 		serr
 	);
-	Napi::Object data = Napi::Object::New(env);
-	data["time"] = sweph_js_array_converter(ret, 7, env);
-	data["attributes"] = sweph_js_array_converter(attr, 8, env);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
 	obj["error"] = serr;
-	obj["data"] = data;
+	obj["data"] = sweph_js_array_converter(ret, 7, env);
+	obj["attributes"] = sweph_js_array_converter(attr, 8, env);
 	return obj;
 }

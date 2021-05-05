@@ -21,12 +21,10 @@ Napi::Value sweph_sol_eclipse_where(const Napi::CallbackInfo& info) {
 		attr,
 		serr
 	);
-	Napi::Object data = Napi::Object::New(env);
-	data["coordinates"] = sweph_js_array_converter(geopos, 10, env);
-	data["attributes"] = sweph_js_array_converter(attr, 11, env);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
 	obj["error"] = serr;
-	obj["data"] = data;
+	obj["data"] = sweph_js_array_converter(geopos, 10, env);
+	obj["attributes"] = sweph_js_array_converter(attr, 11, env);
 	return obj;
 }

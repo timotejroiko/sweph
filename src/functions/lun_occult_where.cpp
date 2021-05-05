@@ -1,7 +1,7 @@
 #include <sweph.h>
 
 constexpr std::pair<int, const char*> args[] = {
-	{ 4, "Expecting 4 arguments: tjd_start, ipl, starname, ifl" },
+	{ 4, "Expecting 4 arguments: tjd_ut, ipl, starname, ifl" },
 	{ NUMBER, "Argument 1 should be a number - julian day in universal time" },
 	{ NUMBER, "Argument 2 should be a number - target object ID" },
 	{ STRINGNULL, "Argument 3 should be a string or NULL - target star name" },
@@ -25,12 +25,10 @@ Napi::Value sweph_lun_occult_where(const Napi::CallbackInfo& info) {
 		attr,
 		serr
 	);
-	Napi::Object data = Napi::Object::New(env);
-	data["coordinates"] = sweph_js_array_converter(geopos, 10, env);
-	data["attributes"] = sweph_js_array_converter(attr, 8, env);
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
 	obj["error"] = serr;
-	obj["data"] = data;
+	obj["data"] = sweph_js_array_converter(geopos, 10, env);
+	obj["attributes"] = sweph_js_array_converter(attr, 8, env);
 	return obj;
 }
