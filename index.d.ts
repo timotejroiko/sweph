@@ -155,7 +155,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		 data: FixStarData;
+		 data: CalcData2;
 	}
 
 	interface FixStarMag extends Flag, Name, Error {
@@ -359,7 +359,7 @@ declare module "sweph" {
 		data: EclipseTimes
 	}
 
-	interface LunOccultWhenGlob extends Flag, Error {
+	interface EclipseWhenGlob extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of eclipse timings  
@@ -401,6 +401,110 @@ declare module "sweph" {
 		 * ```
 		 */
 		attributes: LunEclipseAttributes3
+	}
+
+	interface NodAps extends Flag, Error {
+		/**
+		 * ### Description
+		 * Object containing ascending node, descending node, aphelion and perihelion values  
+		 * Depending on the specific object and the method flag used, the values can be either "mean" or "osculating"
+		 * ```
+		 * ```
+		 */
+		 data: {
+			/**
+			 * ### Description
+			 * Array of ascending node values returned by the calculation  
+			 * By default the values are in ecliptic coordinates (longitude, latitude, distance)  
+			 * If `SEFLG_SPEED` or `SEFLG_SPEED3` are used, the daily speeds for each value are also retured, otherwise they are 0  
+			 * If `SEFLG_EQUATORIAL` is used, the values are in equatorial coordinates instead (right ascension, declination, distance)  
+			 * If `SELFG_XYZ` is used, the values are in cartesian coordinates instead (X, Y, Z)  
+			 * ```
+			 * ```
+			 */
+			ascending: CalcData2;
+			/**
+			 * ### Description
+			 * Array of descending node values returned by the calculation  
+			 * By default the values are in ecliptic coordinates (longitude, latitude, distance)  
+			 * If `SEFLG_SPEED` or `SEFLG_SPEED3` are used, the daily speeds for each value are also retured, otherwise they are 0  
+			 * If `SEFLG_EQUATORIAL` is used, the values are in equatorial coordinates instead (right ascension, declination, distance)  
+			 * If `SELFG_XYZ` is used, the values are in cartesian coordinates instead (X, Y, Z)  
+			 * ```
+			 * ```
+			 */
+			descending: CalcData2;
+			/**
+			 * ### Description
+			 * Array of perihelion node values returned by the calculation  
+			 * By default the values are in ecliptic coordinates (longitude, latitude, distance)  
+			 * If `SEFLG_SPEED` or `SEFLG_SPEED3` are used, the daily speeds for each value are also retured, otherwise they are 0  
+			 * If `SEFLG_EQUATORIAL` is used, the values are in equatorial coordinates instead (right ascension, declination, distance)  
+			 * If `SELFG_XYZ` is used, the values are in cartesian coordinates instead (X, Y, Z)  
+			 * ```
+			 * ```
+			 */
+			perihelion: CalcData2;
+			/**
+			 * ### Description
+			 * Array of aphelion values returned by the calculation  
+			 * By default the values are in ecliptic coordinates (longitude, latitude, distance)  
+			 * If `SEFLG_SPEED` or `SEFLG_SPEED3` are used, the daily speeds for each value are also retured, otherwise they are 0  
+			 * If `SEFLG_EQUATORIAL` is used, the values are in equatorial coordinates instead (right ascension, declination, distance)  
+			 * If `SELFG_XYZ` is used, the values are in cartesian coordinates instead (X, Y, Z)  
+			 * if `SE_NODBIT_FOPOINT` is used, the values are the object's second focus instead  
+			 * ```
+			 * ```
+			 */
+			aphelion: CalcData2;
+		 };
+	}
+
+	interface Pheno extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array containing data for planetary phenomena  
+		 * ```
+		 * ```
+		 */
+		data: PhenoData;
+	}
+
+	interface RefracExtended {
+		/**
+		 * ### Description
+		 * Converted altitude value  
+		 * ```
+		 * ```
+		 */
+		data: number;
+		/**
+		 * ### Description
+		 * Array containing additional output from altitude conversion  
+		 * ```
+		 * ```
+		 */
+		extended: RefracExtendedData;
+	}
+
+	interface RiseTrans extends Flag, Error {
+		/**
+		 * ### Description
+		 * Time of transit in julian days in universal time  
+		 * ```
+		 * ```
+		 */
+		data: number;
+	}
+
+	interface SolEclipseHow extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of data about the solar eclipse  
+		 * ```
+		 * ```
+		 */
+		data: SolEclipseAttributes;
 	}
 
 	/*
@@ -522,7 +626,7 @@ declare module "sweph" {
 		distSpd: number
 	]
 
-	type FixStarData = [
+	type CalcData2 = [
 		/**
 		 * (`λ`) Ecliptic longitude  
 		 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
@@ -1157,6 +1261,25 @@ declare module "sweph" {
 		second: number;
 	}
 
+	type DateObject2 = {
+		/**
+		 * Full year
+		 */
+		year: number;
+		/**
+		 * Month (1-12)
+		 */
+		month: number;
+		/**
+		 * Day (1-31)
+		 */
+		day: number;
+		/**
+		 * Hour including fraction (0-23.999999)
+		 */
+		hour: number;
+	}
+
 	type EclipseTimes = [
 		/**
 		 * time of maximum eclipse in jd
@@ -1424,6 +1547,95 @@ declare module "sweph" {
 		 * Angular distance of moon from object in degrees
 		 */
 		angular_distance: number,
+	]
+
+	type PhenoData = [
+		/**
+		 * Phase angle (Earth-planet-sun)
+		 */
+		phase_angle: number,
+		/**
+		 * Phase (illumined fraction of disc)
+		 */
+		phase: number,
+		/**
+		 * Elongation of planet
+		 */
+		elongation: number,
+		/**
+		 * Apparent diameter of disc
+		 */
+		diameter: number,
+		/**
+		 * Apparent magnitude
+		 */
+		magnitude: number
+	]
+
+	type RefracExtendedData = [
+		/**
+		 * True altitude if possible, otherwise input value
+		 */
+		true_altitude: number,
+		/**
+		 * Apparent altitude if possible, otherwise input value
+		 */
+		apparent_altitude: number,
+		/**
+		 * Refraction value
+		 */
+		refraction: number,
+		/**
+		 * Dip of the horizon
+		 */
+		dip: number
+	]
+
+	type SolEclipseAttributes = [
+		/**
+		 * Fraction of solar diameter covered by moon
+		 */
+		solar_diameter: number,
+		/**
+		 * Ratio of lunar diameter to solar one
+		 */
+		lunar_diameter: number,
+		/**
+		 * Fraction of the solar disc covered by moon (obscuration)
+		 */
+		solar_disc: number,
+		/**
+		 * Diameter of core shadow in km
+		 */
+		core_shadow: number,
+		/**
+		 * Azimuth of the sun at tjd
+		 */
+		azimuth: number,
+		/**
+		 * True altitude of the sun above horizon at tjd
+		 */
+		true_altitude: number,
+		/**
+		 * Apparent altitude of the sun above horizon at tjd
+		 */
+		apparent_altitude: number,
+		/**
+		 * Elongation of moon in degrees
+		 */
+		elongation: number,
+		/**
+		 * Magnitude according to NASA (same as solar_diameter if partial and lunar_diameter if annular or total)
+		 */
+		mag: number,
+		/**
+		 * Saros series number (if available, otherwise -99999999)
+		 */
+		saros: number,
+		/**
+		 * Saros series member number (if available, otherwise -99999999)
+		 */
+		saros_member: number
 	]
 
 	/*
@@ -3156,7 +3368,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function lun_occult_when_glob(tjd_start: number, ipl: number, starname: string | null, ifl: number, ifltype: number, backwards: boolean): LunOccultWhenGlob;
+	export function lun_occult_when_glob(tjd_start: number, ipl: number, starname: string | null, ifl: number, ifltype: number, backwards: boolean): EclipseWhenGlob;
 
 	/**
 	 * ### Description
@@ -3262,40 +3474,130 @@ declare module "sweph" {
 	export function lun_occult_where(tjd_ut: number, ipl: number, starname: string | null, ifl: number): LunOccultWhere;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param ipl 
-	 * @param iflag 
-	 * @param method 
+	 * ### Description
+	 * Calculate an object's nodes and apsides from universal time  
+	 * If the calculation method includes `SE_NODBIT_FOPOINT`, the `aphelion` field contains the values for the object's "second focus" instead
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ipl: number // Object ID
+	 * • iflag: number // Calculation flags
+	 * • method: number // Calculation method flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // Computed flags or ERR
+	 *   error: string, // Error message in case of error
+	 *   data: Object {
+	 *     ascending: Array<number> [
+	 *       lon, // Longitude, right ascension, or cartesian X
+	 *       lat, // Latitude, declination or cartesian Y
+	 *       dist, // Distance in AU or cartesian Z
+	 *       lonSpd, // Daily speed for lon
+	 *       latSpd, // Daily speed for lat
+	 *       distSpd, // Daily speed for dist
+	 *     ],
+	 *     descending: Array<number> [
+	 *       lon, // Longitude, right ascension, or cartesian X
+	 *       lat, // Latitude, declination or cartesian Y
+	 *       dist, // Distance in AU or cartesian Z
+	 *       lonSpd, // Daily speed for lon
+	 *       latSpd, // Daily speed for lat
+	 *       distSpd, // Daily speed for dist
+	 *     ],
+	 *     perihelion: Array<number> [
+	 *       lon, // Longitude, right ascension, or cartesian X
+	 *       lat, // Latitude, declination or cartesian Y
+	 *       dist, // Distance in AU or cartesian Z
+	 *       lonSpd, // Daily speed for lon
+	 *       latSpd, // Daily speed for lat
+	 *       distSpd, // Daily speed for dist
+	 *     ],
+	 *     aphelion: Array<number> [
+	 *       lon, // Longitude, right ascension, or cartesian X
+	 *       lat, // Latitude, declination or cartesian Y
+	 *       dist, // Distance in AU or cartesian Z
+	 *       lonSpd, // Daily speed for lon
+	 *       latSpd, // Daily speed for lat
+	 *       distSpd, // Daily speed for dist
+	 *     ],
+	 *   }
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH;
+	 * const result = nod_aps_ut(2416547, constants.SE_MARS, flags, 0);
+	 * if(result.flag !== flags) { console.log(new Error(result.error)); }
+	 * console.log(`Longitude of the Ascending node: ${result.data.ascending[0]}`)
+	 * ```
+	 * &nbsp;
 	 */
-	export function nod_aps_ut(tjd_ut: number, ipl: number, iflag: number, method: number): {
-		flag: number;
-		error: string;
-		data: {
-			ascending: [6],
-			descending: [6],
-			perihelion: [6],
-			aphelion: [6]
-		}
-	}
+	export function nod_aps_ut(tjd_ut: number, ipl: number, iflag: number, method: number): NodAps;
 
-	/**
-	 * 
-	 * @param tjd_et 
-	 * @param ipl 
-	 * @param iflag 
-	 * @param method 
+		/**
+	 * ### Description
+	 * Calculate an object's nodes and apsides from ephemeris/terrestrial time  
+	 * If the calculation method includes `SE_NODBIT_FOPOINT`, the `aphelion` field contains the values for the object's "second focus" instead
+	 * ### Params
+	 * ```
+	 * • tjd_et: number // Julian day in ephemeris/terrestrial time
+	 * • ipl: number // Object ID
+	 * • iflag: number // Calculation flags
+	 * • method: number // Calculation method flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // Computed flags or ERR
+	 *   error: string, // Error message in case of error
+	 *   data: Object {
+	 *     ascending: Array<number> [
+	 *       lon, // Longitude, right ascension, or cartesian X
+	 *       lat, // Latitude, declination or cartesian Y
+	 *       dist, // Distance in AU or cartesian Z
+	 *       lonSpd, // Daily speed for lon
+	 *       latSpd, // Daily speed for lat
+	 *       distSpd, // Daily speed for dist
+	 *     ],
+	 *     descending: Array<number> [
+	 *       lon, // Longitude, right ascension, or cartesian X
+	 *       lat, // Latitude, declination or cartesian Y
+	 *       dist, // Distance in AU or cartesian Z
+	 *       lonSpd, // Daily speed for lon
+	 *       latSpd, // Daily speed for lat
+	 *       distSpd, // Daily speed for dist
+	 *     ],
+	 *     perihelion: Array<number> [
+	 *       lon, // Longitude, right ascension, or cartesian X
+	 *       lat, // Latitude, declination or cartesian Y
+	 *       dist, // Distance in AU or cartesian Z
+	 *       lonSpd, // Daily speed for lon
+	 *       latSpd, // Daily speed for lat
+	 *       distSpd, // Daily speed for dist
+	 *     ],
+	 *     aphelion: Array<number> [
+	 *       lon, // Longitude, right ascension, or cartesian X
+	 *       lat, // Latitude, declination or cartesian Y
+	 *       dist, // Distance in AU or cartesian Z
+	 *       lonSpd, // Daily speed for lon
+	 *       latSpd, // Daily speed for lat
+	 *       distSpd, // Daily speed for dist
+	 *     ],
+	 *   }
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const flags = constants.SEFLG_SWIEPH;
+	 * const result = nod_aps(2416547, constants.SE_MARS, flags, 0);
+	 * if(result.flag !== flags) { console.log(new Error(result.error)); }
+	 * console.log(`Longitude of the Ascending node: ${result.data.ascending[0]}`)
+	 * ```
+	 * &nbsp;
 	 */
-	export function nod_aps(tjd_et: number, ipl: number, iflag: number, method: number): {
-		flag: number;
-		error: string;
-		data: {
-			ascending: [6],
-			descending: [6],
-			perihelion: [6],
-			aphelion: [6]
-		}
-	}
+	export function nod_aps(tjd_et: number, ipl: number, iflag: number, method: number): NodAps;
 
 	/**
 	 * ### Description
@@ -3329,28 +3631,70 @@ declare module "sweph" {
 	export function orbit_max_min_true_distance(tjd_et: number, ipl: number, iflag: number): OrbitMaxMinTrueDistance;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param ipl 
-	 * @param iflag 
+	 * ### Description
+	 * Compute phase, phase angle, elongation, apparent diameter, apparent magnitude for the Sun, the Moon, all planets and asteroids
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ipl: number // Object ID
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message or warning if any
+	 *   data: Array<number> [
+	 *     phase_angle: number, // Phase angle (Earth-planet-sun)
+	 *     phase: number, // Phase (illumined fraction of disc)
+	 *     elongation: number, // Elongation of planet
+	 *     diameter: number, // Apparent diameter of disc
+	 *     magnitude: number // Apparent magnitude
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = pheno_ut(2416547, constants.SE_MOON, constants.SEFLG_SWIEPH);
+	 * if(result.error) { console.log(result.error); }
+	 * console.log(`Phase Angle: ${result.data[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function pheno_ut(tjd_ut: number, ipl: number, iflag: number): {
-		flag: number;
-		error: string;
-		data: [5];
-	}
+	export function pheno_ut(tjd_ut: number, ipl: number, iflag: number): Pheno;
 
 	/**
-	 * 
-	 * @param tjd_et 
-	 * @param ipl 
-	 * @param iflag 
+	 * ### Description
+	 * Compute phase, phase angle, elongation, apparent diameter, apparent magnitude for the Sun, the Moon, all planets and asteroids
+	 * ### Params
+	 * ```
+	 * • tjd_et: number // Julian day in ephemeris/terrestrial time
+	 * • ipl: number // Object ID
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message or warning if any
+	 *   data: Array<number> [
+	 *     phase_angle: number, // Phase angle (Earth-planet-sun)
+	 *     phase: number, // Phase (illumined fraction of disc)
+	 *     elongation: number, // Elongation of planet
+	 *     diameter: number, // Apparent diameter of disc
+	 *     magnitude: number // Apparent magnitude
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = pheno(2416547, constants.SE_MOON, constants.SEFLG_SWIEPH);
+	 * if(result.error) { console.log(result.error); }
+	 * console.log(`Phase Angle: ${result.data[0]}`);
+	 * ```
+	 * &nbsp;
 	 */
-	export function pheno(tjd_et: number, ipl: number, iflag: number): {
-		flag: number;
-		error: string;
-		data: [5];
-	}
+	export function pheno(tjd_et: number, ipl: number, iflag: number): Pheno;
 
 	/**
 	 * ### Description
@@ -3372,74 +3716,152 @@ declare module "sweph" {
 	export function radnorm(drad: number): number;
 
 	/**
-	 * 
-	 * @param inalt 
-	 * @param geoalt 
-	 * @param atpress 
-	 * @param lapse_rate 
-	 * @param attemp 
-	 * @param calc_flag 
+	 * ### Description
+	 * Calculate true altitude from the apparent altitude or apparent altitude from true altitude  
+	 * Extended function also supports negative heights and more
+	 * ### Params
+	 * ```
+	 * • inalt: number // Input altitude in degrees above the horizon
+	 * • geoalt: number // Altitude of the observer above sea level in meters
+	 * • atpress: number // Atmospheric pressure in mbar/hpa
+	 * • attemp: number // Atmospheric temperature in celsius
+	 * • lapse_rate: number // (attemp/geoalt) = [°K/m]
+	 * • calc_flag: number // Calculation flag (SE_TRUE_TO_APP or SE_APP_TO_TRUE)
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   data: number, // Converted altitude
+	 *   extended: Array<number> [
+	 *     true_altitude, // True altitude if possible, otherwise input value
+	 *     apparent_altitude, // Apparent altitude if possible, otherwise input value
+	 *     refraction, // Refraction value
+	 *     dip // Dip of the horizon
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = refrac_extended(64.323, 500, 1000, 25, 0.0025, constants.SE_APP_TO_TRUE);
+	 * console.log(result.data);
+	 * ```
+	 * &nbsp;
 	 */
-	export function refrac_extended(inalt: number, geoalt: number, atpress: number, lapse_rate: number, attemp: number, calc_flag: number): {
-		data: number,
-		extended: [4]
-	}
+	export function refrac_extended(inalt: number, geoalt: number, atpress: number, attemp: number, lapse_rate: number, calc_flag: number): RefracExtended;
 
 	/**
-	 * 
-	 * @param inalt 
-	 * @param atpress 
-	 * @param attemp 
-	 * @param calc_flag 
+	 * ### Description
+	 * Calculate true altitude from the apparent altitude or apparent altitude from true altitude
+	 * ### Params
+	 * ```
+	 * • inalt: number // Input altitude in degrees above the horizon
+	 * • atpress: number // Atmospheric pressure in mbar/hpa
+	 * • attemp: number // Atmospheric temperature in celsius
+	 * • calc_flag: number // Calculation flag (SE_TRUE_TO_APP or SE_APP_TO_TRUE)
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Converted altitude
+	 * ```
+	 * ### Example
+	 * ```
+	 * const trueAltitude = refrac(64.323, 1000, 25, constants.SE_APP_TO_TRUE) // 64.3163724577654
+	 * ```
+	 * &nbsp;
 	 */
 	export function refrac(inalt: number, atpress: number, attemp: number, calc_flag: number): number;
 
 	/**
-	 * 
-	 * @param tjd 
-	 * @param gregflag 
+	 * ### Description
+	 * Compute year, month, day and hour from a julian day number
+	 * ### Params
+	 * ```
+	 * • tjd: number // Julian day in universal time
+	 * • gregflag: number // Calendar type (SE_JUL_CAL or SE_GREG_CAL)
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   year: number, // year
+	 *   month: number, // month (1-12)
+	 *   day: number, // day (1-31)
+	 *   hour: number // hour (0-23.999)
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const date = revjul(2555555, constants.SE_GREG_CAL);
+	 * console.log(date);
+	 * ```
+	 * &nbsp;
 	 */
-	export function revjul(tjd: number, gregflag: number): {
-		year: number,
-		month: number,
-		day: number,
-		hour: number
-	}
+	export function revjul(tjd: number, gregflag: number): DateObject2;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param ipl 
-	 * @param starname 
-	 * @param epheflag 
-	 * @param rsmi 
-	 * @param geopos 
-	 * @param atpress 
-	 * @param attemp 
-	 * @param horhgt 
+	 * ### Description
+	 * Compute the times of rising, setting and meridian transits for all planets, asteroids, the moon, and the fixed stars  
+	 * This function also supports custom local horizon altitude
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ipl: number // Object ID
+	 * • starname: string | null // Name of the star if a star is desired, null otherwise
+	 * • epheflag: number // Ephemeris flag
+	 * • rsmi: number // Transit type (SE_CALC_RISE, SE_CALC_SET, SE_CALC_MTRANSIT, SE_CALC_ITRANSIT) plus additional transit flags
+	 * • geopos: Array<number> // Geographic coordinates of the observer [longitude, latitude, elevation]
+	 * • atpress: number // Atmospheric pressure in mbar/hpa
+	 * • attemp: number // Atmospheric temperature in celsius
+	 * • horhgt: number // Height of local horizon in degrees at the point where the body rises or sets
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK, ERR or -2 if circumpolar object
+	 *   error: string, // Error message if any
+	 *   data: number // Transit time in julian days in universal time
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = rise_trans_true_hor(2555555, constants.SE_MOON, null, constants.SEFLG_SWIEPH, constants.SE_CALC_RISE, [95,40,200], 0, 0, 0);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
+	 * console.log(result.data);
+	 * ```
+	 * &nbsp;
 	 */
-	export function rise_trans_true_hor(tjd_ut: number, ipl: number, starname: string | null, epheflag: number, rsmi: number, geopos: [longitude: number, latitude: number, elevation: number], atpress: number, attemp: number, horhgt: number): {
-		flag: number;
-		error: string;
-		data: number;
-	}
+	export function rise_trans_true_hor(tjd_ut: number, ipl: number, starname: string | null, epheflag: number, rsmi: number, geopos: [longitude: number, latitude: number, elevation: number], atpress: number, attemp: number, horhgt: number): RiseTrans;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param ipl 
-	 * @param starname 
-	 * @param epheflag 
-	 * @param rsmi 
-	 * @param geopos 
-	 * @param atpress 
-	 * @param attemp 
+	 * ### Description
+	 * Compute the times of rising, setting and meridian transits for all planets, asteroids, the moon, and the fixed stars
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ipl: number // Object ID
+	 * • starname: string | null // Name of the star if a star is desired, null otherwise
+	 * • epheflag: number // Ephemeris flag
+	 * • rsmi: number // Transit type (SE_CALC_RISE, SE_CALC_SET, SE_CALC_MTRANSIT, SE_CALC_ITRANSIT) plus additional transit flags
+	 * • geopos: Array<number> // Geographic coordinates of the observer [longitude, latitude, elevation]
+	 * • atpress: number // Atmospheric pressure in mbar/hpa
+	 * • attemp: number // Atmospheric temperature in celsius
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK, ERR or -2 if circumpolar object
+	 *   error: string, // Error message if any
+	 *   data: number // Transit time in julian days in universal time
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = rise_trans_true_hor(2555555, constants.SE_MOON, null, constants.SEFLG_SWIEPH, constants.SE_CALC_RISE, [95,40,200], 0, 0);
+	 * if(result.flag !== constants.OK) { console.log(result.error); }
+	 * console.log(result.data);
+	 * ```
+	 * &nbsp;
 	 */
-	export function rise_trans(tjd_ut: number, ipl: number, starname: string | null, epheflag: number, rsmi: number, geopos: [longitude: number, latitude: number, elevation: number], atpress: number, attemp: number): {
-		flag: number;
-		error: string;
-		data: number;
-	}
+	export function rise_trans(tjd_ut: number, ipl: number, starname: string | null, epheflag: number, rsmi: number, geopos: [longitude: number, latitude: number, elevation: number], atpress: number, attemp: number): RiseTrans;
 
 	/**
 	 * ### Description
@@ -3555,43 +3977,128 @@ declare module "sweph" {
 	export function set_topo(geolon: number, geolat: number, elevation: number): void;
 
 	/**
-	 * 
-	 * @param tjd_ut 
+	 * ### Description
+	 * Calculate sidereal time at the greenwich meridian
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Sidereal time in hours (0-23.99999)
+	 * ```
+	 * ### Example
+	 * ```
+	 * const time = sidtime(2555555); // 13.176341501003689
+	 * ```
+	 * &nbsp;
 	 */
 	export function sidtime(tjd_ut: number): number;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param eps 
-	 * @param nut 
+	 * ### Description
+	 * Calculate sidereal time at the greenwich meridian with custom obliquity and nutation
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • eps: number // Obliquity of the ecliptic
+	 * • nut: number // Nutation
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Sidereal time in hours (0-23.99999)
+	 * ```
+	 * ### Example
+	 * ```
+	 * const time = sidtime0(2555555, 23.555, 0.25); // 13.191718089387829
+	 * ```
+	 * &nbsp;
 	 */
 	export function sidtime0(tjd_ut: number, eps: number, nut: number): number;
+	
+	/**
+	 * ### Description
+	 * Get solar eclipse data for a given date
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ifl: number // Ephemeris flag
+	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse type (SE_ECL_TOTAL, SE_ECL_ANNULAR, SE_ECL_PARTIAL) or 0 if no eclipse
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     solar_diameter, // Fraction of solar diameter covered by moon
+	 *     lunar_diameter, // Ratio of lunar diameter to solar one
+	 *     solar_disc, // Fraction of the solar disc covered by moon (obscuration)
+	 *     core_shadow, // Diameter of core shadow in km
+	 *     azimuth, // Azimuth of the sun at jd
+	 *     true_altitude, // True altitude of the sun above horizon at jd
+	 *     apparent_altitude, // Apparent altitude of the sun above horizon at jd
+	 *     elongation, // Elongation of moon in degrees
+	 *     mag, // Magnitude according to NASA (same as solar_diameter if partial and lunar_diameter if annular or total)
+	 *     saros_number, // Saros series number (if available, otherwise -99999999)
+	 *     saros_member // Saros series member number (if available, otherwise -99999999)
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = sol_eclipse_how(2416547, constants.SEFLG_SWIEPH, [10,45,500]);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   magnitude: ${result.data[8]}
+	 * `)
+	 * ```
+	 * &nbsp;
+	 */
+	export function sol_eclipse_how(tjd_ut: number, ifl: number, geopos: [longitude: number, latitude: number, elevation: number]): SolEclipseHow;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param ifl 
-	 * @param geopos 
+	 * ### Description
+	 * Search for solar eclipses globally
+	 * ### Params
+	 * ```
+	 * • tjd_start: number // Julian day in universal time to start searching from
+	 * • ifl: number // Ephemeris flag
+	 * • ifltype: number // Eclipse type (SE_ECL_TOTAL, SE_ECL_ANNULAR, SE_ECL_PARTIAL, SE_ECL_ANNULAR_TOTAL, SE_ECL_CENTRAL, SE_ECL_NONCENTRAL or 0 for any)
+	 * • backwards: boolean // Search backwards in time instead
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse type (SE_ECL_TOTAL, SE_ECL_ANNULAR, SE_ECL_PARTIAL, SE_ECL_ANNULAR_TOTAL, SE_ECL_CENTRAL, SE_ECL_NONCENTRAL) or 0 if no eclipse found
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     eclipse_max, // Time of maximum eclipse in jd
+	 *     local_noon, // Time when eclipse takes place at local apparent noon
+	 *     eclipse_start, // Time of eclipse start
+	 *     eclipse_end, // Time of eclipse end
+	 *     total_start, // Time of totality start
+	 *     total_end, // Time of totality end
+	 *     center_start, // Time of center line start
+	 *     center_end, // Time of center line end
+	 *     annular_total, // Time when annular-total eclipse becomes total
+	 *     total_annular // Time when annular-total eclipse becomes annular again
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = sol_eclipse_when_glob(2416547, constants.SEFLG_SWIEPH, 0, false);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   eclipse_max: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function sol_eclipse_how(tjd_ut: number, ifl: number, geopos: [longitude: number, latitude: number, elevation: number]): {
-		flag: number;
-		error: string;
-		data: [11]
-	}
-
-	/**
-	 * 
-	 * @param tjd_start 
-	 * @param ifl 
-	 * @param iftype 
-	 * @param backward 
-	 */
-	export function sol_eclipse_when_glob(tjd_start: number, ifl: number, iftype: number, backward: number): {
-		flag: number;
-		error: string;
-		data: [10]
-	}
+	export function sol_eclipse_when_glob(tjd_start: number, ifl: number, iftype: number, backwards: number): EclipseWhenGlob;
 
 	/**
 	 * 

@@ -8398,3 +8398,4 @@ const char *CALL_CONV swe_get_current_file_data(int ifno, double *tfstart, doubl
   *denum = pfp->sweph_denum;
   return pfp->fnam;
 }
+
