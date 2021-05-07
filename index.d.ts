@@ -2895,7 +2895,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function heliacal_ut(tjd_ut: number,	dgeo: [longitude: number, latitude: number, elevation: number],	datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], object_name: string,	event_type: number,	hel_flag: number): Heliacal;
+	export function heliacal_ut(tjd_ut: number,	dgeo: [longitude: number, latitude: number, elevation: number],	datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], object_name: string, event_type: number, hel_flag: number): Heliacal;
 
 	/**
 	 * ### Description
