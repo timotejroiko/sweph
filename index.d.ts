@@ -4501,7 +4501,7 @@ declare module "sweph" {
 	 * ### Returns
 	 * ```
 	 * Object {
-	 *   flag: number, // OK or ERR
+	 *   flag: number, // OK, ERR, -2 if object is below horizon, 1 if scotopic vision or 2 if near limit photopic/scotopic vision
 	 *   error: string, // Error message if ERR
 	 *   data: Array<number> [
 	 *     visual_mag: number, // Limiting visual magnitude (object is visible if this value is bigger than the object's magnitude value)
