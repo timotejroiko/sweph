@@ -127,7 +127,7 @@ declare module "sweph" {
 	interface DateConversion extends Flag {
 		/**
 		 * ### Description
-		 * Julian day value
+		 * Julian day value  
 		 * ```
 		 * ```
 		 */
@@ -137,7 +137,7 @@ declare module "sweph" {
 	interface DeltaT extends Error {
 		/**
 		 * ### Description
-		 * Delta T value
+		 * Delta T value  
 		 * ```
 		 * ```
 		 */
@@ -161,7 +161,7 @@ declare module "sweph" {
 	interface FixStarMag extends Flag, Name, Error {
 		/**
 		 * ### Description
-		 * Magnitude value
+		 * Magnitude value  
 		 * ```
 		 * ```
 		 */
@@ -171,7 +171,7 @@ declare module "sweph" {
 	interface GauquelinSector extends Flag, Error {
 		/**
 		 * ### Description
-		 * Gauquelin Sector
+		 * Gauquelin Sector  
 		 * ```
 		 * ```
 		 */
@@ -181,7 +181,7 @@ declare module "sweph" {
 	interface Ayanamsa extends Flag, Error {
 		/**
 		 * ### Description
-		 * Ayanamsa Value
+		 * Ayanamsa Value  
 		 * ```
 		 * ```
 		 */
@@ -333,7 +333,7 @@ declare module "sweph" {
 	interface LocalApparentTime extends Flag, Error {
 		/**
 		 * ### Description
-		 * Local apparent time in julian day in universal time
+		 * Local apparent time in julian day in universal time  
 		 * ```
 		 * ```
 		 */
@@ -343,7 +343,7 @@ declare module "sweph" {
 	interface LocalMeanTime extends Flag, Error {
 		/**
 		 * ### Description
-		 * Local mean time in julian day in universal time
+		 * Local mean time in julian day in universal time  
 		 * ```
 		 * ```
 		 */
@@ -353,7 +353,7 @@ declare module "sweph" {
 	interface OrbitMaxMinTrueDistance extends Flag, Error {
 		/**
 		 * ### Description
-		 * Orbital maximum and minimum possible distances
+		 * Orbital maximum and minimum possible distances  
 		 * ```
 		 * ```
 		 */
@@ -458,7 +458,7 @@ declare module "sweph" {
 		/**
 		 * ### Description
 		 * Object containing ascending node, descending node, aphelion and perihelion values  
-		 * Depending on the specific object and the method flag used, the values can be either "mean" or "osculating"
+		 * Depending on the specific object and the method flag used, the values can be either "mean" or "osculating"  
 		 * ```
 		 * ```
 		 */
@@ -623,7 +623,7 @@ declare module "sweph" {
 		fraction: number;
 		/**
 		 * ### Description
-		 * Zodiac sign or nakshatra number
+		 * Zodiac sign or nakshatra number  
 		 * ```
 		 * ```
 		 */
@@ -774,7 +774,7 @@ declare module "sweph" {
 		latSpd: number,
 		/**
 		 * (`aus`) Distance daily speed in AU  
-		 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`  
+		 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`
 		 */
 		distSpd: number
 	]
@@ -783,24 +783,24 @@ declare module "sweph" {
 		/**
 		 * (`λ`) Ecliptic longitude  
 		 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
-		 * (`x`) Cartesian X if `SEFLG_XYZ`  
+		 * (`x`) Cartesian X if `SEFLG_XYZ`
 		 */
 		lon: number,
 		/**
 		 * (`β`) Ecliptic latitude  
 		 * (`δ`) Equatorial declination if `SEFLG_EQUATORIAL`  
-		 * (`y`) Cartesian Y if `SEFLG_XYZ`  
+		 * (`y`) Cartesian Y if `SEFLG_XYZ`
 		 */
 		lat: number,
 		/**
 		 * (`au`) Distance in AU  
-		 * (`z`) Cartesian Z if `SEFLG_XYZ`  
+		 * (`z`) Cartesian Z if `SEFLG_XYZ`
 		 */
 		dist: number,
 		/**
 		 * (`λs`) Ecliptic longitude daily speed  
 		 * (`αs`) Equatorial right ascension daily speed if `SEFLG_EQUATORIAL`  
-		 * (`xs`) Cartesian daily speed if `SEFLG_XYZ`  
+		 * (`xs`) Cartesian daily speed if `SEFLG_XYZ`
 		 */
 		lonSpd: number,
 		/**
@@ -811,7 +811,7 @@ declare module "sweph" {
 		latSpd: number,
 		/**
 		 * (`aus`) Distance daily speed in AU  
-		 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`  
+		 * (`zs`) Cartesian Z daily speed if `SEFLG_XYZ`
 		 */
 		distSpd: number
 	]
@@ -1156,35 +1156,35 @@ declare module "sweph" {
 		/**
 		 * Momentary speed of the Ascendant
 		 */
-		 asc_speed: number,
-		 /**
-		  * Momentary speed of the Midheaven
-		  */
-		 mc_speed: number,
-		 /**
-		  * Momentary speed in Right Ascension of the Midheaven
-		  */
-		 armc_speed: number,
-		 /**
-		  * Momentary speed of the Vertex
-		  */
-		 vertex_speed: number,
-		 /**
-		  * Momentary speed of the Equatorial Ascendant
-		  */
-		 equasc_speed: number,
-		 /**
-		  * Momentary speed of Walter Koch's Co-Ascendant
-		  */
-		 coasc1_speed: number,
-		 /**
-		  * Momentary speed of Michael Munkasey's Co-Ascendant
-		  */
-		 coasc2_speed: number,
-		 /**
-		  * Momentary speed of Michael Munkasey's Polar Ascendant
-		  */
-		 polasc_speed: number
+		asc_speed: number,
+		/**
+		 * Momentary speed of the Midheaven
+		 */
+		mc_speed: number,
+		/**
+		 * Momentary speed in Right Ascension of the Midheaven
+		 */
+		armc_speed: number,
+		/**
+		 * Momentary speed of the Vertex
+		 */
+		vertex_speed: number,
+		/**
+		 * Momentary speed of the Equatorial Ascendant
+		 */
+		equasc_speed: number,
+		/**
+		 * Momentary speed of Walter Koch's Co-Ascendant
+		 */
+		coasc1_speed: number,
+		/**
+		 * Momentary speed of Michael Munkasey's Co-Ascendant
+		 */
+		coasc2_speed: number,
+		/**
+		 * Momentary speed of Michael Munkasey's Polar Ascendant
+		 */
+		polasc_speed: number
 	]
 
 	type GauquelinHousesList = [
@@ -1505,7 +1505,7 @@ declare module "sweph" {
 		/**
 		 * Time of sunset between first and forth contact
 		 */
-		sunset: number  
+		sunset: number
 	]
 
 	type EclipseCoords = [
@@ -2163,7 +2163,7 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
-	 * Find which day of the week a particular date is.  
+	 * Find which day of the week a particular date is
 	 * ### Params
 	 * ```
 	 * • jd: number // Julian day value in universal time
@@ -2843,7 +2843,7 @@ declare module "sweph" {
 	 *     RiseS, // rise/set time of Sun in JD
 	 *     Lag, // rise/set time of object minus rise/set time of Sun in JD
 	 *     TvisVR, // visibility duration in JD
-	 *     LMoon, //  crescent length of Moon in degrees
+	 *     LMoon, // crescent length of Moon in degrees
 	 *     CVAact, // CVAact in degrees
 	 *     Illum, // Illum in percentage
 	 *     CVAact, // CVAact in degrees
@@ -2895,7 +2895,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function heliacal_ut(tjd_ut: number,	dgeo: [longitude: number, latitude: number, elevation: number],	datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], object_name: string, event_type: number, hel_flag: number): Heliacal;
+	export function heliacal_ut(tjd_ut: number, dgeo: [longitude: number, latitude: number, elevation: number], datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], object_name: string, event_type: number, hel_flag: number): Heliacal;
 
 	/**
 	 * ### Description
@@ -4052,7 +4052,7 @@ declare module "sweph" {
 	/**
 	 * ### Description
 	 * Set ayanamsa for sidereal mode  
-	 * For predefined ayanamsas, set second and third parameters to 0  
+	 * For predefined ayanamsas, set second and third parameters to 0
 	 * ### Params
 	 * ```
 	 * • sid_mode: number // Ayanamsa ID
@@ -4424,17 +4424,6 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function utc_time_zone(iyear: number, imonth: number, iday: number, ihour: number, imin: number, dsec: number, d_timezone: number): DateObject2;
-
-	/**
-	 * 
-	 * @param iyear 
-	 * @param imonth 
-	 * @param iday 
-	 * @param ihour 
-	 * @param imin 
-	 * @param dsec 
-	 * @param gregflag 
-	 */
 
 	/**
 	 * ### Description
