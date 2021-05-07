@@ -275,6 +275,61 @@ declare module "sweph" {
 		pointsSpeed: PointsSpeeds
 	}
 
+	interface DateObject {
+		/**
+		 * ### Description
+		 * Full year  
+		 * ```
+		 * ```
+		 */
+		year: number;
+		/**
+		 * ### Description
+		 * Month (1-12)  
+		 * ```
+		 * ```
+		 */
+		month: number;
+		/**
+		 * ### Description
+		 * Day (1-31)  
+		 * ```
+		 * ```
+		 */
+		day: number;
+		/**
+		 * ### Description
+		 * Hour including fraction (0-23.99999)  
+		 * ```
+		 * ```
+		 */
+		hour: number;
+	}
+
+	interface DateObject2 extends DateObject {
+		/**
+		 * ### Description
+		 * Hour (0-23)  
+		 * ```
+		 * ```
+		 */
+		hour: number;
+		/**
+		 * ### Description
+		 * Minute (0-59)  
+		 * ```
+		 * ```
+		 */
+		minute: number;
+		/**
+		 * ### Description
+		 * Second including fraction (0-59.99999)  
+		 * ```
+		 * ```
+		 */
+		second: number;
+	}
+
 	interface LocalApparentTime extends Flag, Error {
 		/**
 		 * ### Description
@@ -335,11 +390,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: [
-			...times: EclipseTimes,
-			rise: number, // time of moonrise, if it occurs during the eclipse
-			set: number, // time of moonset, if it occurs during the eclipse
-		],
+		data: EclipseTimes2,
 		/**
 		 * ### Description
 		 * Array of additional data about the lunar eclipse  
@@ -366,7 +417,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		 data: EclipseTimes2
+		 data: EclipseTimes3
 	}
 
 	interface LunOccultWhenLoc extends Flag, Error {
@@ -376,14 +427,14 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: EclipseTimes3,
+		data: EclipseTimes4,
 		/**
 		 * ### Description
 		 * Array of additional data about the lunar eclipse  
 		 * ```
 		 * ```
 		 */
-		attributes: LunEclipseAttributes2
+		attributes: EclipseAttributes
 	}
 
 	interface LunOccultWhere extends Flag, Error {
@@ -400,7 +451,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		attributes: LunEclipseAttributes3
+		attributes: LunEclipseAttributes2
 	}
 
 	interface NodAps extends Flag, Error {
@@ -504,7 +555,109 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: SolEclipseAttributes;
+		data: EclipseAttributes2;
+	}
+
+	interface SolEclipseWhenLoc extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of eclipse timings  
+		 * ```
+		 * ```
+		 */
+		data: EclipseTimes4;
+		/**
+		 * ### Description
+		 * Array of additional data about the solar eclipse  
+		 * ```
+		 * ```
+		 */
+		attributes: EclipseAttributes2;
+	}
+
+	interface SolEclipseWhere extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array of eclipse coordinates  
+		 * ```
+		 * ```
+		 */
+		data: EclipseCoords;
+		/**
+		 * ### Description
+		 * Array of additional data about the solar eclipse  
+		 * ```
+		 * ```
+		 */
+		attributes: EclipseAttributes2;
+	}
+
+	interface SplitDeg {
+		/**
+		 * ### Description
+		 * Degrees value  
+		 * ```
+		 * ```
+		 */
+		degree: number;
+		/**
+		 * ### Description
+		 * Minutes value  
+		 * ```
+		 * ```
+		 */
+		minute: number;
+		/**
+		 * ### Description
+		 * Seconds value  
+		 * ```
+		 * ```
+		 */
+		second: number;
+		/**
+		 * ### Description
+		 * Seconds fraction value  
+		 * ```
+		 * ```
+		 */
+		fraction: number;
+		/**
+		 * ### Description
+		 * Zodiac sign or nakshatra number
+		 * ```
+		 * ```
+		 */
+		sign: number;
+	}
+
+	interface TimeEqu extends Flag, Error {
+		/**
+		 * ### Description
+		 * Value of the equation of time (difference between LMT and LAT)  
+		 * ```
+		 * ```
+		 */
+		data: number;
+	}
+
+	interface UtcToJd extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array containing julian day in both ephemeris and universal time  
+		 * ```
+		 * ```
+		 */
+		data: JdEtUd;
+	}
+
+	interface VisLimitMag extends Flag, Error {
+		/**
+		 * ### Description
+		 * Array containing the altitude, azimuth and magnitude data of the object along with the altitude and azimuth of the sun and the moon  
+		 * ```
+		 * ```
+		 */
+		data: VisLimitMagData;
 	}
 
 	/*
@@ -1234,52 +1387,6 @@ declare module "sweph" {
 		house_36_speed: number,
 	]
 
-	type DateObject = {
-		/**
-		 * Full year
-		 */
-		year: number;
-		/**
-		 * Month (1-12)
-		 */
-		month: number;
-		/**
-		 * Day (1-31)
-		 */
-		day: number;
-		/**
-		 * Hour (0-23)
-		 */
-		hour: number;
-		/**
-		 * Minute (0-59)
-		 */
-		minute: number;
-		/**
-		 * Second including fraction (0-59.999999)
-		 */
-		second: number;
-	}
-
-	type DateObject2 = {
-		/**
-		 * Full year
-		 */
-		year: number;
-		/**
-		 * Month (1-12)
-		 */
-		month: number;
-		/**
-		 * Day (1-31)
-		 */
-		day: number;
-		/**
-		 * Hour including fraction (0-23.999999)
-		 */
-		hour: number;
-	}
-
 	type EclipseTimes = [
 		/**
 		 * time of maximum eclipse in jd
@@ -1316,6 +1423,18 @@ declare module "sweph" {
 	]
 
 	type EclipseTimes2 = [
+		...times: EclipseTimes,
+		/**
+		 * Time of moonrise, if it occurs during the eclipse
+		 */
+		rise: number,
+		/**
+		 * Time of moonset, if it occurs during the eclipse
+		 */
+		set: number,
+	]
+
+	type EclipseTimes3 = [
 		/**
 		 * time of maximum eclipse in jd
 		 */
@@ -1349,16 +1468,16 @@ declare module "sweph" {
 		 */
 		center_end: number,
 		/**
-		 * time when annular-total eclipse becomes total (not implemented)
+		 * time when annular-total eclipse becomes total
 		 */
 		annular_total: number,
 		/**
-		 * time when annular-total eclipse becomes annular again (not implemented)
+		 * time when annular-total eclipse becomes annular again
 		 */
 		total_annular: number
 	]
 
-	type EclipseTimes3 = [
+	type EclipseTimes4 = [
 		/**
 		 * Time of maximum eclipse
 		 */
@@ -1380,11 +1499,11 @@ declare module "sweph" {
 		 */
 		fourth_contact: number,
 		/**
-		 * Time of sunrise between first and forth contact (not implemented)
+		 * Time of sunrise between first and forth contact
 		 */
 		sunrise: number,
 		/**
-		 * Time of sunset between first and forth contact (not implemented)
+		 * Time of sunset between first and forth contact
 		 */
 		sunset: number  
 	]
@@ -1430,6 +1549,57 @@ declare module "sweph" {
 		 * Geographic latitude of southern limit of penumbra
 		 */
 		south_penumbra_lat: number
+	]
+
+	type EclipseAttributes = [
+		/**
+		 * Fraction of solar diameter covered by moon (magnitude)
+		 */
+		solar_diameter: number,
+		/**
+		 * Ratio of lunar diameter to solar one
+		 */
+		lunar_diameter: number,
+		/**
+		 * Fraction of solar disc covered by moon (obscuration)
+		 */
+		solar_disc: number,
+		/**
+		 * Diameter of core shadow in km
+		 */
+		core_shadow: number,
+		/**
+		 * Azimuth of sun at tjd
+		 */
+		sun_azimuth: number,
+		/**
+		 * True altitude of sun above horizon at tjd
+		 */
+		true_altitude: number,
+		/**
+		 * Apparent altitude of sun above horizon at tjd
+		 */
+		mean_altitude: number,
+		/**
+		 * Elongation of moon in degrees
+		 */
+		elongation: number
+	]
+
+	type EclipseAttributes2 = [
+		...attr: EclipseAttributes,
+		/**
+		 * Eclipse magnitude (same as solar_diameter or lunar_diameter depending on the eclipse type)
+		 */
+		mag: number,
+		/**
+		 * Saros series number (if available, otherwise -99999999)
+		 */
+		saros: number,
+		/**
+		 * Saros series member number (if available, otherwise -99999999)
+		 */
+		saros_member: number
 	]
 
 	type LunEclipseAttributes = [
@@ -1480,41 +1650,6 @@ declare module "sweph" {
 	]
 
 	type LunEclipseAttributes2 = [
-		/**
-		 * Fraction of solar diameter covered by moon (magnitude)
-		 */
-		solar_diameter: number,
-		/**
-		 * Ratio of lunar diameter to solar one
-		 */
-		lunar_diameter: number,
-		/**
-		 * Fraction of solar disc covered by moon (obscuration)
-		 */
-		solar_disc: number,
-		/**
-		 * Diameter of core shadow in km
-		 */
-		core_shadow: number,
-		/**
-		 * Azimuth of sun at tjd
-		 */
-		sun_azimuth: number,
-		/**
-		 * True altitude of sun above horizon at tjd
-		 */
-		true_altitude: number,
-		/**
-		 * Apparent altitude of sun above horizon at tjd
-		 */
-		mean_altitude: number,
-		/**
-		 * Elongation of moon in degrees
-		 */
-		elongation: number
-	]
-
-	type LunEclipseAttributes3 = [
 		/**
 		 * Fraction of object's diameter covered by moon (magnitude)
 		 */
@@ -1591,51 +1726,50 @@ declare module "sweph" {
 		dip: number
 	]
 
-	type SolEclipseAttributes = [
+	type JdEtUd = [
 		/**
-		 * Fraction of solar diameter covered by moon
+		 * Julian day in ephemeris/terrestrial time
 		 */
-		solar_diameter: number,
+		et: number,
 		/**
-		 * Ratio of lunar diameter to solar one
+		 * Julian day in universal time
 		 */
-		lunar_diameter: number,
+		ut: number
+	]
+
+	type VisLimitMagData = [
 		/**
-		 * Fraction of the solar disc covered by moon (obscuration)
+		 * Limiting visual magnitude (object is visible if this value is bigger than the object's magnitude value)
 		 */
-		solar_disc: number,
+		visual_mag: number,
 		/**
-		 * Diameter of core shadow in km
+		 * Altitude of the object
 		 */
-		core_shadow: number,
+		obj_altitude: number,
 		/**
-		 * Azimuth of the sun at tjd
+		 * Azimuth of the object
 		 */
-		azimuth: number,
+		obj_azimuth: number,
 		/**
-		 * True altitude of the sun above horizon at tjd
+		 * Altitude of the sun
 		 */
-		true_altitude: number,
+		sun_altitude: number,
 		/**
-		 * Apparent altitude of the sun above horizon at tjd
+		 * Azimuth of the sun
 		 */
-		apparent_altitude: number,
+		sun_azimuth: number,
 		/**
-		 * Elongation of moon in degrees
+		 * Altitude of the moon
 		 */
-		elongation: number,
+		moon_altitude: number,
 		/**
-		 * Magnitude according to NASA (same as solar_diameter if partial and lunar_diameter if annular or total)
+		 * Azimuth of the moon
 		 */
-		mag: number,
+		moon_azimuth: number,
 		/**
-		 * Saros series number (if available, otherwise -99999999)
+		 * The object's magnitude
 		 */
-		saros: number,
-		/**
-		 * Saros series member number (if available, otherwise -99999999)
-		 */
-		saros_member: number
+		magnitude: number
 	]
 
 	/*
@@ -3074,7 +3208,7 @@ declare module "sweph" {
 	 *   day: number; // Day (1-31)
 	 *   hour: number; // Hour (0-23)
 	 *   minute: number; // Minute (0-59)
-	 *   second: number; // Second including fraction (0-59.999999)
+	 *   second: number; // Second including fraction (0-59.99999)
 	 * }
 	 * ```
 	 * ### Example
@@ -3084,7 +3218,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function jdet_to_utc(tjd_et: number, gregflag: number): DateObject
+	export function jdet_to_utc(tjd_et: number, gregflag: number): DateObject2;
 
 	/**
 	 * ### Description
@@ -3102,7 +3236,7 @@ declare module "sweph" {
 	 *   day: number; // Day (1-31)
 	 *   hour: number; // Hour (0-23)
 	 *   minute: number; // Minute (0-59)
-	 *   second: number; // Second including fraction (0-59.999999)
+	 *   second: number; // Second including fraction (0-59.99999)
 	 * }
 	 * ```
 	 * ### Example
@@ -3112,7 +3246,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function jdut1_to_utc(tjd_ut: number, gregflag: number): DateObject;
+	export function jdut1_to_utc(tjd_ut: number, gregflag: number): DateObject2;
 
 	/**
 	 * ### Description
@@ -3122,7 +3256,7 @@ declare module "sweph" {
 	 * • year: number // Full year
 	 * • month: number // Month (1-12)
 	 * • day: number // Day (1-31)
-	 * • hour: number // Hour with fraction (0-23.999999)
+	 * • hour: number // Hour with fraction (0-23.99999)
 	 * • gregflag: number // Calendar system, SE_GREG_CAL for gregorian calendar, SE_JUL_CAL for julian calendar
 	 * ```
 	 * ### Returns
@@ -3795,7 +3929,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function revjul(tjd: number, gregflag: number): DateObject2;
+	export function revjul(tjd: number, gregflag: number): DateObject;
 
 	/**
 	 * ### Description
@@ -4039,7 +4173,7 @@ declare module "sweph" {
 	 *     true_altitude, // True altitude of the sun above horizon at jd
 	 *     apparent_altitude, // Apparent altitude of the sun above horizon at jd
 	 *     elongation, // Elongation of moon in degrees
-	 *     mag, // Magnitude according to NASA (same as solar_diameter if partial and lunar_diameter if annular or total)
+	 *     mag, // Eclipse magnitude (same as solar_diameter if partial and lunar_diameter if annular or total)
 	 *     saros_number, // Saros series number (if available, otherwise -99999999)
 	 *     saros_member // Saros series member number (if available, otherwise -99999999)
 	 *   ]
@@ -4101,76 +4235,195 @@ declare module "sweph" {
 	export function sol_eclipse_when_glob(tjd_start: number, ifl: number, iftype: number, backwards: number): EclipseWhenGlob;
 
 	/**
-	 * 
-	 * @param tjd_start 
-	 * @param ifL 
-	 * @param geopos 
-	 * @param backwards 
+	 * ### Description
+	 * Search for solar eclipses locally
+	 * ### Params
+	 * ```
+	 * • tjd_start: number // Julian day in universal time to start searching from
+	 * • ifl: number // Ephemeris flag
+	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * • backwards: boolean // Search backwards in time instead
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse type or 0 if none found
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     max_eclipse: number, // Time of maximum eclipse
+	 *     first_contact: number, // Time of first contact
+	 *     second_contact: number, // Time of second contact
+	 *     third_contact: number, // Time of third contact
+	 *     fourth_contact: number, // Time of fourth contact
+	 *     sunrise: number, // Time of sunrise between first and forth contact
+	 *     sunset: number // Time of sunset between first and forth contact
+	 *   ],
+	 *   attributes: Array<number> [
+	 *     solar_diameter: number, // Fraction of solar diameter covered by moon (magnitude)
+	 *     lunar_diameter: number, // Ratio of lunar diameter to solar one
+	 *     solar_disc: number, // Fraction of solar disc covered by moon (obscuration)
+	 *     core_shadow: number, // Diameter of core shadow in km
+	 *     sun_azimuth: number, // Azimuth of sun at tjd
+	 *     true_altitude: number, // True altitude of sun above horizon at tjd
+	 *     mean_altitude: number, // Apparent altitude of sun above horizon at tjd
+	 *     elongation: number // Elongation of moon in degrees
+	 *     mag, // Magnitude according to NASA (same as solar_diameter if partial and lunar_diameter if annular or total)
+	 *     saros_number, // Saros series number (if available, otherwise -99999999)
+	 *     saros_member // Saros series member number (if available, otherwise -99999999)
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = sol_eclipse_when_loc(2416547, constants.SEFLG_SWIEPH, [135, 45, 0], false);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   eclipse_max: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function sol_eclipse_when_loc(tjd_start: number, ifL: number, geopos: [longitude: number, latitude: number, elevation: number], backwards: boolean): {
-		flag: number;
-		error: string;
-		data: {
-			time: [7],
-			attributes: [11]
-		}
-	}
+	export function sol_eclipse_when_loc(tjd_start: number, ifl: number, geopos: [longitude: number, latitude: number, elevation: number], backwards: boolean): SolEclipseWhenLoc;
 
 	/**
-	 * 
-	 * @param tjd_ut 
-	 * @param ifl 
+	 * ### Description
+	 * Get geographical coordinates for an eclipse
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • ifl: number // Ephemeris flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // ERR, eclipse type or 0 if none found
+	 *   error: string, // Error message in case of error
+	 *   data: Array<number> [
+	 *     central_long: number, // Geographic longitude of central line
+	 *     central_lat: number, // Geographic latitude of central line
+	 *     north_umbra_long: number, // Geographic longitude of northern limit of umbra
+	 *     north_umbra_lat: number, // Geographic latitude of northern limit of umbra
+	 *     south_umbra_long: number, // Geographic longitude of southern limit of umbra
+	 *     south_umbra_lat: number, // Geographic latitude of southern limit of umbra
+	 *     north_penumbra_long: number, // Geographic longitude of northern limit of penumbra
+	 *     north_penumbra_lat: number, // Geographic latitude of northern limit of penumbra
+	 *     south_penumbra_long: number, // Geographic longitude of southern limit of penumbra
+	 *     south_penumbra_lat: number // Geographic latitude of southern limit of penumbra
+	 *   ],
+	 *   attributes: Array<number> [
+	 *     diameter_fraction: number, // Fraction of solar diameter covered by moon (magnitude)
+	 *     diameter_ratio: number, // Ratio of lunar diameter to solar diameter
+	 *     disc_fraction: number, // Fraction of solar disc covered by moon (obscuration)
+	 *     core_shadow: number, // Diameter of core shadow in km
+	 *     azimuth: number, // Azimuth of the sun at tjd
+	 *     true_altitude: number, // True altitude of the sun above horizon at tjd
+	 *     apparent_altitude: number, // Apparent altitude of the sun above horizon at tjd
+	 *     angular_distance: number, // Angular distance of the moon from the sun in degrees
+	 *     mag, // Eclipse magnitude (same as solar_diameteror lunar_diameter depending on the eclipse type)
+	 *     saros_number, // Saros series number (if available, otherwise -99999999)
+	 *     saros_member // Saros series member number (if available, otherwise -99999999)
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = sol_eclipse_where(2416547, constants.SEFLG_SWIEPH);
+	 * if(result.flag === constants.ERR) { throw new Error(result.error); }
+	 * console.log(`
+	 *   type: ${result.flag}
+	 *   longitude: ${result.data[0]}
+	 * `)
+	 * ```
+	 * &nbsp;
 	 */
-	export function sol_eclipse_where(tjd_ut: number, ifl: number): {
-		flag: number;
-		error: string;
-		data: {
-			coordinates: [10],
-			attributes: [11]
-		}
-	}
+	export function sol_eclipse_where(tjd_ut: number, ifl: number): SolEclipseWhere;
 
 	/**
-	 * 
-	 * @param ddeg 
-	 * @param roundflag 
+	 * ### Description
+	 * Convert decimal degrees value to degree, minute, second, sign and/or nakshatras
+	 * ### Params
+	 * ```
+	 * • ddeg: number // Input degrees value
+	 * • roundflag: number // Split and rounding methods
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   degree: number, // degrees value
+	 *   minute: number, // minutes value
+	 *   second: number, // seconds value
+	 *   fraction: number, // fraction of a second
+	 *   sign: number // sign or nakshatra number
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = split_deg(130.234, constants.SE_SPLIT_DEG_ZODIACAL);
+	 * console.log(result.degree); // 10
+	 * console.log(result.sign); // 4
+	 * ```
+	 * &nbsp;
 	 */
-	export function split_deg(ddeg: number, roundflag: number): {
-		degree: number,
-		minute: number,
-		second: number,
-		fraction: number,
-		sign: number
-	}
+	export function split_deg(ddeg: number, roundflag: number): SplitDeg;
 
 	/**
-	 * 
-	 * @param tjd_ut 
+	 * ### Description
+	 * Calculate the equation of time (difference between LMT and LAT)
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message if any
+	 *   data: number // Value of the equation of time
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = time_equ(2555555);
+	 * if(result.error) { console.log(result.error); }
+	 * console.log(result.data);
+	 * ```
+	 * &nbsp;
 	 */
-	export function time_equ(tjd_ut: number): {
-		flag: number,
-		error: string,
-		data: number
-	}
+	export function time_equ(tjd_ut: number): TimeEqu;
 
 	/**
-	 * 
-	 * @param iyear 
-	 * @param imonth 
-	 * @param iday 
-	 * @param ihour 
-	 * @param imin 
-	 * @param dsec 
-	 * @param d_timezone 
+	 * ### Description
+	 * Convert local time to UTC or UTC to local time using a timezone offset
+	 * ### Params
+	 * ```
+	 * • iyear: number // Full year
+	 * • imonth: number // Month (1-12)
+	 * • iday: number // Day (1-31)
+	 * • ihour: number // Hour (0-23)
+	 * • imin: number // Minute (0-59)
+	 * • dsec: number // Seconds including fraction (0-59.99999)
+	 * • d_timezone: number // Timezone offset in decimal hours (0-23.99999)
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   year: number; // Full year
+	 *   month: number; // Month (1-12)
+	 *   day: number; // Day (1-31)
+	 *   hour: number; // Hour (0-23)
+	 *   minute: number; // Minute (0-59)
+	 *   second: number; // Second including fraction (0-59.99999)
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = utc_time_zone(2010, 5, 23, 15, 30, 0, 5.5);
+	 * console.log(result.hour); // 10;
+	 * ```
+	 * &nbsp;
 	 */
-	export function utc_time_zone(iyear: number, imonth: number, iday: number, ihour: number, imin: number, dsec: number, d_timezone: number): {
-		year: number;
-		month: number;
-		day: number;
-		hour: number;
-		minute: number;
-		seconds: number;
-	}
+	export function utc_time_zone(iyear: number, imonth: number, iday: number, ihour: number, imin: number, dsec: number, d_timezone: number): DateObject2;
 
 	/**
 	 * 
@@ -4182,11 +4435,40 @@ declare module "sweph" {
 	 * @param dsec 
 	 * @param gregflag 
 	 */
-	export function utc_to_jd(iyear: number, imonth: number, iday: number, ihour: number, imin: number, dsec: number, gregflag: number): {
-		flag: number,
-		error: string,
-		data: [2]
-	}
+
+	/**
+	 * ### Description
+	 * Convert UTC date and time to julian day in ephemeris time and julian day in universal time
+	 * ### Params
+	 * ```
+	 * • iyear: number // Full year
+	 * • imonth: number // Month (1-12)
+	 * • iday: number // Day (1-31)
+	 * • ihour: number // Hour (0-23)
+	 * • imin: number // Minute (0-59)
+	 * • dsec: number // Seconds including fraction (0-59.99999)
+	 * • gregflag: number // Calendar system, SE_GREG_CAL for gregorian calendar, SE_JUL_CAL for julian calendar
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message if ERR
+	 *   data: Array<number> [
+	 *     et: number, // Julian day in ephemeris/terrestrial time
+	 *     ut: number // Julian day in universal time
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = utc_to_jd(2010, 5, 23, 15, 30, 0, constants.SE_GREG_CAL);
+	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
+	 * console.log(`JD_ET: ${result.data[0]}`);
+	 * ```
+	 * &nbsp;
+	 */
+	export function utc_to_jd(iyear: number, imonth: number, iday: number, ihour: number, imin: number, dsec: number, gregflag: number): UtcToJd;
 
 
 	/**
@@ -4204,11 +4486,44 @@ declare module "sweph" {
 	 */
 	export function version(): string;
 
-	export function vis_limit_mag(tjd_ut: number, dgeo: [longitude: number, latitude: number, elevation: number], datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], objectname: string, helflag: number): {
-		flag: number,
-		error: string,
-		data: [8]
-	}
+	/**
+	 * ### Description
+	 * Determine an object's visibility
+	 * ### Params
+	 * ```
+	 * • tjd_ut: number // Julian day in universal time
+	 * • dgeo: Array<number> // Geographic coordinates [longitude, latitude, elevation]
+	 * • datm: Array<number> // Atmospheric conditions [pressure, temperature, humidity, meteorological_range]
+	 * • dobs: Array<number> // Observer description [age, sellen ratio, optical type, optical magnification, optical aperture, optical transmission]
+	 * • objectname: string // Name of fixed star or planet
+	 * • helflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message if ERR
+	 *   data: Array<number> [
+	 *     visual_mag: number, // Limiting visual magnitude (object is visible if this value is bigger than the object's magnitude value)
+	 *     obj_altitude: number, // Altitude of the object
+	 *     obj_azimuth: number, // Azimuth of the object
+	 *     sun_altitude: number, // Altitude of the sun
+	 *     sun_azimuth: number, // Azimuth of the sun
+	 *     moon_altitude: number, // Altitude of the moon
+	 *     moon_azimuth: number, // Azimuth of the moon
+	 *     magnitude: number // The object's magnitude
+	 *   ]
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = vis_limit_mag(2555555, [65,47,900], [1000,10,50,-0.15], [21,0,0,0,0,0], "venus", 0);
+	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
+	 * console.log(`JD_ET: ${result.data[0]}`);
+	 * ```
+	 * &nbsp;
+	 */
+	export function vis_limit_mag(tjd_ut: number, dgeo: [longitude: number, latitude: number, elevation: number], datm: [pressure: number, temperature: number, humidity: number, meteorological_range: number], dobs: [age: number, sellen_ratio: number, optical_type: number, optical_magnification: number, optical_aperture: number, optical_transmission: number], objectname: string, helflag: number): VisLimitMag;
 
 	/*
 	┌──────────────────────────────────────────────────┬───────────┬──────────────────────────────────────────────────┐
