@@ -16,19 +16,17 @@ Everything you need to create Astrology and Astronomy applications with javascri
 
 This library follows the licensing requirements for the Swiss Ephemeris by Astrodienst AG.
 
-#### GPL
+### GPL
 
-Up to and including version `2.10.01`, this library is licensed under `GPL-2.0`.
-
+Up to and including version `2.10.01`, this library is licensed under `GPL-2.0`.  
 To install and use this library under GPL, use `npm install sweph@2.10.01`.
 
-#### AGPL
+### AGPL
 
-Starting from version `2.10.1` and later, this library is licensed under `AGPL-3.0`.
-
+Starting from version `2.10.1` and later, this library is licensed under `AGPL-3.0`.  
 To install and use the latest version of this library under AGPL, use `npm install sweph`.
 
-#### LGPL
+### LGPL
 
 If you own a professional license for the Swiss Ephemeris, you may use any version of this library under `LGPL-3.0`.
 
@@ -40,12 +38,9 @@ Updates to this library will be released under new revisions, while updates to t
 
 ## Documentation
 
-This library is fully typed and documented via intellisense. To access its documentation simply hover over its functions, like in the images below:
+This library is fully typed and documented via intellisense. To access its documentation simply hover over its functions:
 
-![docs_example1](docs1.png)
-![docs_example2](docs2.png)
-![docs_example3](docs3.png)
-![docs_example4](docs4.png)
+![docs_example](docs.gif)
 
 ## Contributing
 
