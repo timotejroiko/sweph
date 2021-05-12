@@ -44,6 +44,8 @@ This library is fully typed and documented via intellisense. To access its docum
 
 ![docs_example1](docs1.png)
 ![docs_example2](docs2.png)
+![docs_example3](docs3.png)
+![docs_example4](docs4.png)
 
 ## Contributing
 
