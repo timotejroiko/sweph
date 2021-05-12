@@ -2,9 +2,10 @@
  * ## Sweph
  * Definitive Swiss Ephemeris bindings for Node.js  
  * 
- * [Official documentation for the Swiss Ephemeris](https://www.astro.com/swisseph/swephprg.htm)  
+ * [Official programmers documentation for the Swiss Ephemeris](https://www.astro.com/swisseph/swephprg.htm)  
+ * [Official guide for the Swiss Ephemeris](https://www.astro.com/ftp/swisseph/doc/swisseph.htm)  
  * [Sweph on Github](https://github.com/timotejroiko/sweph)  
- * [Sweph on NPM](http://npm.com/package/sweph)  
+ * [Sweph on NPM](http://npmjs.com/package/sweph)  
  * 
  * ### Usage
  * ```
