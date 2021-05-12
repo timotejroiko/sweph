@@ -10,6 +10,15 @@
 	"repository": {
 		"url": "https://github.com/timotejroiko/sweph.git"
 	},
+	"keywords": [
+		"sweph",
+		"swiss",
+		"ephemeris",
+		"astrology",
+		"astronomy",
+		"swisseph",
+		"node"
+	],
 	"bugs": "https://github.com/timotejroiko/sweph/issues",
 	"dependencies": {
 		"node-addon-api": "*"
