@@ -18,8 +18,8 @@ This library follows the licensing requirements for the Swiss Ephemeris by Astro
 
 ### - GPL
 
-Up to and including version `2.10.01`, this library is licensed under `GPL-2.0`.  
-To install and use this library under GPL, use `npm install sweph@2.10.01`.
+Up to and including version `2.10.0`, this library is licensed under `GPL-2.0`.  
+To install and use this library under GPL, use `npm install sweph@2.10.0`.
 
 ### - AGPL
 
