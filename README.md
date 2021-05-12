@@ -9,7 +9,8 @@ Everything you need to create Astrology and Astronomy applications with javascri
 * Version matching
 * Made with the N-API
 
-[Official documentation for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/swisseph/swephprg.htm)  
+[Official programmers documentation for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/swisseph/swephprg.htm)  
+[Official guide for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/ftp/swisseph/doc/swisseph.htm)  
 [Sweph on NPM](http://npm.com/package/sweph)
 
 ## Installation and Licensing
@@ -41,6 +42,28 @@ Updates to this library will be released under new revisions, while updates to t
 This library is fully typed and documented via intellisense. To access its documentation simply hover over its functions:
 
 ![docs_example](docs.gif)
+
+## Ephemeris files
+
+This library does not include any ephemeris files by default. To use the Swiss Ephemeris files, download them from [https://www.astro.com/ftp/swisseph/ephe/](https://www.astro.com/ftp/swisseph/ephe/) and call `set_ephe_path()` to point the library to the folder containing the ephemeris files.
+
+Each main ephemeris file covers a range of 600 years starting from the century indicated in its name, for example the file `sepl_18.se1` is valid from year 1800 until year 2400. The following files are available:
+
+* sepl files - planets (AD)
+* seplm files - planets (BC)
+* semo files - moon (AD)
+* semom files - moon (BC)
+* seas files - main asteroids (AD)
+* seasm files - main asteroids (BC)
+
+For advanced usage, the following files can also be found:
+
+* astxxx folders - files for individual asteroids (600 years)
+* longfiles folder - files for individual asteroids (6000 years)
+* jplfiles folder - files for nasa's jpl ephemerides
+* sat folder - files for planetary moons
+
+More information can be found in the [Swiss Ephemeris files documentation](https://www.astro.com/ftp/swisseph/doc/swisseph.htm#_Toc58931065).
 
 ## Contributing
 

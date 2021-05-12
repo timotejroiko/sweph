@@ -1,6 +1,6 @@
 {
 	"name": "sweph",
-	"version": "2.10.0-0",
+	"version": "2.10.1-0",
 	"description": "The definitive Swiss Ephemeris bindings for Node.js",
 	"main": "index.js",
 	"typings": "./index.d.ts",
@@ -8,7 +8,7 @@
 		"test": "echo \"Error: no test specified\" && exit 0"
 	},
 	"repository": {
-		"url": "https://github.com/timotejroiko/discord.js-light.git"
+		"url": "https://github.com/timotejroiko/sweph.git"
 	},
 	"bugs": "https://github.com/timotejroiko/sweph/issues",
 	"dependencies": {
@@ -19,7 +19,7 @@
 		"url": "https://patreon.com/timotejroiko"
 	},
 	"author": "Timotej Valentin Rojko",
-	"license": "(GPL-2.0-or-later OR LGPL-3.0-or-later)",
+	"license": "(AGPL-3.0-or-later OR LGPL-3.0-or-later)",
 	"devDependencies": {
 		"eslint": "^7.25.0"
 	}
