@@ -1,49 +1,49 @@
-# SWEPH
+# Sweph
 
-Definitive Swiss Ephemeris bindings for Node.js  
+The definitive Swiss Ephemeris bindings for Node.js  
 Everything you need to create Astrology and Astronomy applications with javascript and node.js
 
 * 100% API coverage
 * Built-in Typescript declarations
 * Built-in intellisense documentation
 * Version matching
-* Made with N-API
+* Made with the N-API
 
-[Official documentation for the Swiss Ephemeris](https://www.astro.com/swisseph/swephprg.htm)  
+[Official documentation for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/swisseph/swephprg.htm)  
 [Sweph on NPM](http://npm.com/package/sweph)
 
 ## Installation and Licensing
 
 This library follows the licensing requirements for the Swiss Ephemeris by Astrodienst AG.
 
-### GPL (2.10.01)
+#### GPL
 
-Up to and including version `2.10.01-X`, this library is licensed under `GPL-2.0`.
+Up to and including version `2.10.01`, this library is licensed under `GPL-2.0`.
 
 To install and use this library under GPL, use `npm install sweph@2.10.01`.
 
-### AGPL (2.10.1)
+#### AGPL
 
-Starting from version `2.10.1-X` and later, this library is licensed under `AGPL-3.0`.
+Starting from version `2.10.1` and later, this library is licensed under `AGPL-3.0`.
 
 To install and use the latest version of this library under AGPL, use `npm install sweph`.
 
-### LGPL
+#### LGPL
 
 If you own a professional license for the Swiss Ephemeris, you may use any version of this library under `LGPL-3.0`.
 
 ## Versioning
 
-This library is version locked to the Swiss Ephemeris in addition to its own revisions. For example, version `2.10.1-1` corresponds to the Swiss Ephemeris library version `2.10.1` and this library's revision `1`.
+This library is version locked to the Swiss Ephemeris in addition to its own revisions. For example, version `2.10.1-1` corresponds to the Swiss Ephemeris version `2.10.1` and this library's revision `1`.
 
-Updates to this library will be released under new revisions, while updates to the upstream Swiss Ephemeris library be released under matching semver versions.
+Updates to this library will be released under new revisions, while updates to the upstream Swiss Ephemeris will be released under matching semver versions.
 
 ## Documentation
 
 This library is fully typed and documented via intellisense. To access its documentation simply hover over its functions, like in the images below:
 
-![docs_example1](docs_example1.jpg)
-![docs_example2](docs_example2.jpg)
+![docs_example1](docs1.png)
+![docs_example2](docs2.png)
 
 ## Contributing
 
