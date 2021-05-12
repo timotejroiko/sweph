@@ -7,8 +7,16 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
+	"repository": {
+		"url": "https://github.com/timotejroiko/discord.js-light.git"
+	},
+	"bugs": "https://github.com/timotejroiko/sweph/issues",
 	"dependencies": {
 		"node-addon-api": "*"
+	},
+	"funding": {
+		"type": "patreon",
+		"url": "https://patreon.com/timotejroiko"
 	},
 	"author": "Timotej Valentin Rojko",
 	"license": "(GPL-2.0-or-later OR LGPL-3.0-or-later)",
