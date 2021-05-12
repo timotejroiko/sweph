@@ -8,7 +8,7 @@
 		"test": "echo \"Error: no test specified\" && exit 0"
 	},
 	"repository": {
-		"url": "https://github.com/timotejroiko/discord.js-light.git"
+		"url": "https://github.com/timotejroiko/sweph.git"
 	},
 	"bugs": "https://github.com/timotejroiko/sweph/issues",
 	"dependencies": {
