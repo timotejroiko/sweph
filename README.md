@@ -16,17 +16,17 @@ Everything you need to create Astrology and Astronomy applications with javascri
 
 This library follows the licensing requirements for the Swiss Ephemeris by Astrodienst AG.
 
-### GPL
+### - GPL
 
 Up to and including version `2.10.01`, this library is licensed under `GPL-2.0`.  
 To install and use this library under GPL, use `npm install sweph@2.10.01`.
 
-### AGPL
+### - AGPL
 
 Starting from version `2.10.1` and later, this library is licensed under `AGPL-3.0`.  
 To install and use the latest version of this library under AGPL, use `npm install sweph`.
 
-### LGPL
+### - LGPL
 
 If you own a professional license for the Swiss Ephemeris, you may use any version of this library under `LGPL-3.0`.
 
@@ -50,3 +50,7 @@ If you find any innacuracy or bug in this library, or if you find an update that
 
 * Due to how the underlying C library operates, you may find that the `error` field returned by some functions will contain data even if there is no actual error. This can happen when existing memory buffers are recycled and the user must handle it by also checking the returned flag values as per the Swiss Ephemeris documentation.
 * While worker_threads are supported, the underlying C library is single threaded and its settings are global. Functions such as `set_ephe_path()` will affect the entire process, including worker_threads. While you can still use worker_threads as long as you dont change settings from other threads in the middle of calculations, true thead-safe multithreading can be achieved using child_process instead.
+
+## Author
+
+Copyright © 2021, Timotej Valentin Rojko
