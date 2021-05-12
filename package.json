@@ -1,6 +1,6 @@
 {
 	"name": "sweph",
-	"version": "2.10.01-0",
+	"version": "2.10.01-1",
 	"description": "complete swiss ephemeris bindings for node.js",
 	"main": "index.js",
 	"typings": "./index.d.ts",
@@ -11,7 +11,7 @@
 		"node-addon-api": "*"
 	},
 	"author": "Timotej Valentin Rojko",
-	"license": "GPL-2.0-or-later",
+	"license": "(GPL-2.0-or-later OR LGPL-3.0-or-later)",
 	"devDependencies": {
 		"eslint": "^7.25.0"
 	}

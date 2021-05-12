@@ -1,5 +1,6 @@
 .vscode
 build
+node_modules
 deps/release
 deps/swisseph.sln
 deps/swisseph.vcxproj
@@ -8,3 +9,6 @@ src/functions.cpp
 .eslintrc.json
 .gitattributes
 .gitignore
+package-lock.json
+test.ts
+thread.js
