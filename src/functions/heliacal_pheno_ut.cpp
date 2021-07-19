@@ -17,17 +17,17 @@ Napi::Value sweph_heliacal_pheno_ut(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double dgeo [3];
-	if(!sweph_double_array_converter(dgeo, info[1])) {
+	if(!sweph_double_array_converter(dgeo, 3, info[1])) {
 		Napi::TypeError::New(env, args[2].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}
 	double datm [4];
-	if(!sweph_double_array_converter(datm, info[2])) {
+	if(!sweph_double_array_converter(datm, 4, info[2])) {
 		Napi::TypeError::New(env, args[3].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}
 	double dobs [6];
-	if(!sweph_double_array_converter(dobs, info[3])) {
+	if(!sweph_double_array_converter(dobs, 6, info[3])) {
 		Napi::TypeError::New(env, args[4].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}

@@ -15,7 +15,7 @@ Napi::Value sweph_house_pos(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double planet [2];
-	if(!sweph_double_array_converter(planet, info[4])) {
+	if(!sweph_double_array_converter(planet, 2, info[4])) {
 		Napi::TypeError::New(env, args[5].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}

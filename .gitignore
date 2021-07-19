@@ -7,5 +7,3 @@ deps/swisseph.vcxproj
 deps/swisseph.vcxproj.filters
 src/functions.cpp
 package-lock.json
-test.ts
-thread.js

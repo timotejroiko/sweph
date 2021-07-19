@@ -12,7 +12,7 @@ Napi::Value sweph_cotrans(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double in [3];
-	if(!sweph_double_array_converter(in, info[0])) {
+	if(!sweph_double_array_converter(in, 3, info[0])) {
 		Napi::TypeError::New(env, args[1].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}

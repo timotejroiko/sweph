@@ -10,5 +10,3 @@ src/functions.cpp
 .gitattributes
 .gitignore
 package-lock.json
-test.ts
-thread.js

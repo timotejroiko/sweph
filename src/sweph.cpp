@@ -119,9 +119,9 @@ bool sweph_type_check(const std::pair<int, const char*> types[], const Napi::Cal
 	return true;
 }
 
-bool sweph_double_array_converter(double *target, Napi::Value data) {
+bool sweph_double_array_converter(double *target, int size, Napi::Value data) {
 	Napi::Array x = data.As<Napi::Array>();
-	for(int i = 0; i < sizeof(target) / sizeof(target[0]); i++) {
+	for(int i = 0; i < size; i++) {
 		Napi::Value v = x[i];
 		if(!v.IsNumber()) {
 			return false;
