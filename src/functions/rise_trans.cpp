@@ -18,7 +18,7 @@ Napi::Value sweph_rise_trans(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double geopos [3];
-	if(!sweph_double_array_converter(geopos, info[5])) {
+	if(!sweph_double_array_converter(geopos, 3, info[5])) {
 		Napi::TypeError::New(env, args[6].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}

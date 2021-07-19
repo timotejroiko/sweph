@@ -13,7 +13,7 @@ Napi::Value sweph_lun_eclipse_how(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double geopos [3];
-	if(!sweph_double_array_converter(geopos, info[2])) {
+	if(!sweph_double_array_converter(geopos, 3, info[2])) {
 		Napi::TypeError::New(env, args[3].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}

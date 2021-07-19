@@ -14,12 +14,12 @@ Napi::Value sweph_azalt_rev(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double geopos [3];
-	if(!sweph_double_array_converter(geopos, info[2])) {
+	if(!sweph_double_array_converter(geopos, 3, info[2])) {
 		Napi::TypeError::New(env, args[3].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}
 	double xin [2];
-	if(!sweph_double_array_converter(xin, info[3])) {
+	if(!sweph_double_array_converter(xin, 2, info[3])) {
 		Napi::TypeError::New(env, args[4].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}

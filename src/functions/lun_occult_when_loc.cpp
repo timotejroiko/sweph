@@ -16,7 +16,7 @@ Napi::Value sweph_lun_occult_when_loc(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double geopos [3];
-	if(!sweph_double_array_converter(geopos, info[0])) {
+	if(!sweph_double_array_converter(geopos, 3, info[0])) {
 		Napi::TypeError::New(env, args[1].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}

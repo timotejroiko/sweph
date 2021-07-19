@@ -97,7 +97,7 @@ Napi::Value sweph_cs2degstr(const Napi::CallbackInfo& info);
 
 bool sweph_is_type(int type, Napi::Value data);
 bool sweph_type_check(const std::pair<int, const char*> types[], const Napi::CallbackInfo& info);
-bool sweph_double_array_converter(double *target, Napi::Value data);
+bool sweph_double_array_converter(double *target, int size, Napi::Value data);
 Napi::Array sweph_js_array_converter(double *src, int size, Napi::Env env);
 
 enum TYPES {
