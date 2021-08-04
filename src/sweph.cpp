@@ -90,6 +90,14 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["cs2timestr"] = Napi::Function::New(env, sweph_cs2timestr);
 	exports["cs2lonlatstr"] = Napi::Function::New(env, sweph_cs2lonlatstr);
 	exports["cs2degstr"] = Napi::Function::New(env, sweph_cs2degstr);
+	exports["solcross"] = Napi::Function::New(env, sweph_solcross);
+	exports["solcross_ut"] = Napi::Function::New(env, sweph_solcross_ut);
+	exports["mooncross"] = Napi::Function::New(env, sweph_mooncross);
+	exports["mooncross_ut"] = Napi::Function::New(env, sweph_mooncross_ut);
+	exports["mooncross_node"] = Napi::Function::New(env, sweph_mooncross_node);
+	exports["mooncross_node_ut"] = Napi::Function::New(env, sweph_mooncross_node_ut);
+	exports["helio_cross"] = Napi::Function::New(env, sweph_helio_cross);
+	exports["helio_cross_ut"] = Napi::Function::New(env, sweph_helio_cross_ut);
 	return exports;
 }
 

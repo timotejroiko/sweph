@@ -661,6 +661,34 @@ declare module "sweph" {
 		data: VisLimitMagData;
 	}
 
+	interface Cross extends Error {
+		/**
+		 * ### Description
+		 * Date when the next crossing happens in julian days  
+		 * The julian day value is in universal time when using the `_ut` variant of the function, otherwise its in ephemeris/terrestrial time  
+		 * ```
+		 * ```
+		 */
+		date: number;
+	}
+
+	interface NodeCross extends Cross {
+		/**
+		 * ### Description
+		 * Ecliptic longitude where the crossing happens  
+		 * ```
+		 * ```
+		 */
+		longitude: number;
+		/**
+		 * ### Description
+		 * Ecliptic latitude margin of precision for the crossing date  
+		 * ```
+		 * ```
+		 */
+		latitude: number;
+	}
+
 	/*
 	┌──────────────────────────────────────────────────┬───────────┬──────────────────────────────────────────────────┐
 	│┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│   Types   │┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼│
@@ -2900,6 +2928,64 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
+	 * Compute a planets heliocentric crossing over some longitude
+	 * ### Params
+	 * ```
+	 * • ipl: number // Object ID
+	 * • x2cross: number // Longitude point to search for
+	 * • jd_ut: number // Start date in julian days in universal time
+	 * • flag: number // Calculation flag
+	 * • dir: number // Search direction, 0 = forwards, -1 = backwards
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message if ERR
+	 *   date: number // Next crossing date in julian days in universal time
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = helio_cross_ut(constants.SE_MARS, 134.5, 2415362, constants.SEFLG_SWIEPH, 0);
+	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
+	 * console.log(`Date: ${result.date}`);
+	 * ```
+	 * &nbsp;
+	 */
+	export function helio_cross_ut(ipl: number, x2cross: number, jd_ut: number, flag: number, dir: number): Cross & Flag;
+
+	/**
+	 * ### Description
+	 * Compute a planets heliocentric crossing over some longitude
+	 * ### Params
+	 * ```
+	 * • ipl: number // Object ID
+	 * • x2cross: number // Longitude point to search for
+	 * • jd_et: number // Start date in julian days in ephemeris/terrestrial time
+	 * • flag: number // Calculation flag
+	 * • dir: number // Search direction, 0 = forwards, -1 = backwards
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   flag: number, // OK or ERR
+	 *   error: string, // Error message if ERR
+	 *   date: number // Next crossing date in julian days in ephemeris/terrestrial time
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const result = helio_cross(constants.SE_MARS, 134.5, 2415362, constants.SEFLG_SWIEPH, 0);
+	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
+	 * console.log(`Date: ${result.date}`);
+	 * ```
+	 * &nbsp;
+	 */
+	export function helio_cross(ipl: number, x2cross: number, jd_et: number, flag: number, dir: number): Cross & Flag;
+
+	/**
+	 * ### Description
 	 * Get the name of a house system
 	 * ### Params
 	 * ```
@@ -3607,6 +3693,116 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function lun_occult_where(tjd_ut: number, ipl: number, starname: string | null, ifl: number): LunOccultWhere;
+
+	/**
+	 * ### Description
+	 * Compute the next Moon crossing over its node, by finding zero latitude crossing  
+	 * ### Params
+	 * ```
+	 * • jd_ut: number // Start date in julian days in universal time
+	 * • flag: number // Calculation flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   date: number, // Date of the crossing in julian days in universal time
+	 *   error: string, // Error message if resulting date is smaller than starting date
+	 *   longitude: number, // Ecliptic longitude where the crossing happens
+	 *   latitude: number // Ecliptic latitude precision margin for the crossing date
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const jd = 2415362;
+	 * const result = mooncross_node_ut(jd, constants.SEFLG_SWIEPH);
+	 * if(result.date < jd) { throw new Error(result.error); }
+	 * console.log(`Date: ${result.date}`);
+	 * ```
+	 * &nbsp;
+	 */
+	 export function mooncross_node_ut(jd_ut: number, flag: number): NodeCross;
+
+	/**
+	 * ### Description
+	 * Compute the next Moon crossing over its node, by finding zero latitude crossing  
+	 * ### Params
+	 * ```
+	 * • jd_et: number // Start date in julian days in ephemeris/terrestrial time
+	 * • flag: number // Calculation flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   date: number, // Date of the crossing in julian days in ephemeris/terrestrial time
+	 *   error: string, // Error message if resulting date is smaller than starting date
+	 *   longitude: number, // Ecliptic longitude where the crossing happens
+	 *   latitude: number // Ecliptic latitude precision margin for the crossing date
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const jd = 2415362;
+	 * const result = mooncross_node(jd, constants.SEFLG_SWIEPH);
+	 * if(result.date < jd) { throw new Error(result.error); }
+	 * console.log(`Date: ${result.date}`);
+	 * ```
+	 * &nbsp;
+	 */
+	export function mooncross_node(jd_et: number, flag: number): NodeCross;
+
+	/**
+	 * ### Description
+	 * Compute Moon's crossing over some longitude
+	 * ### Params
+	 * ```
+	 * • x2cross: number // Ecliptic latitude position to search for
+	 * • jd_ut: number // Start date in julian days in universal time
+	 * • flag: number // Calculation flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   date: number, // Date of the crossing in julian days in universal time
+	 *   error: string, // Error message if resulting date is smaller than starting date
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const jd = 2415362;
+	 * const result = mooncross_ut(185.25 ,jd , constants.SEFLG_SWIEPH);
+	 * if(result.date < jd) { throw new Error(result.error); }
+	 * console.log(`Date: ${result.date}`);
+	 * ```
+	 * &nbsp;
+	 */
+	 export function mooncross_ut(x2cross: number, jd_ut: number, flag: number): Cross;
+
+	 /**
+	 * ### Description
+	 * Compute Moon's crossing over some longitude
+	 * ### Params
+	 * ```
+	 * • x2cross: number // Ecliptic latitude position to search for
+	 * • jd_et: number // Start date in julian days in ephemeris/terrestrial time
+	 * • flag: number // Calculation flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   date: number, // Date of the crossing in julian days in ephemeris/terrestrial time
+	 *   error: string, // Error message if resulting date is smaller than starting date
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const jd = 2415362;
+	 * const result = mooncross(185.25 ,jd , constants.SEFLG_SWIEPH);
+	 * if(result.date < jd) { throw new Error(result.error); }
+	 * console.log(`Date: ${result.date}`);
+	 * ```
+	 * &nbsp;
+	 */
+	 export function mooncross(x2cross: number, jd_et: number, flag: number): Cross;
 
 	/**
 	 * ### Description
@@ -4339,6 +4535,60 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function sol_eclipse_where(tjd_ut: number, ifl: number): SolEclipseWhere;
+
+	/**
+	 * ### Description
+	 * Compute Sun's crossing over some longitude
+	 * ### Params
+	 * ```
+	 * • x2cross: number // Ecliptic latitude position to search for
+	 * • jd_ut: number // Start date in julian days in universal time
+	 * • flag: number // Calculation flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   date: number, // Date of the crossing in julian days in universal time
+	 *   error: string, // Error message if resulting date is smaller than starting date
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const jd = 2415362;
+	 * const result = solcross_ut(185.25 ,jd , constants.SEFLG_SWIEPH);
+	 * if(result.date < jd) { throw new Error(result.error); }
+	 * console.log(`Date: ${result.date}`);
+	 * ```
+	 * &nbsp;
+	 */
+	export function solcross_ut(x2cross: number, jd_ut: number, flag: number): Cross;
+
+	/**
+	 * ### Description
+	 * Compute Sun's crossing over some longitude
+	 * ### Params
+	 * ```
+	 * • x2cross: number // Ecliptic latitude position to search for
+	 * • jd_et: number // Start date in julian days in ephemeris/terrestrial time
+	 * • flag: number // Calculation flag
+	 * ```
+	 * ### Returns
+	 * ```
+	 * Object {
+	 *   date: number, // Date of the crossing in julian days in ephemeris/terrestrial time
+	 *   error: string, // Error message if resulting date is smaller than starting date
+	 * }
+	 * ```
+	 * ### Example
+	 * ```
+	 * const jd = 2415362;
+	 * const result = solcross(185.25 ,jd , constants.SEFLG_SWIEPH);
+	 * if(result.date < jd) { throw new Error(result.error); }
+	 * console.log(`Date: ${result.date}`);
+	 * ```
+	 * &nbsp;
+	 */
+	export function solcross(x2cross: number, jd_et: number, flag: number): Cross;
 
 	/**
 	 * ### Description

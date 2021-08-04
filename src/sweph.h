@@ -94,6 +94,14 @@ Napi::Value sweph_day_of_week(const Napi::CallbackInfo& info);
 Napi::Value sweph_cs2timestr(const Napi::CallbackInfo& info);
 Napi::Value sweph_cs2lonlatstr(const Napi::CallbackInfo& info);
 Napi::Value sweph_cs2degstr(const Napi::CallbackInfo& info);
+Napi::Value sweph_solcross(const Napi::CallbackInfo& info);
+Napi::Value sweph_solcross_ut(const Napi::CallbackInfo& info);
+Napi::Value sweph_mooncross(const Napi::CallbackInfo& info);
+Napi::Value sweph_mooncross_ut(const Napi::CallbackInfo& info);
+Napi::Value sweph_mooncross_node(const Napi::CallbackInfo& info);
+Napi::Value sweph_mooncross_node_ut(const Napi::CallbackInfo& info);
+Napi::Value sweph_helio_cross(const Napi::CallbackInfo& info);
+Napi::Value sweph_helio_cross_ut(const Napi::CallbackInfo& info);
 
 bool sweph_is_type(int type, Napi::Value data);
 bool sweph_type_check(const std::pair<int, const char*> types[], const Napi::CallbackInfo& info);
