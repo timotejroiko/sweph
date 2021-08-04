@@ -11,7 +11,7 @@ Everything you need to create Astrology and Astronomy applications with javascri
 
 [Official programmers documentation for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/swisseph/swephprg.htm)  
 [Official guide for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/ftp/swisseph/doc/swisseph.htm)  
-[Sweph on Github](https://github.com/timotejroiko/sweph)
+[Sweph on Github](https://github.com/timotejroiko/sweph)  
 [Sweph on NPM](https://npmjs.com/package/sweph)
 
 ## Installation and Licensing
