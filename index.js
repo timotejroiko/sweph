@@ -1,6 +1,7 @@
 "use strict";
 
-module.exports = require("./build/Release/sweph.node");
-module.exports.constants = require("./constants.js");
-module.exports.sweph = module.exports;
-module.exports.default = module.exports;
+const sweph = require("./build/Release/sweph.node");
+sweph.constants = require("./constants.js");
+sweph.sweph = sweph;
+sweph.default = sweph;
+module.exports = sweph;
