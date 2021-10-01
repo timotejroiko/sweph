@@ -1,10 +1,10 @@
 # Sweph
 
 The definitive Swiss Ephemeris bindings for Node.js  
-Everything you need to create Astrology and Astronomy applications with javascript and node.js
+Everything you need to create Astrology and Astronomy applications with javascript and node
 
 * 100% API coverage
-* Built-in Typescript declarations
+* Built-in Typescript declarations and ESM exports
 * Built-in intellisense documentation
 * Version matched
 * Made with the N-API

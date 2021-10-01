@@ -10,7 +10,7 @@
  * ### Usage
  * ```
  * const { utc_to_jd, calc, houses_ex2, constants, set_ephe_path } = require("sweph");
- * // or - import { utc_to_jd, calc, houses, constants, set_ephe_path } from "sweph";
+ * // or import { utc_to_jd, calc, houses_ex2, constants, set_ephe_path } from "sweph";
  *
  * set_ephe_path("./ephemeris"); // folder containing your ephemeris files;
  *
