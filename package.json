@@ -34,6 +34,6 @@
 	"author": "Timotej Valentin Rojko",
 	"license": "(AGPL-3.0-or-later OR LGPL-3.0-or-later)",
 	"devDependencies": {
-		"eslint": "^7.31.0"
+		"eslint": "^7.32.0"
 	}
 }

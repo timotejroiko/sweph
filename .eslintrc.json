@@ -4,6 +4,14 @@
 		"ecmaVersion": 2020,
 		"sourceType": "script"
 	},
+	"overrides": [
+		{
+			"files": [ "*.mjs" ],
+			"parserOptions": {
+				"sourceType": "module"
+			}
+		}
+	],
 	"env": {
 		"node": true,
 		"es2020": true
