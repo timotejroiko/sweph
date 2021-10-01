@@ -157,7 +157,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-			data: CalcData2;
+		data: CalcData2;
 	}
 
 	interface FixStarMag extends Flag, Name, Error {
@@ -419,7 +419,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-			data: EclipseTimes3
+		data: EclipseTimes3
 	}
 
 	interface LunOccultWhenLoc extends Flag, Error {
@@ -464,7 +464,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-			data: {
+		data: {
 			/**
 			 * ### Description
 			 * Array of ascending node values returned by the calculation  
@@ -510,7 +510,7 @@ declare module "sweph" {
 			 * ```
 			 */
 			aphelion: CalcData2;
-			};
+		};
 	}
 
 	interface Pheno extends Flag, Error {
@@ -1524,7 +1524,7 @@ declare module "sweph" {
 		 * Time of third contact
 		 */
 		third_contact: number,
-			/**
+		/**
 		 * Time of fourth contact
 		 */
 		fourth_contact: number,
@@ -3721,7 +3721,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-		export function mooncross_node_ut(jd_ut: number, flag: number): NodeCross;
+	export function mooncross_node_ut(jd_ut: number, flag: number): NodeCross;
 
 	/**
 	 * ### Description
@@ -3776,9 +3776,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-		export function mooncross_ut(x2cross: number, jd_ut: number, flag: number): Cross;
+	export function mooncross_ut(x2cross: number, jd_ut: number, flag: number): Cross;
 
-		/**
+	/**
 	 * ### Description
 	 * Compute Moon's crossing over some longitude
 	 * ### Params
@@ -3803,7 +3803,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-		export function mooncross(x2cross: number, jd_et: number, flag: number): Cross;
+	export function mooncross(x2cross: number, jd_et: number, flag: number): Cross;
 
 	/**
 	 * ### Description
@@ -3868,7 +3868,7 @@ declare module "sweph" {
 	 */
 	export function nod_aps_ut(tjd_ut: number, ipl: number, iflag: number, method: number): NodAps;
 
-		/**
+	/**
 	 * ### Description
 	 * Calculate an object's nodes and apsides from ephemeris/terrestrial time  
 	 * If the calculation method includes `SE_NODBIT_FOPOINT`, the `aphelion` field contains the values for the object's "second focus" instead
