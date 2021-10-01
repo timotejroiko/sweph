@@ -1,9 +1,13 @@
 {
 	"name": "sweph",
-	"version": "2.10.0-4",
+	"version": "2.10.0-5",
 	"description": "The definitive Swiss Ephemeris bindings for Node.js",
 	"main": "index.js",
 	"typings": "./index.d.ts",
+	"exports": {
+		"require": "./index.js",
+		"import": "./index.mjs"
+	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 0"
 	},
