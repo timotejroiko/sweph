@@ -1840,7 +1840,7 @@ declare module "sweph" {
 	 * ### Params
 	 * ```
 	 * • tjd_ut: number // Julian day in universal time
-	 * • calc_flag: number // Calculation flag, SE_HOR2ECL or SE_HOR2EQU
+	 * • calc_flag: number // Calculation flag, SE_ECL2HOR or SE_EQU2HOR
 	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
 	 * • atpress: number // Atmospheric pressure in mbar/hpa
 	 * • attemp: number // Atmospheric temperature in celcius
