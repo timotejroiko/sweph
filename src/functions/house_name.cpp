@@ -2,7 +2,7 @@
 
 constexpr std::pair<int, const char*> args[] = {
 	{ 1, "Expecting 1 argument: hsys" },
-	{ NUMBER, "Argument 1 should be a number - house system ID" }
+	{ STRING, "Argument 1 should be a string - house system ID" }
 };
 
 Napi::Value sweph_house_name(const Napi::CallbackInfo& info) {
@@ -10,7 +10,8 @@ Napi::Value sweph_house_name(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return env.Null();
 	}
-	const char* name = swe_house_name(info[0].As<Napi::Number>().Int32Value());
+	char sys = info[0].As<Napi::String>().Utf8Value()[0];
+	const char* name = swe_house_name(int(sys));
 	if(name == NULL) {
 		Napi::TypeError::New(env, "Invalid house system").ThrowAsJavaScriptException();
 		return env.Null();
