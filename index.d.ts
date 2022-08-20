@@ -2998,11 +2998,11 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const name = house_name("p"); // "Placidus"
+	 * const name = house_name("P"); // "Placidus"
 	 * ```
 	 * &nbsp;
 	 */
-	export function house_name(hsys: number): string;
+	export function house_name(hsys: HouseSystems | string & {}): string;
 
 	/**
 	 * ### Description
@@ -3031,7 +3031,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function house_pos(armc: number, geolat: number, eps: number, hsys: string, xpin: [longitude: number, latitude: number]): HousePosition;
+	export function house_pos(armc: number, geolat: number, eps: number, hsys: HouseSystems | string & {}, xpin: [longitude: number, latitude: number]): HousePosition;
 
 	/**
 	 * ### Description
@@ -3085,8 +3085,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): HousesEx<12>;
 	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: "G", decl?: number): HousesEx<36>;
+	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): HousesEx<12>;
+	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: string, decl?: number): HousesEx<12> | HousesEx<36>;
 
 	/**
 	 * ### Description
@@ -3132,8 +3133,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses_armc(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): Houses<12>;
 	export function houses_armc(armc: number, geolat: number, eps: number, hsys: "G", decl?: number): Houses<36>;
+	export function houses_armc(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): Houses<12>;
+	export function houses_armc(armc: number, geolat: number, eps: number, hsys: string, decl?: number): Houses<12> | Houses<36>;
 
 	/**
 	 * ### Description
@@ -3178,8 +3180,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
 	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: "G"): Houses<36>;
+	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
+	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: string): Houses<12> | Houses<36>;
 
 	/**
 	 * ### Description
@@ -3232,8 +3235,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): HousesEx<12>;
 	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: "G"): HousesEx<36>;
+	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): HousesEx<12>;
+	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: string): HousesEx<12> | HousesEx<36>;
 
 	/**
 	 * ### Description
@@ -3277,8 +3281,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
 	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: "G"): Houses<36>;
+	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
+	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: string): Houses<12> | Houses<36>;
 
 	/**
 	 * ### Description
