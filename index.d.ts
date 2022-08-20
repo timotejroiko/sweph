@@ -2,9 +2,10 @@
  * ## Sweph
  * Definitive Swiss Ephemeris bindings for Node.js  
  * 
- * [Official documentation for the Swiss Ephemeris](https://www.astro.com/swisseph/swephprg.htm)  
+ * [Official programmers documentation for the Swiss Ephemeris](https://www.astro.com/swisseph/swephprg.htm)  
+ * [Official guide for the Swiss Ephemeris](https://www.astro.com/ftp/swisseph/doc/swisseph.htm)  
  * [Sweph on Github](https://github.com/timotejroiko/sweph)  
- * [Sweph on NPM](http://npm.com/package/sweph)  
+ * [Sweph on NPM](http://npmjs.com/package/sweph)  
  * 
  * ### Usage
  * ```
@@ -46,7 +47,7 @@ declare module "sweph" {
 		 */
 		flag: number;
 	}
-	
+
 	interface Error {
 		/**
 		 * ### Description
@@ -156,7 +157,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		 data: CalcData2;
+		data: CalcData2;
 	}
 
 	interface FixStarMag extends Flag, Name, Error {
@@ -418,7 +419,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		 data: EclipseTimes3
+		data: EclipseTimes3
 	}
 
 	interface LunOccultWhenLoc extends Flag, Error {
@@ -463,7 +464,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		 data: {
+		data: {
 			/**
 			 * ### Description
 			 * Array of ascending node values returned by the calculation  
@@ -509,7 +510,7 @@ declare module "sweph" {
 			 * ```
 			 */
 			aphelion: CalcData2;
-		 };
+		};
 	}
 
 	interface Pheno extends Flag, Error {
@@ -1495,7 +1496,7 @@ declare module "sweph" {
 		 * Time of third contact
 		 */
 		third_contact: number,
-		 /**
+		/**
 		 * Time of fourth contact
 		 */
 		fourth_contact: number,
@@ -1811,7 +1812,7 @@ declare module "sweph" {
 	 * ### Params
 	 * ```
 	 * • tjd_ut: number // Julian day in universal time
-	 * • calc_flag: number // Calculation flag, SE_HOR2ECL or SE_HOR2EQU
+	 * • calc_flag: number // Calculation flag, SE_ECL2HOR or SE_EQU2HOR
 	 * • geopos: Array<number> // Geographic coordinates [longitude, latitude, elevation]
 	 * • atpress: number // Atmospheric pressure in mbar/hpa
 	 * • attemp: number // Atmospheric temperature in celcius
@@ -1942,7 +1943,7 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function calc(tjd_et: number, ipl: number, iflag: number): Calc;
-	
+
 	/**
 	 * ### Description
 	 * Reset swisseph internals and cleanup file handles  
@@ -2911,11 +2912,11 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const name = house_name("p"); // "Placidus"
+	 * const name = house_name("P"); // "Placidus"
 	 * ```
 	 * &nbsp;
 	 */
-	export function house_name(hsys: number): string;
+	export function house_name(hsys: HouseSystems | string & {}): string;
 
 	/**
 	 * ### Description
@@ -2944,7 +2945,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function house_pos(armc: number, geolat: number, eps: number, hsys: string, xpin: [longitude: number, latitude: number]): HousePosition;
+	export function house_pos(armc: number, geolat: number, eps: number, hsys: HouseSystems | string & {}, xpin: [longitude: number, latitude: number]): HousePosition;
 
 	/**
 	 * ### Description
@@ -2998,8 +2999,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): HousesEx<12>;
 	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: "G", decl?: number): HousesEx<36>;
+	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): HousesEx<12>;
+	export function houses_armc_ex2(armc: number, geolat: number, eps: number, hsys: string, decl?: number): HousesEx<12> | HousesEx<36>;
 
 	/**
 	 * ### Description
@@ -3045,8 +3047,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses_armc(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): Houses<12>;
 	export function houses_armc(armc: number, geolat: number, eps: number, hsys: "G", decl?: number): Houses<36>;
+	export function houses_armc(armc: number, geolat: number, eps: number, hsys: HouseSystems, decl?: number): Houses<12>;
+	export function houses_armc(armc: number, geolat: number, eps: number, hsys: string, decl?: number): Houses<12> | Houses<36>;
 
 	/**
 	 * ### Description
@@ -3091,8 +3094,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
 	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: "G"): Houses<36>;
+	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
+	export function houses_ex(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: string): Houses<12> | Houses<36>;
 
 	/**
 	 * ### Description
@@ -3145,8 +3149,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): HousesEx<12>;
 	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: "G"): HousesEx<36>;
+	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: HouseSystems): HousesEx<12>;
+	export function houses_ex2(tjd_ut: number, iflag: number, geolat: number, geolon: number, hsys: string): HousesEx<12> | HousesEx<36>;
 
 	/**
 	 * ### Description
@@ -3190,8 +3195,9 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
 	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: "G"): Houses<36>;
+	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: HouseSystems): Houses<12>;
+	export function houses(tjd_ut: number, geolat: number, geolon: number, hsys: string): Houses<12> | Houses<36>;
 
 	/**
 	 * ### Description
@@ -3671,7 +3677,7 @@ declare module "sweph" {
 	 */
 	export function nod_aps_ut(tjd_ut: number, ipl: number, iflag: number, method: number): NodAps;
 
-		/**
+	/**
 	 * ### Description
 	 * Calculate an object's nodes and apsides from ephemeris/terrestrial time  
 	 * If the calculation method includes `SE_NODBIT_FOPOINT`, the `aphelion` field contains the values for the object's "second focus" instead
@@ -4150,7 +4156,7 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function sidtime0(tjd_ut: number, eps: number, nut: number): number;
-	
+
 	/**
 	 * ### Description
 	 * Get solar eclipse data for a given date
