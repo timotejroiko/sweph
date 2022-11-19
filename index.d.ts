@@ -2,9 +2,9 @@
  * ## Sweph
  * Definitive Swiss Ephemeris bindings for Node.js  
  * 
- * [Official programmers documentation for the Swiss Ephemeris](https://www.astro.com/swisseph/swephprg.htm)  
+ * [Official programmer's documentation for the Swiss Ephemeris](https://www.astro.com/swisseph/swephprg.htm)  
  * [Official guide for the Swiss Ephemeris](https://www.astro.com/ftp/swisseph/doc/swisseph.htm)  
- * [Sweph on Github](https://github.com/timotejroiko/sweph)  
+ * [Sweph on GitHub](https://github.com/timotejroiko/sweph)  
  * [Sweph on NPM](http://npmjs.com/package/sweph)  
  * 
  * ### Usage
@@ -2064,7 +2064,7 @@ declare module "sweph" {
 	 * ```
 	 * • csec: number // Centiseconds value
 	 * • sep: string // Separator character
-	 * • supzero: boolean // Omit seconds if they are zero
+	 * • suppresszero: boolean // Omit seconds if they are zero
 	 * ```
 	 * ### Returns
 	 * ```
@@ -2076,7 +2076,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function cs2timestr(csec: number, sep: string, supzero: boolean): string;
+	export function cs2timestr(csec: number, sep: string, suppresszero: boolean): string;
 
 	/**
 	 * ### Description
@@ -2161,7 +2161,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function date_conversion(year: number, month: number, day: number, hour: number, calendar: string): DateConversion;
+	export function date_conversion(year: number, month: number, day: number, hour: number, calendar: "g" | "j" | (string & {})): DateConversion;
 
 	/**
 	 * ### Description
@@ -2572,7 +2572,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function gauquelin_sector(tjd_ut: number, ipl: number, starname: string | null, iflag: number, imeth: number, geopos: [number,number,number], atpress: number, attemp: number): GauquelinSector;
+	export function gauquelin_sector(tjd_ut: number, ipl: number, starname: string | null, iflag: number, imeth: number, geopos: [longitude: number, latitude: number, elevation: number], atpress: number, attemp: number): GauquelinSector;
 
 	/**
 	 * ### Description
@@ -3918,7 +3918,7 @@ declare module "sweph" {
 	 * ### Params
 	 * ```
 	 * • tjd: number // Julian day in universal time
-	 * • gregflag: number // Calendar type (SE_JUL_CAL or SE_GREG_CAL)
+	 * • gregflag: number // Calendar system, SE_GREG_CAL for gregorian calendar, SE_JUL_CAL for julian calendar
 	 * ```
 	 * ### Returns
 	 * ```
