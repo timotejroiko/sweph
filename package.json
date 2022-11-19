@@ -1,6 +1,6 @@
 {
 	"name": "sweph",
-	"version": "2.10.0-7",
+	"version": "2.10.0-8",
 	"description": "The definitive Swiss Ephemeris bindings for Node.js",
 	"main": "index.js",
 	"typings": "./index.d.ts",
