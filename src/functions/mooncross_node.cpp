@@ -11,7 +11,7 @@ Napi::Value sweph_mooncross_node(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return env.Null();
 	}
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	double xlon;
 	double xlat;
 	double jd_et = swe_mooncross_node(

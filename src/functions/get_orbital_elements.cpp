@@ -13,7 +13,7 @@ Napi::Value sweph_get_orbital_elements(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double ret [50];
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	int32 flag = swe_get_orbital_elements(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),

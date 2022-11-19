@@ -12,7 +12,7 @@ Napi::Value sweph_lmt_to_lat(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double conv;
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	int32 flag = swe_lmt_to_lat(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().DoubleValue(),

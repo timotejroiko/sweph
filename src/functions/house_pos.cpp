@@ -19,7 +19,7 @@ Napi::Value sweph_house_pos(const Napi::CallbackInfo& info) {
 		Napi::TypeError::New(env, args[5].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	char sys = info[3].As<Napi::String>().Utf8Value()[0];
 	double house = swe_house_pos(
 		info[0].As<Napi::Number>().DoubleValue(),

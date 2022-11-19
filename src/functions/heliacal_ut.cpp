@@ -31,7 +31,7 @@ Napi::Value sweph_heliacal_ut(const Napi::CallbackInfo& info) {
 		Napi::TypeError::New(env, args[4].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	double ret [50];
 	int32 flag = swe_heliacal_ut(
 		info[0].As<Napi::Number>().DoubleValue(),

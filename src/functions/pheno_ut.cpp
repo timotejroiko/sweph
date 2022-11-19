@@ -13,7 +13,7 @@ Napi::Value sweph_pheno_ut(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double attr [20];
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	int32 flag = swe_pheno_ut(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),

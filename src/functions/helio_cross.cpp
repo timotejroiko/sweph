@@ -14,7 +14,7 @@ Napi::Value sweph_helio_cross(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return env.Null();
 	}
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	double jd_cross;
 	int32 flag = swe_helio_cross(
 		info[0].As<Napi::Number>().Int32Value(),

@@ -23,7 +23,7 @@ Napi::Value sweph_rise_trans(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double ret;
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	int32 flag = swe_rise_trans(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),
