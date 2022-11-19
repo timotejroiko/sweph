@@ -1,17 +1,17 @@
 # Sweph
 
 The definitive Swiss Ephemeris bindings for Node.js  
-Everything you need to create Astrology and Astronomy applications with javascript and node
+Everything you need to create Astrology and Astronomy applications with JavaScript and node
 
 * 100% API coverage
-* Built-in Typescript declarations and ESM named exports
+* Built-in Typescript declarations and ESM exports
 * Built-in intellisense documentation
 * Version matched
 * Made with the N-API
 
-[Official programmers documentation for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/swisseph/swephprg.htm)  
+[Official programmer's documentation for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/swisseph/swephprg.htm)  
 [Official guide for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/ftp/swisseph/doc/swisseph.htm)  
-[Sweph on Github](https://github.com/timotejroiko/sweph)  
+[Sweph on GitHub](https://github.com/timotejroiko/sweph)  
 [Sweph on NPM](https://npmjs.com/package/sweph)
 
 ## Installation and Licensing
@@ -26,7 +26,7 @@ To install and use this library under GPL, use `npm install sweph@gpl` or `npm i
 ### - AGPL
 
 Starting from version `2.10.1` and later, this library is licensed under `AGPL-3.0`.  
-To install and use the latest version of this library under AGPL, use `npm install sweph`.
+To install and use the latest version of this library under AGPL, use `npm install sweph` or `npm install sweph@latest`.
 
 ### - LGPL
 
@@ -36,7 +36,7 @@ If you own a professional license for the Swiss Ephemeris, you may use any versi
 
 This library is version locked to the Swiss Ephemeris in addition to its own revisions. For example, version `2.10.1-1` corresponds to the Swiss Ephemeris version `2.10.1` and this library's revision `1`.
 
-Updates to this library will be released under new revisions, while updates to Swiss Ephemeris will be released under matching semver versions.
+Updates to this library will be released under new revisions, while updates to Swiss Ephemeris will be released under matching SemVer versions.
 
 ## Documentation
 
@@ -56,22 +56,26 @@ Each main ephemeris file covers a range of 600 years starting from the century i
 * semom files - moon (BC)
 * seas files - main asteroids (AD)
 * seasm files - main asteroids (BC)
+
 For advanced usage, the following files can also be found:
+
 * astxxx folders - files for individual asteroids (600 years)
 * longfiles folder - files for individual asteroids (6000 years)
-* jplfiles folder - files for nasa's jpl ephemerides
+* jplfiles folder - files for NASA's JPL ephemerides
 * sat folder - files for planetary moons
-More information can be found in the [Swiss Ephemeris files documentation](https://www.astro.com/ftp/swisseph/doc/swisseph.htm#_Toc58931065).
+
+More information can be found in the [Swiss Ephemeris files documentation](https://www.astro.com/ftp/swisseph/doc/swisseph.htm).
 
 ## Contributing
 
-If you find any innacuracy or bug in this library, or if you find an update that is not yet included in this library, feel free to open an issue or a pull request.
+If you find any inaccuracy or bug in this library, or if you find an upstream update that is not yet included in this library, feel free to open an issue or a pull request.
 
-## Known Issues and Caveats
+## Limitations
 
-* Due to how the underlying C library operates, you may find that the `error` field returned by some functions will contain random data even if there is no actual error. This can happen when existing memory buffers are recycled therefore the user must always check the returned flag values as per the Swiss Ephemeris documentation.
-* While worker_threads are supported, the underlying C library is single threaded and its settings are global. Functions such as `set_ephe_path()` will affect the entire process, including worker_threads. While you can still use worker_threads as long as you dont change settings from other threads in the middle of calculations, true thead-safe multithreading can be achieved using child_process instead.
+* While worker_threads are supported, the underlying C library is single threaded and contains process-wide settings. Functions such as `set_ephe_path()` or `set_sid_mode()` will affect the entire process, including all worker_threads. While you can still use worker_threads as long as you don't change settings from other threads in the middle of calculations, true thread-safe multithreading can only be achieved using child_process.
+
+* This library is a C/C++ add-on designed for Node.JS only, it will not work in browsers, other JS engines or in any other environment that does not support native C/C++ add-ons. In order to install this library, the target system must have the necessary build tools installed, such as `python`, `make` and `gcc` on Linux, `xcode` on Mac, `visual c++` on Windows, and/or other equivalent solutions.
 
 ## Author
 
-Copyright © 2021, Timotej Valentin Rojko
+Copyright © 2021-2022, Timotej Valentin Rojko
