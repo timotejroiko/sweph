@@ -30,7 +30,7 @@ Napi::Value sweph_vis_limit_mag(const Napi::CallbackInfo& info) {
 		Napi::TypeError::New(env, args[4].second).ThrowAsJavaScriptException();
 		return env.Null();
 	}
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	double ret [8];
 	int32 flag = swe_vis_limit_mag(
 		info[0].As<Napi::Number>().DoubleValue(),

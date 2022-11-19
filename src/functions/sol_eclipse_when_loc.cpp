@@ -20,7 +20,7 @@ Napi::Value sweph_sol_eclipse_when_loc(const Napi::CallbackInfo& info) {
 	}
 	double ret [10];
 	double attr [20];
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	int32 flag = swe_sol_eclipse_when_loc(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),

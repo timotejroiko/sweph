@@ -11,7 +11,7 @@ Napi::Value sweph_time_equ(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double e;
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	int32 flag = swe_time_equ(
 		info[0].As<Napi::Number>().DoubleValue(),
 		&e,

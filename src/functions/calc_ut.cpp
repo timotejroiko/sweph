@@ -13,7 +13,7 @@ Napi::Value sweph_calc_ut(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double xx [6];
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	int32 flag = swe_calc_ut(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),

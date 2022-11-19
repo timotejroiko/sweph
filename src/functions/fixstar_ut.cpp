@@ -13,7 +13,7 @@ Napi::Value sweph_fixstar_ut(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double xx [6];
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	char star [AS_MAXCH];
 	strcpy(star, info[0].As<Napi::String>().Utf8Value().c_str());
 	int32 flag = swe_fixstar_ut(

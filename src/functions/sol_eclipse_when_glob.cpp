@@ -14,7 +14,7 @@ Napi::Value sweph_sol_eclipse_when_glob(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double ret [10];
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	int32 flag = swe_sol_eclipse_when_glob(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),

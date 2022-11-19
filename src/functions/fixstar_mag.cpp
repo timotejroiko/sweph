@@ -11,7 +11,7 @@ Napi::Value sweph_fixstar_mag(const Napi::CallbackInfo& info) {
 		return env.Null();
 	}
 	double mag;
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	char star [AS_MAXCH];
 	strcpy(star, info[0].As<Napi::String>().Utf8Value().c_str());
 	int32 flag = swe_fixstar_mag(

@@ -11,7 +11,7 @@ Napi::Value sweph_deltat_ex(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return env.Null();
 	}
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	double delta = swe_deltat_ex(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().Int32Value(),

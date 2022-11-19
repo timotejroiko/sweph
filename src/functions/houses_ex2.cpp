@@ -18,7 +18,7 @@ Napi::Value sweph_houses_ex2(const Napi::CallbackInfo& info) {
 	double points [10];
 	double cspeed [37];
 	double pspeed [10];
-	char serr [AS_MAXCH];
+	char serr [AS_MAXCH] = "";
 	char sys = info[4].As<Napi::String>().Utf8Value()[0];
 	int g = sys == 'G' ? 37 : 13;
 	int flag = swe_houses_ex2(
