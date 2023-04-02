@@ -8,9 +8,6 @@
 		"require": "./index.js",
 		"import": "./index.mjs"
 	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 0"
-	},
 	"repository": {
 		"url": "https://github.com/timotejroiko/sweph.git"
 	},
@@ -24,6 +21,10 @@
 		"node"
 	],
 	"bugs": "https://github.com/timotejroiko/sweph/issues",
+	"scripts": {
+		"install": "node-gyp rebuild && npm run test",
+		"test": "node -e \"const s = require('./'); const c = s.calc(2222222,0,4); console.log('OK')\""
+	},
 	"dependencies": {
 		"node-addon-api": "*"
 	},

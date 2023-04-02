@@ -9,7 +9,7 @@ defaults:
 
 jobs:
   test:
-    name: Test sweph on ${{ matrix.os }} with ${{ matrix.compiler }}.
+    name: Test sweph on ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
