@@ -76,6 +76,8 @@ If you find any inaccuracy or bug in this library, or if you find an upstream up
 
 * This library is a C/C++ add-on designed for Node.JS only, it will not work in browsers, other JS engines or in any other environment that does not support native C/C++ add-ons. In order to install this library, the target system must have the necessary build tools installed, such as `python`, `make` and `gcc` on Linux, `xcode` on Mac, `visual c++` on Windows, and/or other equivalent solutions.
 
-## Author
+## Copyright
 
-Copyright © 2021-2022, Timotej Valentin Rojko
+Copyright © 2021-2023, Timotej Valentin Rojko
+
+This library is offered free of charge for any type of use, including commercial use, however, if you're an individual or a company using this library in commercial products and/or services, consider subscribing to the appropriate sponsorship level [here](https://github.com/sponsors/timotejroiko) and get priority support for your business.
