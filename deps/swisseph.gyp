@@ -19,25 +19,6 @@
 				"swisseph/sweph.c",
 				"swisseph/swephlib.c"
 			],
-			"cflags": [
-				"-flto",
-				"-Ofast",
-				"-pipe"
-			],
-			"cflags_cc": [
-				"-flto",
-				"-Ofast",
-				"-pipe"
-			],
-			"msvs_settings": {
-				"VCCLCompilerTool": {
-					"AdditionalOptions": [
-						"/O2",
-						"/GL",
-						"/Gw"
-					]
-				}
-			}
 		}
 	]
 }
