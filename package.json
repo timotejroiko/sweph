@@ -1,6 +1,6 @@
 {
 	"name": "sweph",
-	"version": "2.10.3-2",
+	"version": "2.10.3-3",
 	"description": "The definitive Swiss Ephemeris bindings for Node.js",
 	"keywords": [
 		"sweph",
@@ -14,7 +14,7 @@
 	"homepage": "https://github.com/timotejroiko/sweph",
 	"bugs": "https://github.com/timotejroiko/sweph/issues",
 	"repository": "github:timotejroiko/sweph",
-	"funding": "https://github.com/timotejroiko/tiny-discord?sponsor=1",
+	"funding": "https://github.com/timotejroiko/sweph?sponsor=1",
 	"license": "(AGPL-3.0-or-later OR LGPL-3.0-or-later)",
 	"author": "Timotej Valentin Rojko",
 	"exports": {
