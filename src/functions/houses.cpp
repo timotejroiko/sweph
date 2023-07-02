@@ -16,7 +16,6 @@ Napi::Value sweph_houses(const Napi::CallbackInfo& info) {
 	double cusps [37];
 	double points [10];
 	char sys = info[3].As<Napi::String>().Utf8Value()[0];
-	int g = sys == 'G' ? 37 : 13;
 	int flag = swe_houses(
 		info[0].As<Napi::Number>().DoubleValue(),
 		info[1].As<Napi::Number>().DoubleValue(),
@@ -25,6 +24,7 @@ Napi::Value sweph_houses(const Napi::CallbackInfo& info) {
 		cusps,
 		points
 	);
+	int g = sys == 'G' && flag == OK ? 37 : 13;
 	Napi::Object data = Napi::Object::New(env);
 	data["houses"] = sweph_js_array_converter(&cusps[1], g-1, env);
 	data["points"] = sweph_js_array_converter(points, 8, env);

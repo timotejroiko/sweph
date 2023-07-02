@@ -649,7 +649,7 @@ declare module "sweph" {
 		 * ```
 		 * ```
 		 */
-		data: JdEtUd;
+		data: JdEtUt;
 	}
 
 	interface VisLimitMag extends Flag, Error {
@@ -1728,7 +1728,7 @@ declare module "sweph" {
 		dip: number
 	]
 
-	type JdEtUd = [
+	type JdEtUt = [
 		/**
 		 * Julian day in ephemeris/terrestrial time
 		 */

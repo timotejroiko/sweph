@@ -2,29 +2,47 @@
 	"name": "sweph",
 	"version": "2.10.0-8",
 	"description": "The definitive Swiss Ephemeris bindings for Node.js",
-	"main": "index.js",
-	"typings": "./index.d.ts",
+	"keywords": [
+		"sweph",
+		"swiss",
+		"ephemeris",
+		"astrology",
+		"astronomy",
+		"swisseph",
+		"node"
+	],
+	"homepage": "https://github.com/timotejroiko/sweph",
+	"bugs": "https://github.com/timotejroiko/sweph/issues",
+	"repository": "github:timotejroiko/sweph",
+	"funding": "https://github.com/timotejroiko/sweph?sponsor=1",
+	"author": "Timotej Valentin Rojko",
 	"exports": {
 		"require": "./index.js",
 		"import": "./index.mjs"
 	},
+	"main": "index.js",
+	"types": "./index.d.ts",
+	"files": [
+		"./index.js",
+		"./index.mjs",
+		"./index.d.ts",
+		"./constants.js",
+		"./binding.gyp",
+		"./swisseph",
+		"./src/functions",
+		"./src/sweph.cpp",
+		"./src/sweph.h"
+	],
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 0"
+		"preinstall": "node -e \"const { readdirSync, readFileSync, writeFileSync } = require('fs'); const file = readdirSync('./src/functions').map((x,i) => readFileSync('./src/functions/' + x, 'utf8').replace(/args/g, 'args' + i).replace('#include <sweph.h>', '')).reduce((a,b) => a + b, '#include <sweph.h>'); writeFileSync('./src/functions.cpp', file, 'utf8');\"",
+		"install": "node-gyp rebuild && npm run test",
+		"test": "node -e \"const s = require('./'); const c = s.calc(2222222,0,4); console.log('OK')\""
 	},
-	"repository": {
-		"url": "https://github.com/timotejroiko/sweph.git"
-	},
-	"bugs": "https://github.com/timotejroiko/sweph/issues",
 	"dependencies": {
 		"node-addon-api": "*"
 	},
-	"funding": {
-		"type": "patreon",
-		"url": "https://patreon.com/timotejroiko"
-	},
-	"author": "Timotej Valentin Rojko",
 	"license": "(GPL-2.0-or-later OR LGPL-3.0-or-later)",
 	"devDependencies": {
-		"eslint": "^8.21.0"
+		"eslint": "^8.44.0"
 	}
 }

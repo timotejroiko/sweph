@@ -9,6 +9,6 @@ void sweph_set_jpl_file(const Napi::CallbackInfo& info) {
 	if(!sweph_type_check(args, info)) {
 		return;
 	}
-	swe_set_jpl_file((char*)info[0].As<Napi::String>().Utf8Value().c_str());
+	swe_set_jpl_file(info[0].As<Napi::String>().Utf8Value().c_str());
 	return;
 }
