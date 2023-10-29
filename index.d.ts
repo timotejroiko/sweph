@@ -14,7 +14,7 @@
  *
  * set_ephe_path("./ephemeris"); // folder containing your ephemeris files;
  *
- * const date = utc_to_jd(2020, 1, 25, 15, 35, 0, constants.SE_GREG_CAL); // 1 Jan 2020, 15:35:00
+ * const date = utc_to_jd(2020, 1, 25, 15, 35, 0, constants.SE_GREG_CAL); // 25 Jan 2020, 15:35:00, gregorian calendar
  * if(date.flag !== constants.OK) { throw new Error(date.error); }
  *
  * const [ jd_et, jd_ut ] = date.data; // et for planets, ut for houses
