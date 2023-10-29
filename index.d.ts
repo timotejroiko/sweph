@@ -2345,7 +2345,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const distance = difdeg2n(120, 130); // 350
+	 * const distance = difdegn(120, 130); // 350
 	 * ```
 	 * &nbsp;
 	 */
@@ -4651,7 +4651,10 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
-	 * Convert local time to UTC or UTC to local time using a timezone offset
+	 * Convert between local time and UTC using a timezone offset.  
+	 * For time zones east of Greenwich, d_timezone should be positive.  
+	 * For time zones west of Greenwich, d_timezone should be negative.  
+	 * To convert from UTC back to local time, invert d_timezone's sign.
 	 * ### Params
 	 * ```
 	 * • iyear: number // Full year
@@ -4660,7 +4663,7 @@ declare module "sweph" {
 	 * • ihour: number // Hour (0-23)
 	 * • imin: number // Minute (0-59)
 	 * • dsec: number // Seconds including fraction (0-59.99999)
-	 * • d_timezone: number // Timezone offset in decimal hours (0-23.99999)
+	 * • d_timezone: number // Timezone offset in decimal hours (0-23.99999), positive or negative 
 	 * ```
 	 * ### Returns
 	 * ```

@@ -1,13 +1,13 @@
 # Sweph
 
 The definitive Swiss Ephemeris bindings for Node.js  
-Everything you need to create Astrology and Astronomy applications with JavaScript and node
+Everything you need to create Astrology and Astronomy applications with JavaScript and Node.JS
 
 * 100% API coverage
 * Built-in Typescript declarations and ESM exports
 * Built-in intellisense documentation
 * Version matched
-* Made with the N-API
+* Built with Node's N-API
 
 [Official programmer's documentation for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/swisseph/swephprg.htm)  
 [Official guide for the Swiss Ephemeris by Astrodienst AG](https://www.astro.com/ftp/swisseph/doc/swisseph.htm)  
@@ -46,25 +46,30 @@ This library is fully typed and documented via intellisense. To access its docum
 
 ## Ephemeris files
 
-This library does not include any ephemeris files. To use the Swiss Ephemeris files, download them from [https://www.astro.com/ftp/swisseph/ephe/](https://www.astro.com/ftp/swisseph/ephe/) and call `set_ephe_path()` to point the library to the folder containing the ephemeris files.
+Ephemeris files are required to enable high precision calculations for planets and asteroids. This library does not include any ephemeris files by default, but you can download them from the official Swiss Ephemeris Github repository (main planets only) or the official Astrodienst Dropox folder (all files):
+
+* Swiss Ephemeris Github: [https://github.com/aloistr/swisseph/tree/master/ephe](https://github.com/aloistr/swisseph/tree/master/ephe)
+* Astrodienst Dropbox [https://www.dropbox.com/scl/fo/y3naz62gy6f6qfrhquu7u/h?rlkey=ejltdhb262zglm7eo6yfj2940&dl=0](https://www.dropbox.com/scl/fo/y3naz62gy6f6qfrhquu7u/h?rlkey=ejltdhb262zglm7eo6yfj2940&dl=0)
 
 Each main ephemeris file covers a range of 600 years starting from the century indicated in its name, for example the file `sepl_18.se1` is valid from year 1800 until year 2400. The following files are available:
 
-* sepl files - planets (AD)
+* sepl files - planets
 * seplm files - planets (BC)
-* semo files - moon (AD)
+* semo files - moon
 * semom files - moon (BC)
-* seas files - main asteroids (AD)
+* seas files - main asteroids
 * seasm files - main asteroids (BC)
 
-For advanced usage, the following files can also be found:
+For advanced usage, the following files and folders can also be found in the dropbox link:
 
-* astxxx folders - files for individual asteroids (600 years)
-* longfiles folder - files for individual asteroids (6000 years)
-* jplfiles folder - files for NASA's JPL ephemerides
-* sat folder - files for planetary moons
+* all_ast - files for all asteroids (600 years range)
+* long_ast - files for named asteroids (6000 years range)
+* jpl binary files - files for NASA's JPL ephemerides
+* ephe/sat folder - files for planetary moons
 
-More information can be found in the [Swiss Ephemeris files documentation](https://www.astro.com/ftp/swisseph/doc/swisseph.htm).
+To use the files, download them, store them in some folder, then call `set_ephe_path()` to point the library to that folder. Asteroid files should be placed in `astxxx` subfolders, the same way they appear in the dropbox asteroids section. Files for planetary moons should be placed in a `sat` subfolder.
+
+More information can be found in the files sections of the [Swiss Ephemeris documentation](https://www.astro.com/ftp/swisseph/doc/swisseph.htm).
 
 ## Contributing
 
@@ -74,7 +79,7 @@ If you find any inaccuracy or bug in this library, or if you find an upstream up
 
 * While worker_threads are supported, the underlying C library is single threaded and contains process-wide settings. Functions such as `set_ephe_path()` or `set_sid_mode()` will affect the entire process, including all worker_threads. While you can still use worker_threads as long as you don't change settings from other threads in the middle of calculations, true thread-safe multithreading can only be achieved using child_process.
 
-* This library is a C/C++ add-on designed for Node.JS only, it will not work in browsers, other JS engines or in any other environment that does not support native C/C++ add-ons. In order to install this library, the target system must have the necessary build tools installed, such as `python`, `make` and `gcc` on Linux, `xcode` on Mac, `visual c++` on Windows, and/or other equivalent solutions.
+* This library is a C/C++ add-on designed for Node.JS only, it will not work in browsers, other JS engines or in any other environment that does not support native C/C++ add-ons made with Node's N-API. In order to install this library, the target system must have the necessary build tools installed, such as `python`, `make` and `gcc` on Linux, `xcode` on Mac, `visual c++ build tools` on Windows, and/or other equivalent solutions.
 
 ## Copyright
 
