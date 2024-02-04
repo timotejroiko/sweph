@@ -37,7 +37,7 @@ declare module "sweph" {
 	└──────────────────────────────────────────────────┴────────────┴──────────────────────────────────────────────────┘
 	*/
 
-	interface Flag {
+	export interface Flag {
 		/**
 		 * ### Description
 		 * Status flag returned by the function  
@@ -48,7 +48,7 @@ declare module "sweph" {
 		flag: number;
 	}
 
-	interface Error {
+	export interface Error {
 		/**
 		 * ### Description
 		 * Error message  
@@ -59,7 +59,7 @@ declare module "sweph" {
 		error: string;
 	}
 
-	interface Name {
+	export interface Name {
 		/**
 		 * ### Description
 		 * Star name  
@@ -70,7 +70,7 @@ declare module "sweph" {
 		name: string;
 	}
 
-	interface GetCurrentFileData {
+	export interface GetCurrentFileData {
 		/**
 		 * ### Description
 		 * Path to ephemeris file  
@@ -101,7 +101,7 @@ declare module "sweph" {
 		denum: number;
 	}
 
-	interface GetOrbitalElements extends Flag, Error {
+	export interface GetOrbitalElements extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of orbital/kepler elements  
@@ -111,7 +111,7 @@ declare module "sweph" {
 		data: OrbitalElementsData;
 	}
 
-	interface Calc extends Error, Flag {
+	export interface Calc extends Error, Flag {
 		/**
 		 * ### Description
 		 * Array of values returned by the calculation  
@@ -126,7 +126,7 @@ declare module "sweph" {
 		data: CalcData;
 	}
 
-	interface DateConversion extends Flag {
+	export interface DateConversion extends Flag {
 		/**
 		 * ### Description
 		 * Julian day value  
@@ -136,7 +136,7 @@ declare module "sweph" {
 		data: number;
 	}
 
-	interface DeltaT extends Error {
+	export interface DeltaT extends Error {
 		/**
 		 * ### Description
 		 * Delta T value  
@@ -146,7 +146,7 @@ declare module "sweph" {
 		data: number;
 	}
 
-	interface FixStar extends Flag, Name, Error {
+	export interface FixStar extends Flag, Name, Error {
 		/**
 		 * ### Description
 		 * Array of values returned by the calculation  
@@ -160,7 +160,7 @@ declare module "sweph" {
 		data: CalcData2;
 	}
 
-	interface FixStarMag extends Flag, Name, Error {
+	export interface FixStarMag extends Flag, Name, Error {
 		/**
 		 * ### Description
 		 * Magnitude value  
@@ -170,7 +170,7 @@ declare module "sweph" {
 		data: number;
 	}
 
-	interface GauquelinSector extends Flag, Error {
+	export interface GauquelinSector extends Flag, Error {
 		/**
 		 * ### Description
 		 * Gauquelin Sector  
@@ -180,7 +180,7 @@ declare module "sweph" {
 		data: number;
 	}
 
-	interface Ayanamsa extends Flag, Error {
+	export interface Ayanamsa extends Flag, Error {
 		/**
 		 * ### Description
 		 * Ayanamsa Value  
@@ -190,7 +190,7 @@ declare module "sweph" {
 		data: number;
 	}
 
-	interface HeliacalPheno extends Flag, Error {
+	export interface HeliacalPheno extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of values used by heliacal calculations  
@@ -200,7 +200,7 @@ declare module "sweph" {
 		data: HeliacalPhenoData;
 	}
 
-	interface Heliacal extends Flag, Error {
+	export interface Heliacal extends Flag, Error {
 		/**
 		 * ### Description
 		 * Event times of the heliacal phenomenon  
@@ -210,7 +210,7 @@ declare module "sweph" {
 		data: HeliacalData;
 	}
 
-	interface HousePosition extends Error {
+	export interface HousePosition extends Error {
 		/**
 		 * ### Description
 		 * House position including fraction  
@@ -221,7 +221,7 @@ declare module "sweph" {
 		data: number
 	}
 
-	interface Houses<T> extends Flag {
+	export interface Houses<T> extends Flag {
 		/**
 		 * ### Description
 		 * Calculated positions for the houses and other points  
@@ -231,7 +231,7 @@ declare module "sweph" {
 		data: HouseData<T>
 	}
 
-	interface HousesEx<T> extends Flag, Error {
+	export interface HousesEx<T> extends Flag, Error {
 		/**
 		 * ### Description
 		 * Calculated positions for the houses and other points  
@@ -242,7 +242,7 @@ declare module "sweph" {
 		data: HouseExData<T>
 	}
 
-	interface HouseData<T> {
+	export interface HouseData<T> {
 		/**
 		 * ### Description
 		 * Longitude positions for the houses  
@@ -260,7 +260,7 @@ declare module "sweph" {
 		points: PointsList
 	}
 
-	interface HouseExData<T> extends HouseData<T> {
+	export interface HouseExData<T> extends HouseData<T> {
 		/**
 		 * ### Description
 		 * Momentary motion speeds of the houses  
@@ -277,7 +277,7 @@ declare module "sweph" {
 		pointsSpeed: PointsSpeeds
 	}
 
-	interface DateObject {
+	export interface DateObject {
 		/**
 		 * ### Description
 		 * Full year  
@@ -308,7 +308,7 @@ declare module "sweph" {
 		hour: number;
 	}
 
-	interface DateObject2 extends DateObject {
+	export interface DateObject2 extends DateObject {
 		/**
 		 * ### Description
 		 * Hour (0-23)  
@@ -332,7 +332,7 @@ declare module "sweph" {
 		second: number;
 	}
 
-	interface LocalApparentTime extends Flag, Error {
+	export interface LocalApparentTime extends Flag, Error {
 		/**
 		 * ### Description
 		 * Local apparent time in julian day in universal time  
@@ -342,7 +342,7 @@ declare module "sweph" {
 		data: number
 	}
 
-	interface LocalMeanTime extends Flag, Error {
+	export interface LocalMeanTime extends Flag, Error {
 		/**
 		 * ### Description
 		 * Local mean time in julian day in universal time  
@@ -352,7 +352,7 @@ declare module "sweph" {
 		data: number
 	}
 
-	interface OrbitMaxMinTrueDistance extends Flag, Error {
+	export interface OrbitMaxMinTrueDistance extends Flag, Error {
 		/**
 		 * ### Description
 		 * Orbital maximum and minimum possible distances  
@@ -375,7 +375,7 @@ declare module "sweph" {
 		}
 	}
 
-	interface LunEclipseHow extends Flag, Error {
+	export interface LunEclipseHow extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of data about the lunar eclipse  
@@ -385,7 +385,7 @@ declare module "sweph" {
 		data: LunEclipseAttributes
 	}
 
-	interface LunEclipseWhenLoc extends Flag, Error {
+	export interface LunEclipseWhenLoc extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of eclipse timings  
@@ -402,7 +402,7 @@ declare module "sweph" {
 		attributes: LunEclipseAttributes
 	}
 
-	interface LunEclipseWhen extends Flag, Error {
+	export interface LunEclipseWhen extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of eclipse timings  
@@ -412,7 +412,7 @@ declare module "sweph" {
 		data: EclipseTimes
 	}
 
-	interface EclipseWhenGlob extends Flag, Error {
+	export interface EclipseWhenGlob extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of eclipse timings  
@@ -422,7 +422,7 @@ declare module "sweph" {
 		data: EclipseTimes3
 	}
 
-	interface LunOccultWhenLoc extends Flag, Error {
+	export interface LunOccultWhenLoc extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of eclipse timings  
@@ -439,7 +439,7 @@ declare module "sweph" {
 		attributes: EclipseAttributes
 	}
 
-	interface LunOccultWhere extends Flag, Error {
+	export interface LunOccultWhere extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of eclipse coordinates  
@@ -456,7 +456,7 @@ declare module "sweph" {
 		attributes: LunEclipseAttributes2
 	}
 
-	interface NodAps extends Flag, Error {
+	export interface NodAps extends Flag, Error {
 		/**
 		 * ### Description
 		 * Object containing ascending node, descending node, aphelion and perihelion values  
@@ -513,7 +513,7 @@ declare module "sweph" {
 		};
 	}
 
-	interface Pheno extends Flag, Error {
+	export interface Pheno extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array containing data for planetary phenomena  
@@ -523,7 +523,7 @@ declare module "sweph" {
 		data: PhenoData;
 	}
 
-	interface RefracExtended {
+	export interface RefracExtended {
 		/**
 		 * ### Description
 		 * Converted altitude value  
@@ -540,7 +540,7 @@ declare module "sweph" {
 		extended: RefracExtendedData;
 	}
 
-	interface RiseTrans extends Flag, Error {
+	export interface RiseTrans extends Flag, Error {
 		/**
 		 * ### Description
 		 * Time of transit in julian days in universal time  
@@ -550,7 +550,7 @@ declare module "sweph" {
 		data: number;
 	}
 
-	interface SolEclipseHow extends Flag, Error {
+	export interface SolEclipseHow extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of data about the solar eclipse  
@@ -560,7 +560,7 @@ declare module "sweph" {
 		data: EclipseAttributes2;
 	}
 
-	interface SolEclipseWhenLoc extends Flag, Error {
+	export interface SolEclipseWhenLoc extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of eclipse timings  
@@ -577,7 +577,7 @@ declare module "sweph" {
 		attributes: EclipseAttributes2;
 	}
 
-	interface SolEclipseWhere extends Flag, Error {
+	export interface SolEclipseWhere extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array of eclipse coordinates  
@@ -594,7 +594,7 @@ declare module "sweph" {
 		attributes: EclipseAttributes2;
 	}
 
-	interface SplitDeg {
+	export interface SplitDeg {
 		/**
 		 * ### Description
 		 * Degrees value  
@@ -632,7 +632,7 @@ declare module "sweph" {
 		sign: number;
 	}
 
-	interface TimeEqu extends Flag, Error {
+	export interface TimeEqu extends Flag, Error {
 		/**
 		 * ### Description
 		 * Value of the equation of time (difference between LMT and LAT)  
@@ -642,7 +642,7 @@ declare module "sweph" {
 		data: number;
 	}
 
-	interface UtcToJd extends Flag, Error {
+	export interface UtcToJd extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array containing julian day in both ephemeris and universal time  
@@ -652,7 +652,7 @@ declare module "sweph" {
 		data: JdEtUt;
 	}
 
-	interface VisLimitMag extends Flag, Error {
+	export interface VisLimitMag extends Flag, Error {
 		/**
 		 * ### Description
 		 * Array containing the altitude, azimuth and magnitude data of the object along with the altitude and azimuth of the sun and the moon  
@@ -662,7 +662,7 @@ declare module "sweph" {
 		data: VisLimitMagData;
 	}
 
-	interface Cross extends Error {
+	export interface Cross extends Error {
 		/**
 		 * ### Description
 		 * Date when the next crossing happens in julian days  
@@ -673,7 +673,7 @@ declare module "sweph" {
 		date: number;
 	}
 
-	interface NodeCross extends Cross {
+	export interface NodeCross extends Cross {
 		/**
 		 * ### Description
 		 * Ecliptic longitude where the crossing happens  
@@ -696,7 +696,7 @@ declare module "sweph" {
 	└──────────────────────────────────────────────────┴───────────┴──────────────────────────────────────────────────┘
 	*/
 
-	type OrbitalElementsData = [
+	export type OrbitalElementsData = [
 		/**
 		 * Semimajor axis
 		 */
@@ -768,7 +768,7 @@ declare module "sweph" {
 		aphelion_distance: number
 	]
 
-	type CalcData = [
+	export type CalcData = [
 		/**
 		 * (`λ`) Ecliptic longitude  
 		 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
@@ -809,7 +809,7 @@ declare module "sweph" {
 		distSpd: number
 	]
 
-	type CalcData2 = [
+	export type CalcData2 = [
 		/**
 		 * (`λ`) Ecliptic longitude  
 		 * (`α`) Equatorial right ascension if `SEFLG_EQUATORIAL`  
@@ -846,7 +846,7 @@ declare module "sweph" {
 		distSpd: number
 	]
 
-	type HeliacalPhenoData = [
+	export type HeliacalPhenoData = [
 		/**
 		 * Topocentric altitude of object in degrees (unrefracted)
 		 */
@@ -969,7 +969,7 @@ declare module "sweph" {
 		MSk: number
 	]
 
-	type HeliacalData = [
+	export type HeliacalData = [
 		/**
 		 * Start visibility in JD
 		 */
@@ -984,7 +984,7 @@ declare module "sweph" {
 		vis_end: number
 	]
 
-	type AzaltRev = [
+	export type AzaltRev = [
 		/**
 		 * (λ) Ecliptic longitude if SE_HOR2ECL  
 		 * (α) Equatorial right ascension if SE_HOR2EQU
@@ -997,7 +997,7 @@ declare module "sweph" {
 		lat: number
 	]
 
-	type Azalt = [
+	export type Azalt = [
 		/**
 		 * Azimuth
 		 */
@@ -1012,7 +1012,7 @@ declare module "sweph" {
 		ap: number
 	]
 
-	type CoTransSp = [
+	export type CoTransSp = [
 		...cotrans: CoTrans,
 		/**
 		 * Daily speed for lon
@@ -1028,7 +1028,7 @@ declare module "sweph" {
 		distSpd: number
 	]
 
-	type CoTrans = [
+	export type CoTrans = [
 		/**
 		 * (λ) Ecliptic longitude or (α) Equatorial right ascension
 		 */
@@ -1043,9 +1043,9 @@ declare module "sweph" {
 		dist: number,
 	]
 
-	type HouseSystems = "B" | "Y" | "X" | "H" | "C" | "F" | "A" | "E" | "D" | "N" | "G" | "I" | "i" | "K" | "U" | "M" | "P" | "T" | "O" | "L" | "Q" | "R" | "S" | "V" | "W";
+	export type HouseSystems = "B" | "Y" | "X" | "H" | "C" | "F" | "A" | "E" | "D" | "N" | "G" | "I" | "i" | "K" | "U" | "M" | "P" | "T" | "O" | "L" | "Q" | "R" | "S" | "V" | "W";
 
-	type HousesList = [
+	export type HousesList = [
 		/**
 		 * 1st House
 		 */
@@ -1096,7 +1096,7 @@ declare module "sweph" {
 		house_12: number,
 	]
 
-	type PointsList = [
+	export type PointsList = [
 		/**
 		 * Longitude of the Ascendant
 		 */
@@ -1131,7 +1131,7 @@ declare module "sweph" {
 		polasc: number
 	]
 
-	type HousesSpeeds = [
+	export type HousesSpeeds = [
 		/**
 		 * Momentary speed for the 1st House
 		 */
@@ -1182,7 +1182,7 @@ declare module "sweph" {
 		house_12_speed: number,
 	]
 
-	type PointsSpeeds = [
+	export type PointsSpeeds = [
 		/**
 		 * Momentary speed of the Ascendant
 		 */
@@ -1217,7 +1217,7 @@ declare module "sweph" {
 		polasc_speed: number
 	]
 
-	type GauquelinHousesList = [
+	export type GauquelinHousesList = [
 		...houses: HousesList,
 		/**
 		 * 13th House
@@ -1317,7 +1317,7 @@ declare module "sweph" {
 		house_36: number,
 	]
 
-	type GauquelinHousesSpeeds = [
+	export type GauquelinHousesSpeeds = [
 		...houses: HousesSpeeds,
 		/**
 		 * Momentary speed for the 13th House
@@ -1417,7 +1417,7 @@ declare module "sweph" {
 		house_36_speed: number,
 	]
 
-	type EclipseTimes = [
+	export type EclipseTimes = [
 		/**
 		 * time of maximum eclipse in jd
 		 */
@@ -1452,7 +1452,7 @@ declare module "sweph" {
 		penumbral_end: number
 	]
 
-	type EclipseTimes2 = [
+	export type EclipseTimes2 = [
 		...times: EclipseTimes,
 		/**
 		 * Time of moonrise, if it occurs during the eclipse
@@ -1464,7 +1464,7 @@ declare module "sweph" {
 		set: number,
 	]
 
-	type EclipseTimes3 = [
+	export type EclipseTimes3 = [
 		/**
 		 * time of maximum eclipse in jd
 		 */
@@ -1507,7 +1507,7 @@ declare module "sweph" {
 		total_annular: number
 	]
 
-	type EclipseTimes4 = [
+	export type EclipseTimes4 = [
 		/**
 		 * Time of maximum eclipse
 		 */
@@ -1538,7 +1538,7 @@ declare module "sweph" {
 		sunset: number
 	]
 
-	type EclipseCoords = [
+	export type EclipseCoords = [
 		/**
 		 * Geographic longitude of central line
 		 */
@@ -1581,7 +1581,7 @@ declare module "sweph" {
 		south_penumbra_lat: number
 	]
 
-	type EclipseAttributes = [
+	export type EclipseAttributes = [
 		/**
 		 * Fraction of solar diameter covered by moon (magnitude)
 		 */
@@ -1616,7 +1616,7 @@ declare module "sweph" {
 		elongation: number
 	]
 
-	type EclipseAttributes2 = [
+	export type EclipseAttributes2 = [
 		...attr: EclipseAttributes,
 		/**
 		 * Eclipse magnitude (same as solar_diameter or lunar_diameter depending on the eclipse type)
@@ -1632,7 +1632,7 @@ declare module "sweph" {
 		saros_member: number
 	]
 
-	type LunEclipseAttributes = [
+	export type LunEclipseAttributes = [
 		/**
 		 * Umbral magnitude at jd
 		 */
@@ -1679,7 +1679,7 @@ declare module "sweph" {
 		saros_member: number
 	]
 
-	type LunEclipseAttributes2 = [
+	export type LunEclipseAttributes2 = [
 		/**
 		 * Fraction of object's diameter covered by moon (magnitude)
 		 */
@@ -1714,7 +1714,7 @@ declare module "sweph" {
 		angular_distance: number,
 	]
 
-	type PhenoData = [
+	export type PhenoData = [
 		/**
 		 * Phase angle (Earth-planet-sun)
 		 */
@@ -1737,7 +1737,7 @@ declare module "sweph" {
 		magnitude: number
 	]
 
-	type RefracExtendedData = [
+	export type RefracExtendedData = [
 		/**
 		 * True altitude if possible, otherwise input value
 		 */
@@ -1756,7 +1756,7 @@ declare module "sweph" {
 		dip: number
 	]
 
-	type JdEtUt = [
+	export type JdEtUt = [
 		/**
 		 * Julian day in ephemeris/terrestrial time
 		 */
@@ -1767,7 +1767,7 @@ declare module "sweph" {
 		ut: number
 	]
 
-	type VisLimitMagData = [
+	export type VisLimitMagData = [
 		/**
 		 * Limiting visual magnitude (object is visible if this value is bigger than the object's magnitude value)
 		 */
