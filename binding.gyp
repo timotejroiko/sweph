@@ -11,8 +11,8 @@
 				"src"
 			],
 			"dependencies": [
-	  			"swisseph"
-	  		],
+				"swisseph"
+			],
 			"defines": [
 				"NAPI_DISABLE_CPP_EXCEPTIONS"
 			]
