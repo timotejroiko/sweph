@@ -19,7 +19,8 @@
 	"author": "Timotej Valentin Rojko",
 	"exports": {
 		"require": "./index.js",
-		"import": "./index.mjs"
+		"import": "./index.mjs",
+		"types": "./index.d.ts"
 	},
 	"main": "index.js",
 	"types": "./index.d.ts",
