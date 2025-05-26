@@ -1,8 +1,5 @@
 # Sweph
 
-**Current Version - 2.10.3-b-1**  
-**Equivalent to Swiss Ephemeris version 2.10.03b revision 1**
-
 The definitive Swiss Ephemeris bindings for Node.js  
 Everything you need to create Astrology and Astronomy applications with JavaScript and Node.JS
 
@@ -40,6 +37,9 @@ If you own a professional license for the Swiss Ephemeris, you may use any versi
 This library is version locked to the Swiss Ephemeris in addition to its own revisions. For example, version `2.10.1-1` corresponds to the Swiss Ephemeris version `2.10.1` and this library's revision `1`.
 
 Updates to this library will be released under new revisions, while updates to Swiss Ephemeris will be released under matching SemVer versions.
+
+**Current Version - 2.10.3-b-1**  
+**Equivalent to Swiss Ephemeris version 2.10.03b revision 1**
 
 ## Documentation
 
