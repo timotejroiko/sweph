@@ -3151,7 +3151,7 @@ static double adjust_for_tidacc(double ans, double Y, double tid_acc, double tid
 }
 
 /* returns tidal acceleration used in swe_deltat() and swe_deltat_ex() */
-double CALL_CONV swe_get_tid_acc()
+double CALL_CONV swe_get_tid_acc(void)
 {
   return swed.tid_acc;
 }
@@ -3183,7 +3183,7 @@ void CALL_CONV swe_set_delta_t_userdef(double dt)
   }
 }
 
-int32 swi_guess_ephe_flag()
+int32 swi_guess_ephe_flag(void)
 {
   int32 iflag = SEFLG_SWIEPH;
   /* if jpl file is open, assume SEFLG_JPLEPH */
@@ -3935,7 +3935,7 @@ char *CALL_CONV swe_cs2degstr(CSEC t, char *a)
  * ideg 	degrees, 
  * imin 	minutes, 
  * isec 	seconds, 
- * dsecfr	fraction of seconds 
+ * dsecfr	fraction of seconds (zero if rounding used) 
  * inak	nakshatra number; 
  ******************************************************************/
 static void split_deg_nakshatra(double ddeg, int32 roundflag, int32 *ideg, int32 *imin, int32 *isec, double *dsecfr, int32 *inak)
@@ -3977,7 +3977,7 @@ static void split_deg_nakshatra(double ddeg, int32 roundflag, int32 *ideg, int32
   if (!(roundflag & (SE_SPLIT_DEG_ROUND_DEG | SE_SPLIT_DEG_ROUND_MIN | SE_SPLIT_DEG_ROUND_SEC))) {
     *dsecfr = ddeg * 3600 - *isec;
   } else {
-    *dsecfr = *isec;  // is rounded, no fractional seconds
+    *dsecfr = 0;
   }
 }  /* end split_deg_nakshtra */
 

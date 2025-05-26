@@ -1,6 +1,6 @@
 {
 	"name": "sweph",
-	"version": "2.10.3-4",
+	"version": "2.10.3-b-1",
 	"description": "The definitive Swiss Ephemeris bindings for Node.js",
 	"keywords": [
 		"sweph",
@@ -44,9 +44,9 @@
 		"test": "node -e \"const s = require('./'); const c = s.calc(2222222,0,4); console.log('OK')\""
 	},
 	"dependencies": {
-		"node-addon-api": "*"
+		"node-addon-api": "^8.3.1"
 	},
 	"devDependencies": {
-		"eslint": "^8.44.0"
+		"eslint": "^9.27.0"
 	}
 }

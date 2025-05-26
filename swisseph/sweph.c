@@ -6210,7 +6210,7 @@ static int CMP_CALL_CONV fstar_node_compare(const void *node1, const void *node2
 int32 fixstar_cut_string(char *srecord, char *star, struct fixed_star *stardata, char *serr)
 {
   int i;
-  char s[AS_MAXCH];
+  char s[AS_MAXCH + 20];
   char *sde_d;
   char *cpos[20];
   double epoch, radv, parall, mag;
@@ -6256,6 +6256,7 @@ int32 fixstar_cut_string(char *srecord, char *star, struct fixed_star *stardata,
   de_pm = atof(cpos[10]);
   radv = atof(cpos[11]);
   parall = atof(cpos[12]);
+  if (parall < 0) parall = -parall;	// to fix bug like old Rasalgheti
   mag = atof(cpos[13]);
   /****************************************
    * position and speed (equinox)
@@ -6322,7 +6323,7 @@ int32 fixstar_cut_string(char *srecord, char *star, struct fixed_star *stardata,
 static int32 load_all_fixed_stars(char *serr) 
 {
   int32 retc = OK;
-  int nstars = 0, line = 0, fline = 0, nrecs = 0, nnamed = 0;
+  int nstars = 0, nrecs = 0, nnamed = 0;
   char s[AS_MAXCH], *sp;
   char srecord[AS_MAXCH];
   struct fixed_star fstdata;
@@ -6344,13 +6345,11 @@ static int32 load_all_fixed_stars(char *serr)
   rewind(swed.fixfp);
   swed.fixed_stars = NULL;
   while (fgets(s, AS_MAXCH, swed.fixfp) != NULL) {
-    fline++;	
     // skip comment lines
     if (*s == '#') continue;
     if (*s == '\n') continue;
     if (*s == '\r') continue;
     if (*s == '\0') continue;
-    line++;
     strcpy(srecord, s);
     retc = fixstar_cut_string(srecord, NULL, &fstdata, serr);
     if (retc == ERR) return ERR;
@@ -6388,7 +6387,7 @@ static int32 load_all_fixed_stars(char *serr)
   swed.n_fixstars_real = nstars;
   swed.n_fixstars_named = nnamed;
   swed.n_fixstars_records = nrecs;
-  //printf("nstars=%d, nrecords=%d\n", nstars, nrecs);
+  // fprintf(stderr, "nstars=%d, nrecords=%d\n", nstars, nrecs);	
   (void) qsort ((void *) swed.fixed_stars, (size_t) nrecs, sizeof (struct fixed_star),
                     (int (CMP_CALL_CONV *)(const void *,const void *))(fixedstar_name_compare));
   return retc;
@@ -7266,7 +7265,7 @@ void CALL_CONV swe_set_topo(double geolon, double geolat, double geoalt)
   swi_force_app_pos_etc();
 }
 
-void swi_force_app_pos_etc()
+void swi_force_app_pos_etc(void)
 {
   int i;
   for (i = 0; i < SEI_NPLANETS; i++)

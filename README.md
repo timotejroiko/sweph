@@ -1,5 +1,8 @@
 # Sweph
 
+**Current Version - 2.10.3-b-1**  
+**Equivalent to Swiss Ephemeris version 2.10.03b revision 1**
+
 The definitive Swiss Ephemeris bindings for Node.js  
 Everything you need to create Astrology and Astronomy applications with JavaScript and Node.JS
 
