@@ -44,9 +44,12 @@
 		"test": "node -e \"const s = require('./'); const c = s.calc(2222222,0,4); console.log('OK')\""
 	},
 	"dependencies": {
-		"node-addon-api": "^8.3.1"
+		"node-addon-api": "^8.5.0"
 	},
 	"devDependencies": {
-		"eslint": "^9.27.0"
+		"eslint": "^9.36.0"
+	},
+	"optionalDependencies": {
+		"node-gyp": "*"
 	}
 }
