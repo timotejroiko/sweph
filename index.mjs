@@ -1,10 +1,12 @@
 import { createRequire } from "module";
+import { fileURLToPath } from "url";
 import c from "./constants.js";
 
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const require = createRequire(import.meta.url);
 
 /** @type {Omit<import("sweph"), "constants" | "sweph" | "default">} */
-const s = require("./build/Release/sweph.node");
+const s = require("node-gyp-build")(__dirname);
 
 export const sweph = {
     ...s,

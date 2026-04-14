@@ -32,6 +32,7 @@
 		"./index.mjs",
 		"./index.d.ts",
 		"./constants.js",
+		"./prebuilds",
 		"./binding.gyp",
 		"./swisseph",
 		"./src/functions",
@@ -40,16 +41,16 @@
 	],
 	"scripts": {
 		"preinstall": "node -e \"const { readdirSync, readFileSync, writeFileSync } = require('fs'); const file = readdirSync('./src/functions').map((x,i) => readFileSync('./src/functions/' + x, 'utf8').replace(/args/g, 'args' + i).replace('#include <sweph.h>', '')).reduce((a,b) => a + b, '#include <sweph.h>'); writeFileSync('./src/functions.cpp', file, 'utf8');\"",
-		"install": "node-gyp rebuild && npm run test",
-		"test": "node -e \"const s = require('./'); const c = s.calc(2222222,0,4); console.log('OK')\""
+		"rebuild": "node-gyp rebuild && npm run test",
+		"test": "node -e \"const s = require('./'); const c = s.calc(2222222,0,4); console.log('OK')\"",
+		"install": "node-gyp-build && npm run test",
+		"prebuild": "prebuildify --napi --strip --tag-libc"
 	},
 	"dependencies": {
-		"node-addon-api": "^8.5.0"
+		"node-addon-api": "^8.7.0",
+		"node-gyp-build": "^4.8.4"
 	},
 	"devDependencies": {
-		"eslint": "^9.36.0"
-	},
-	"optionalDependencies": {
-		"node-gyp": "*"
+		"prebuildify": "^6.0.1"
 	}
 }

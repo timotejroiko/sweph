@@ -3,7 +3,7 @@
 
 /** @type {Omit<import("sweph"), "constants" | "sweph" | "default">} */
 // @ts-ignore
-const s = require("./build/Release/sweph.node");
+const s = require("node-gyp-build")(__dirname);
 const c = require("./constants.js");
 
 const sweph = {

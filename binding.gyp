@@ -14,7 +14,8 @@
 				"swisseph"
 			],
 			"defines": [
-				"NAPI_DISABLE_CPP_EXCEPTIONS"
+				"NAPI_DISABLE_CPP_EXCEPTIONS",
+				'NAPI_VERSION=6'
 			]
 		},
 		{
