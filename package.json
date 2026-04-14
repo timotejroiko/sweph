@@ -44,7 +44,7 @@
 		"rebuild": "node-gyp rebuild && npm run test",
 		"test": "node -e \"const s = require('./'); const c = s.calc(2222222,0,4); console.log('OK')\"",
 		"install": "node-gyp-build && npm run test",
-		"prebuild": "prebuildify --napi --strip --tag-libc"
+		"prebuild": "prebuildify --napi --strip"
 	},
 	"dependencies": {
 		"node-addon-api": "^8.7.0",
