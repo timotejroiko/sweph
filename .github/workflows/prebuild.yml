@@ -35,7 +35,7 @@ jobs:
             name: windows
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: npm install --build-from-source
 
   build:
@@ -62,7 +62,7 @@ jobs:
       image: ${{ matrix.container || '' }}
       options: --user root
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: npm install --ignore-scripts
       - run: npm run preinstall
       - run: npm run prebuild
@@ -78,7 +78,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
       - uses: actions/download-artifact@v8
