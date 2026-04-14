@@ -63,6 +63,7 @@ jobs:
       options: --user root
     steps:
       - uses: actions/checkout@v6
+      - run: rm -rf prebuilds/
       - run: npm install --ignore-scripts
       - run: npm run preinstall
       - run: npm run prebuild
@@ -81,6 +82,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: main
+      - run: rm -rf prebuilds/
       - uses: actions/download-artifact@v8
         with:
           path: prebuilds/
@@ -89,7 +91,6 @@ jobs:
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git rm -r --cached --ignore-unmatch prebuilds/
-          git add prebuilds/
+          git add -A prebuilds/
           git diff --staged --quiet || git commit -m "chore: update prebuilds"
           git push
