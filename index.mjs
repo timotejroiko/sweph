@@ -100,6 +100,7 @@ export const difcsn = s.difcsn;
 export const difdegn = s.difdegn;
 export const difcs2n = s.difcs2n;
 export const difdeg2n = s.difdeg2n;
+export const deg_midp = s.deg_midp;
 export const csroundsec = s.csroundsec;
 export const d2l = s.d2l;
 export const day_of_week = s.day_of_week;
