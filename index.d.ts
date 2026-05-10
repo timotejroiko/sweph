@@ -2333,6 +2333,26 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
+	 * Midpoint between two points in degrees
+	 * ### Params
+	 * ```
+	 * • deg1: number // First point in degrees
+	 * • deg2: number // Second point in degrees
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Midpoint in degrees
+	 * ```
+	 * ### Example
+	 * ```
+	 * const mid = deg_midp(10, 350); // 0
+	 * ```
+	 * &nbsp;
+	 */
+	export function deg_midp(deg1: number, deg2: number): number;
+
+	/**
+	 * ### Description
 	 * Arc distance between two points in degrees in a single direction
 	 * ### Params
 	 * ```

@@ -88,6 +88,7 @@ Napi::Value sweph_difcsn(const Napi::CallbackInfo& info);
 Napi::Value sweph_difcs2n(const Napi::CallbackInfo& info);
 Napi::Value sweph_difdegn(const Napi::CallbackInfo& info);
 Napi::Value sweph_difdeg2n(const Napi::CallbackInfo& info);
+Napi::Value sweph_deg_midp(const Napi::CallbackInfo& info);
 Napi::Value sweph_csroundsec(const Napi::CallbackInfo& info);
 Napi::Value sweph_d2l(const Napi::CallbackInfo& info);
 Napi::Value sweph_day_of_week(const Napi::CallbackInfo& info);
