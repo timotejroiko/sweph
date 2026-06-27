@@ -38,8 +38,8 @@ This library is version locked to the Swiss Ephemeris in addition to its own rev
 
 Updates to this library will be released under new revisions, while updates to Swiss Ephemeris will be released under matching SemVer versions.
 
-**Current Version: 2.10.3-b-1**  
-**Equivalent to Swiss Ephemeris version: 2.10.03b revision 1**
+**Current Version: 2.10.3-6**  
+**Equivalent to Swiss Ephemeris version: 2.10.03 revision 6**
 
 ## Documentation
 
@@ -49,7 +49,7 @@ This library is fully typed and documented via intellisense. To access its docum
 
 ## Ephemeris files
 
-Ephemeris files are required to enable high precision calculations for planets and asteroids. This library does not include any ephemeris files by default, but you can download them from the official Swiss Ephemeris Github repository (main planets only) or the official Astrodienst Dropox folder (all files):
+Ephemeris files are required to enable high precision calculations for planets and asteroids. This library does not include any ephemeris files by default, but you can download them from the official Swiss Ephemeris Github repository (main planets only) or the official Astrodienst Dropbox folder (all files):
 
 * Swiss Ephemeris Github: [https://github.com/aloistr/swisseph/tree/master/ephe](https://github.com/aloistr/swisseph/tree/master/ephe)
 * Astrodienst Dropbox [https://www.dropbox.com/scl/fo/y3naz62gy6f6qfrhquu7u/h?rlkey=ejltdhb262zglm7eo6yfj2940&dl=0](https://www.dropbox.com/scl/fo/y3naz62gy6f6qfrhquu7u/h?rlkey=ejltdhb262zglm7eo6yfj2940&dl=0)
@@ -82,10 +82,10 @@ If you find any inaccuracy or bug in this library, or if you find an upstream up
 
 * While worker_threads are supported, the underlying C library is single threaded and contains process-wide settings. Functions such as `set_ephe_path()` or `set_sid_mode()` will affect the entire process, including all worker_threads. While you can still use worker_threads as long as you don't change settings from other threads in the middle of calculations, true thread-safe multithreading can only be achieved using child_process.
 
-* This library is a C/C++ add-on designed for Node.JS only, it will not work in browsers, other JS engines or in any other environment that does not support native C/C++ add-ons made with Node's N-API. In order to install this library, the target system must have the necessary build tools installed, such as `python`, `make` and `gcc` on Linux, `xcode` on Mac, `visual c++ build tools` on Windows, and/or other equivalent solutions.
+* This library is a C/C++ add-on designed for Node.JS only, it will not work in browsers, other JS engines or in any other environment that does not support native C/C++ add-ons made with Node's N-API. Prebuilt binaries are included for supported platforms. If no matching prebuild is available for the target system, installation falls back to a native build and requires the necessary build tools, such as `python`, `make` and `gcc` on Linux, `xcode` on Mac, `visual c++ build tools` on Windows, and/or other equivalent solutions.
 
 ## Copyright
 
-Copyright © 2021-2023, Timotej Valentin Rojko
+Copyright © 2021-2026, Timotej Valentin Rojko
 
-This library is offered free of charge for any type of use, including commercial use, however, if you're an individual or a company using this library in commercial products and/or services, consider subscribing to the appropriate sponsorship level [here](https://github.com/sponsors/timotejroiko) and get priority support for your business.
+This library is offered free of charge for any type of use, including commercial use. If you rely on it in personal or commercial projects, consider sponsoring the project to help fund maintenance, updates, and support.
