@@ -2100,7 +2100,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const time = cs2timestr(2345464, ":", true); // "6:30:55"
+	 * const time = cs2timestr(2345464, ":", true); // "06:30:55"
 	 * ```
 	 * &nbsp;
 	 */
@@ -2246,7 +2246,8 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const deltaT = deltat_ex(2431232, constants.SEFLG_MOSEPH); // 0.00032552915335235926
+	 * const result = deltat_ex(2431232, constants.SEFLG_MOSEPH);
+	 * console.log(result.data); // 0.0003093125751840641
 	 * ```
 	 * &nbsp;
 	 */
@@ -2265,7 +2266,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const deltaT = deltat(2431232); // 0.00032554160173271644
+	 * const deltaT = deltat(2431232); // 0.0003093386847061279
 	 * ```
 	 * &nbsp;
 	 */
@@ -2365,7 +2366,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const mid = rad_midp(0.1, 6.2); // 3.2915926535897933
+	 * const mid = rad_midp(0.1, 6.2); // 0.00840734641020724
 	 * ```
 	 * &nbsp;
 	 */
@@ -2409,7 +2410,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const result = fixStar_mag("Aldebaran");
+	 * const result = fixstar_mag("Aldebaran");
 	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
 	 * console.log(`
 	 *   Star: ${result.name}
@@ -2518,7 +2519,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const result = fixStar2_mag("Aldebaran");
+	 * const result = fixstar2_mag("Aldebaran");
 	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
 	 * console.log(`
 	 *   Star: ${result.name}
@@ -3346,7 +3347,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const date = jdet_to_utc(2415423, constants.GREG_CAL);
+	 * const date = jdet_to_utc(2415423, constants.SE_GREG_CAL);
 	 * console.log(date);
 	 * ```
 	 * &nbsp;
@@ -3374,7 +3375,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const date = jdut1_to_utc(2415423, constants.GREG_CAL);
+	 * const date = jdut1_to_utc(2415423, constants.SE_GREG_CAL);
 	 * console.log(date);
 	 * ```
 	 * &nbsp;
@@ -4232,7 +4233,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const result = rise_trans_true_hor(2555555, constants.SE_MOON, null, constants.SEFLG_SWIEPH, constants.SE_CALC_RISE, [95,40,200], 0, 0);
+	 * const result = rise_trans(2555555, constants.SE_MOON, null, constants.SEFLG_SWIEPH, constants.SE_CALC_RISE, [95,40,200], 0, 0);
 	 * if(result.flag !== constants.OK) { console.log(result.error); }
 	 * console.log(result.data);
 	 * ```
@@ -4769,7 +4770,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const version = version(); // "2.10"
+	 * const currentVersion = version(); // "2.10.03"
 	 * ```
 	 * &nbsp;
 	 */
