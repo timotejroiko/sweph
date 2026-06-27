@@ -5,6 +5,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["set_delta_t_userdef"] = Napi::Function::New(env, sweph_set_delta_t_userdef);
 	exports["set_ephe_path"] = Napi::Function::New(env, sweph_set_ephe_path);
 	exports["set_jpl_file"] = Napi::Function::New(env, sweph_set_jpl_file);
+	exports["set_lapse_rate"] = Napi::Function::New(env, sweph_set_lapse_rate);
 	exports["set_sid_mode"] = Napi::Function::New(env, sweph_set_sid_mode);
 	exports["set_tid_acc"] = Napi::Function::New(env, sweph_set_tid_acc);
 	exports["set_topo"] = Napi::Function::New(env, sweph_set_topo);
@@ -84,6 +85,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["difdegn"] = Napi::Function::New(env, sweph_difdegn);
 	exports["difcs2n"] = Napi::Function::New(env, sweph_difcs2n);
 	exports["difdeg2n"] = Napi::Function::New(env, sweph_difdeg2n);
+	exports["difrad2n"] = Napi::Function::New(env, sweph_difrad2n);
 	exports["deg_midp"] = Napi::Function::New(env, sweph_deg_midp);
 	exports["rad_midp"] = Napi::Function::New(env, sweph_rad_midp);
 	exports["csroundsec"] = Napi::Function::New(env, sweph_csroundsec);

@@ -2334,6 +2334,26 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
+	 * Arc distance between two points in radians normalized to the range -PI to PI
+	 * ### Params
+	 * ```
+	 * • rad1: number // First point in radians
+	 * • rad2: number // Second point in radians
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Distance in radians from -PI to PI
+	 * ```
+	 * ### Example
+	 * ```
+	 * const distance = difrad2n(Math.PI / 2, 0); // 1.5707963267948966
+	 * ```
+	 * &nbsp;
+	 */
+	export function difrad2n(rad1: number, rad2: number): number;
+
+	/**
+	 * ### Description
 	 * Midpoint between two points in degrees
 	 * ### Params
 	 * ```
@@ -4333,6 +4353,21 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function set_tid_acc(t_acc: number): void;
+
+	/**
+	 * ### Description
+	 * Set the atmospheric lapse rate used by the extended refraction calculations
+	 * ### Params
+	 * ```
+	 * • lapse_rate: number // Lapse rate [°K/m]
+	 * ```
+	 * ### Example
+	 * ```
+	 * set_lapse_rate(0.0065);
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_lapse_rate(lapse_rate: number): void;
 
 	/**
 	 * ### Description
