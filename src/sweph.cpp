@@ -85,6 +85,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["difcs2n"] = Napi::Function::New(env, sweph_difcs2n);
 	exports["difdeg2n"] = Napi::Function::New(env, sweph_difdeg2n);
 	exports["deg_midp"] = Napi::Function::New(env, sweph_deg_midp);
+	exports["rad_midp"] = Napi::Function::New(env, sweph_rad_midp);
 	exports["csroundsec"] = Napi::Function::New(env, sweph_csroundsec);
 	exports["d2l"] = Napi::Function::New(env, sweph_d2l);
 	exports["day_of_week"] = Napi::Function::New(env, sweph_day_of_week);

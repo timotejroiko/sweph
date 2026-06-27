@@ -2353,6 +2353,26 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
+	 * Midpoint between two points in radians
+	 * ### Params
+	 * ```
+	 * • rad1: number // First point in radians
+	 * • rad2: number // Second point in radians
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Midpoint in radians
+	 * ```
+	 * ### Example
+	 * ```
+	 * const mid = rad_midp(0.1, 6.2); // 3.2915926535897933
+	 * ```
+	 * &nbsp;
+	 */
+	export function rad_midp(rad1: number, rad2: number): number;
+
+	/**
+	 * ### Description
 	 * Arc distance between two points in degrees in a single direction
 	 * ### Params
 	 * ```
