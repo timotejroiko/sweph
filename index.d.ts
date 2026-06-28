@@ -4296,6 +4296,21 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
+	 * Enable or disable nutation interpolation
+	 * ### Params
+	 * ```
+	 * • do_interpolate: boolean // Enable/disable nutation interpolation
+	 * ```
+	 * ### Example
+	 * ```
+	 * set_interpolate_nut(true);
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_interpolate_nut(do_interpolate: boolean): void;
+
+	/**
+	 * ### Description
 	 * Set JPL file  
 	 * File must be placed in the ephemeris path
 	 * ### Params

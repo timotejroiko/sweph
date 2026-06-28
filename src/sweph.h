@@ -8,6 +8,7 @@
 void sweph_close(const Napi::CallbackInfo& info);
 void sweph_set_delta_t_userdef(const Napi::CallbackInfo& info);
 void sweph_set_ephe_path(const Napi::CallbackInfo& info);
+void sweph_set_interpolate_nut(const Napi::CallbackInfo& info);
 void sweph_set_jpl_file(const Napi::CallbackInfo& info);
 void sweph_set_lapse_rate(const Napi::CallbackInfo& info);
 void sweph_set_sid_mode(const Napi::CallbackInfo& info);

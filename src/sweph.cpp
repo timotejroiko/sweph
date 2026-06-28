@@ -4,6 +4,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["close"] = Napi::Function::New(env, sweph_close);
 	exports["set_delta_t_userdef"] = Napi::Function::New(env, sweph_set_delta_t_userdef);
 	exports["set_ephe_path"] = Napi::Function::New(env, sweph_set_ephe_path);
+	exports["set_interpolate_nut"] = Napi::Function::New(env, sweph_set_interpolate_nut);
 	exports["set_jpl_file"] = Napi::Function::New(env, sweph_set_jpl_file);
 	exports["set_lapse_rate"] = Napi::Function::New(env, sweph_set_lapse_rate);
 	exports["set_sid_mode"] = Napi::Function::New(env, sweph_set_sid_mode);

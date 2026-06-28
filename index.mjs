@@ -20,6 +20,7 @@ export const constants = c;
 export const close = s.close;
 export const set_delta_t_userdef = s.set_delta_t_userdef;
 export const set_ephe_path = s.set_ephe_path;
+export const set_interpolate_nut = s.set_interpolate_nut;
 export const set_jpl_file = s.set_jpl_file;
 export const set_lapse_rate = s.set_lapse_rate;
 export const set_sid_mode = s.set_sid_mode;
