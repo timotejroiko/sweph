@@ -24,6 +24,6 @@ Napi::Value sweph_pheno(const Napi::CallbackInfo& info) {
 	Napi::Object obj = Napi::Object::New(env);
 	obj["flag"] = flag;
 	obj["error"] = serr;
-	obj["data"] = sweph_js_array_converter(attr, 5, env);
+	obj["data"] = sweph_js_array_converter(attr, 6, env);
 	return obj;
 }

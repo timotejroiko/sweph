@@ -1734,7 +1734,11 @@ declare module "sweph" {
 		/**
 		 * Apparent magnitude
 		 */
-		magnitude: number
+		magnitude: number,
+		/**
+		 * Geocentric horizontal parallax (Moon only)
+		 */
+		parallax: number
 	]
 
 	export type RefracExtendedData = [
