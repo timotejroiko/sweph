@@ -19,7 +19,7 @@ Napi::Value sweph_helio_cross(const Napi::CallbackInfo& info) {
 	int32 flag = swe_helio_cross(
 		info[0].As<Napi::Number>().Int32Value(),
 		info[1].As<Napi::Number>().DoubleValue(),
-		info[2].As<Napi::Number>().Int32Value(),
+		info[2].As<Napi::Number>().DoubleValue(),
 		info[3].As<Napi::Number>().Int32Value(),
 		info[4].As<Napi::Number>().Int32Value(),
 		&jd_cross,
