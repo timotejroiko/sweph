@@ -3,7 +3,7 @@
 constexpr std::pair<int, const char*> args[] = {
 	{ 2, "Expecting 2 arguments: tjd_ut, ifl" },
 	{ NUMBER, "Argument 1 should be a number - julian day in universal time" },
-	{ NUMBER, "Argument 2 should be a number - target object ID" }
+	{ NUMBER, "Argument 2 should be a number - ephemeris flag" }
 };
 
 Napi::Value sweph_sol_eclipse_where(const Napi::CallbackInfo& info) {

@@ -898,7 +898,7 @@ declare module "sweph" {
 		/**
 		 * First time object is visible:number, according to VR in JD
 		 */
-		TfistVR: number,
+		TfirstVR: number,
 		/**
 		 * optimum time the object is visible:number, according to VR in JD
 		 */
@@ -1118,15 +1118,15 @@ declare module "sweph" {
 		 */
 		equasc: number,
 		/**
-		 * Longitude of Walter Koch's Co-Ascendant
+		 * Longitude of the Co-ascendant (W. Koch)
 		 */
 		coasc1: number,
 		/**
-		 * Longitude of Michael Munkasey's Co-Ascendant
+		 * Longitude of the Co-ascendant (M. Munkasey)
 		 */
 		coasc2: number,
 		/**
-		 * Longitude of Michael Munkasey's Polar Ascendant
+		 * Longitude of the Polar Ascendant (M. Munkasey)
 		 */
 		polasc: number
 	]
@@ -1204,15 +1204,15 @@ declare module "sweph" {
 		 */
 		equasc_speed: number,
 		/**
-		 * Momentary speed of Walter Koch's Co-Ascendant
+		 * Momentary speed of the Co-ascendant (W. Koch)
 		 */
 		coasc1_speed: number,
 		/**
-		 * Momentary speed of Michael Munkasey's Co-Ascendant
+		 * Momentary speed of the Co-ascendant (M. Munkasey)
 		 */
 		coasc2_speed: number,
 		/**
-		 * Momentary speed of Michael Munkasey's Polar Ascendant
+		 * Momentary speed of the Polar Ascendant (M. Munkasey)
 		 */
 		polasc_speed: number
 	]
@@ -2741,7 +2741,7 @@ declare module "sweph" {
 	 * Get ayanamsa value from universal time without nutation
 	 * ### Params
 	 * ```
-	 * • tjd_et: number // Julian day in universal time
+	 * • tjd_ut: number // Julian day in universal time
 	 * ```
 	 * ### Returns
 	 * ```
@@ -2925,7 +2925,7 @@ declare module "sweph" {
 	 *     ARCLact, // actual longitude difference between object and sun in degrees
 	 *     kact, // extinction coefficient
 	 *     minTAV, // smallest topocentric arcus visionis in degrees
-	 *     TfistVR, // first time object is visible, according to VR in JD
+	 *     TfirstVR, // first time object is visible, according to VR in JD
 	 *     TbVR, // optimum time the object is visible, according to VR in JD
 	 *     TlastVR, // last time object is visible, according to VR in JD
 	 *     TbYallop, // best time the object is visible, according to Yallop in JD
@@ -4530,7 +4530,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function sol_eclipse_when_glob(tjd_start: number, ifl: number, iftype: number, backwards: number): EclipseWhenGlob;
+	export function sol_eclipse_when_glob(tjd_start: number, ifl: number, iftype: number, backwards: boolean): EclipseWhenGlob;
 
 	/**
 	 * ### Description
