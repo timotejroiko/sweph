@@ -2818,6 +2818,27 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
+	 * Get a verbose description of the active astronomical models
+	 * ### Params
+	 * ```
+	 * • samod: string // Comma separated model string, SE version preset, or "+" variant
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Returns
+	 * ```
+	 * string // Verbose report from Swiss Ephemeris
+	 * ```
+	 * ### Example
+	 * ```
+	 * const details = get_astro_models("SE2.06", 0);
+	 * console.log(details);
+	 * ```
+	 * &nbsp;
+	 */
+	export function get_astro_models(samod: string, iflag: number): string;
+
+	/**
+	 * ### Description
 	 * Get an object's orbital elements for a given date in ephemeris/terrestrial time
 	 * ### Params
 	 * ```
@@ -4352,6 +4373,23 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function set_sid_mode(sid_mode: number, t0: number, ayan_t0: number): void;
+
+	/**
+	 * ### Description
+	 * Set internal astronomical model overrides
+	 * ### Params
+	 * ```
+	 * • samod: string // Comma separated model string or SE version preset
+	 * • iflag: number // Calculation flags
+	 * ```
+	 * ### Example
+	 * ```
+	 * set_astro_models("SE2.06", 0);
+	 * set_astro_models("5,9,9,4,3,0,0,4", 0);
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_astro_models(samod: string, iflag: number): void;
 
 	/**
 	 * ### Description
