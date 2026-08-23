@@ -870,7 +870,7 @@ declare module "sweph" {
 		/**
 		 * First time object is visible:number, according to VR in JD
 		 */
-		TfistVR: number,
+		TfirstVR: number,
 		/**
 		 * optimum time the object is visible:number, according to VR in JD
 		 */
@@ -1090,15 +1090,15 @@ declare module "sweph" {
 		 */
 		equasc: number,
 		/**
-		 * Longitude of Walter Koch's Co-Ascendant
+		 * Longitude of the Co-ascendant (W. Koch)
 		 */
 		coasc1: number,
 		/**
-		 * Longitude of Michael Munkasey's Co-Ascendant
+		 * Longitude of the Co-ascendant (M. Munkasey)
 		 */
 		coasc2: number,
 		/**
-		 * Longitude of Michael Munkasey's Polar Ascendant
+		 * Longitude of the Polar Ascendant (M. Munkasey)
 		 */
 		polasc: number
 	]
@@ -1176,15 +1176,15 @@ declare module "sweph" {
 		 */
 		equasc_speed: number,
 		/**
-		 * Momentary speed of Walter Koch's Co-Ascendant
+		 * Momentary speed of the Co-ascendant (W. Koch)
 		 */
 		coasc1_speed: number,
 		/**
-		 * Momentary speed of Michael Munkasey's Co-Ascendant
+		 * Momentary speed of the Co-ascendant (M. Munkasey)
 		 */
 		coasc2_speed: number,
 		/**
-		 * Momentary speed of Michael Munkasey's Polar Ascendant
+		 * Momentary speed of the Polar Ascendant (M. Munkasey)
 		 */
 		polasc_speed: number
 	]
@@ -1706,7 +1706,11 @@ declare module "sweph" {
 		/**
 		 * Apparent magnitude
 		 */
-		magnitude: number
+		magnitude: number,
+		/**
+		 * Geocentric horizontal parallax (Moon only)
+		 */
+		parallax: number
 	]
 
 	export type RefracExtendedData = [
@@ -2072,7 +2076,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const time = cs2timestr(2345464, ":", true); // "6:30:55"
+	 * const time = cs2timestr(2345464, ":", true); // "06:30:55"
 	 * ```
 	 * &nbsp;
 	 */
@@ -2305,6 +2309,66 @@ declare module "sweph" {
 
 	/**
 	 * ### Description
+	 * Arc distance between two points in radians normalized to the range -PI to PI
+	 * ### Params
+	 * ```
+	 * • rad1: number // First point in radians
+	 * • rad2: number // Second point in radians
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Distance in radians from -PI to PI
+	 * ```
+	 * ### Example
+	 * ```
+	 * const distance = difrad2n(Math.PI / 2, 0); // 1.5707963267948966
+	 * ```
+	 * &nbsp;
+	 */
+	export function difrad2n(rad1: number, rad2: number): number;
+
+	/**
+	 * ### Description
+	 * Midpoint between two points in degrees
+	 * ### Params
+	 * ```
+	 * • deg1: number // First point in degrees
+	 * • deg2: number // Second point in degrees
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Midpoint in degrees
+	 * ```
+	 * ### Example
+	 * ```
+	 * const mid = deg_midp(10, 350); // 0
+	 * ```
+	 * &nbsp;
+	 */
+	export function deg_midp(deg1: number, deg2: number): number;
+
+	/**
+	 * ### Description
+	 * Midpoint between two points in radians
+	 * ### Params
+	 * ```
+	 * • rad1: number // First point in radians
+	 * • rad2: number // Second point in radians
+	 * ```
+	 * ### Returns
+	 * ```
+	 * number // Midpoint in radians
+	 * ```
+	 * ### Example
+	 * ```
+	 * const mid = rad_midp(0.1, 6.2); // 0.00840734641020724
+	 * ```
+	 * &nbsp;
+	 */
+	export function rad_midp(rad1: number, rad2: number): number;
+
+	/**
+	 * ### Description
 	 * Arc distance between two points in degrees in a single direction
 	 * ### Params
 	 * ```
@@ -2341,7 +2405,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const result = fixStar_mag("Aldebaran");
+	 * const result = fixstar_mag("Aldebaran");
 	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
 	 * console.log(`
 	 *   Star: ${result.name}
@@ -2450,7 +2514,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const result = fixStar2_mag("Aldebaran");
+	 * const result = fixstar2_mag("Aldebaran");
 	 * if(result.flag !== constants.OK) { throw new Error(result.error); }
 	 * console.log(`
 	 *   Star: ${result.name}
@@ -2648,7 +2712,7 @@ declare module "sweph" {
 	 * Get ayanamsa value from universal time without nutation
 	 * ### Params
 	 * ```
-	 * • tjd_et: number // Julian day in universal time
+	 * • tjd_ut: number // Julian day in universal time
 	 * ```
 	 * ### Returns
 	 * ```
@@ -2832,7 +2896,7 @@ declare module "sweph" {
 	 *     ARCLact, // actual longitude difference between object and sun in degrees
 	 *     kact, // extinction coefficient
 	 *     minTAV, // smallest topocentric arcus visionis in degrees
-	 *     TfistVR, // first time object is visible, according to VR in JD
+	 *     TfirstVR, // first time object is visible, according to VR in JD
 	 *     TbVR, // optimum time the object is visible, according to VR in JD
 	 *     TlastVR, // last time object is visible, according to VR in JD
 	 *     TbYallop, // best time the object is visible, according to Yallop in JD
@@ -3220,7 +3284,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const date = jdet_to_utc(2415423, constants.GREG_CAL);
+	 * const date = jdet_to_utc(2415423, constants.SE_GREG_CAL);
 	 * console.log(date);
 	 * ```
 	 * &nbsp;
@@ -3248,7 +3312,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const date = jdut1_to_utc(2415423, constants.GREG_CAL);
+	 * const date = jdut1_to_utc(2415423, constants.SE_GREG_CAL);
 	 * console.log(date);
 	 * ```
 	 * &nbsp;
@@ -3996,7 +4060,7 @@ declare module "sweph" {
 	 * ```
 	 * ### Example
 	 * ```
-	 * const result = rise_trans_true_hor(2555555, constants.SE_MOON, null, constants.SEFLG_SWIEPH, constants.SE_CALC_RISE, [95,40,200], 0, 0);
+	 * const result = rise_trans(2555555, constants.SE_MOON, null, constants.SEFLG_SWIEPH, constants.SE_CALC_RISE, [95,40,200], 0, 0);
 	 * if(result.flag !== constants.OK) { console.log(result.error); }
 	 * console.log(result.data);
 	 * ```
@@ -4036,6 +4100,21 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function set_ephe_path(path: string): void;
+
+	/**
+	 * ### Description
+	 * Enable or disable nutation interpolation
+	 * ### Params
+	 * ```
+	 * • do_interpolate: boolean // Enable/disable nutation interpolation
+	 * ```
+	 * ### Example
+	 * ```
+	 * set_interpolate_nut(true);
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_interpolate_nut(do_interpolate: boolean): void;
 
 	/**
 	 * ### Description
@@ -4096,6 +4175,21 @@ declare module "sweph" {
 	 * &nbsp;
 	 */
 	export function set_tid_acc(t_acc: number): void;
+
+	/**
+	 * ### Description
+	 * Set the atmospheric lapse rate used by the extended refraction calculations
+	 * ### Params
+	 * ```
+	 * • lapse_rate: number // Lapse rate [°K/m]
+	 * ```
+	 * ### Example
+	 * ```
+	 * set_lapse_rate(0.0065);
+	 * ```
+	 * &nbsp;
+	 */
+	export function set_lapse_rate(lapse_rate: number): void;
 
 	/**
 	 * ### Description
@@ -4239,7 +4333,7 @@ declare module "sweph" {
 	 * ```
 	 * &nbsp;
 	 */
-	export function sol_eclipse_when_glob(tjd_start: number, ifl: number, iftype: number, backwards: number): EclipseWhenGlob;
+	export function sol_eclipse_when_glob(tjd_start: number, ifl: number, iftype: number, backwards: boolean): EclipseWhenGlob;
 
 	/**
 	 * ### Description

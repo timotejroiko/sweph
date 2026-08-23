@@ -18,7 +18,7 @@ Napi::Value sweph_fixstar_ut(const Napi::CallbackInfo& info) {
 	strcpy(star, info[0].As<Napi::String>().Utf8Value().c_str());
 	int32 flag = swe_fixstar_ut(
 		star,
-		info[1].As<Napi::Number>().Int32Value(),
+		info[1].As<Napi::Number>().DoubleValue(),
 		info[2].As<Napi::Number>().Int32Value(),
 		xx,
 		serr

@@ -2,7 +2,7 @@
 
 constexpr std::pair<int, const char*> args[] = {
 	{ 6, "Expecting 6 arguments: tjd_ut, dgeo, datm, dobs, objectname, helflag" },
-	{ NUMBER, "Argument 1 should be a number - full year" },
+	{ NUMBER, "Argument 1 should be a number - julian day in universal time" },
 	{ ARRAY, "Argument 2 should be an array of 3 numbers - geographic coordinates [longitude, latitude, elevation]" },
 	{ ARRAY, "Argument 3 should be an array of 4 numbers - atmospheric conditions [pressure, temperature, humidity, meteorological range]" },
 	{ ARRAY, "Argument 4 should be an array of 6 numbers - observer description [age, sellen ratio, optical type, optical magnification, optical aperture, optical transmission]" },
