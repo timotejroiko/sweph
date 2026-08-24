@@ -8,11 +8,13 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["set_jpl_file"] = Napi::Function::New(env, sweph_set_jpl_file);
 	exports["set_lapse_rate"] = Napi::Function::New(env, sweph_set_lapse_rate);
 	exports["set_sid_mode"] = Napi::Function::New(env, sweph_set_sid_mode);
+	exports["set_astro_models"] = Napi::Function::New(env, sweph_set_astro_models);
 	exports["set_tid_acc"] = Napi::Function::New(env, sweph_set_tid_acc);
 	exports["set_topo"] = Napi::Function::New(env, sweph_set_topo);
 	exports["version"] = Napi::Function::New(env, sweph_version);
 	exports["get_library_path"] = Napi::Function::New(env, sweph_get_library_path);
 	exports["get_tid_acc"] = Napi::Function::New(env, sweph_get_tid_acc);
+	exports["get_astro_models"] = Napi::Function::New(env, sweph_get_astro_models);
 	exports["get_planet_name"] = Napi::Function::New(env, sweph_get_planet_name);
 	exports["get_current_file_data"] = Napi::Function::New(env, sweph_get_current_file_data);
 	exports["get_orbital_elements"] = Napi::Function::New(env, sweph_get_orbital_elements);
