@@ -2801,6 +2801,12 @@ declare module "sweph" {
 	export function get_current_file_data(ifno: number): GetCurrentFileData;
 
 	/**
+	 * Get the JPL Development Ephemeris number used to generate the open Swiss
+	 * Ephemeris planet file. Returns the default (441) when no planet file is open.
+	 */
+	export function get_denum(): number;
+
+	/**
 	 * ### Description
 	 * Get library path  
 	 * Returns the location of the node executable
@@ -5122,15 +5128,19 @@ declare module "sweph" {
 		SE_HOR2EQU: 1,
 		SE_TRUE_TO_APP: 0,
 		SE_APP_TO_TRUE: 1,
-		SE_DE_NUMBER: 431,
+		SE_DE_NUMBER: 441,
+		SE3_DE_NUMBER: 441,
 		SE_FNAME_DE200: "de200.eph",
 		SE_FNAME_DE403: "de403.eph",
 		SE_FNAME_DE404: "de404.eph",
 		SE_FNAME_DE405: "de405.eph",
 		SE_FNAME_DE406: "de406.eph",
 		SE_FNAME_DE431: "de431.eph",
-		SE_FNAME_DFT: "de431.eph",
+		SE_FNAME_DE441: "de441.eph",
+		SE_FNAME_DFT: "de441.eph",
+		/** @deprecated Use SE_FNAME_DE406 to select this file explicitly. */
 		SE_FNAME_DFT2: "de406.eph",
+		SE_FNAME_DFT3: "de441.eph",
 		SE_STARFILE_OLD: "fixstars.cat",
 		SE_STARFILE: "sefstars.txt",
 		SE_ASTNAMFILE: "seasnam.txt",
@@ -5180,14 +5190,16 @@ declare module "sweph" {
 		SE_TIDAL_DE422: -25.85,
 		SE_TIDAL_DE430: -25.82,
 		SE_TIDAL_DE431: -25.8,
+		SE_TIDAL_DE441: -25.936,
 		SE_TIDAL_26: -26,
 		SE_TIDAL_STEPHENSON_2016: -25.85,
-		SE_TIDAL_DEFAULT: -25.8,
+		SE_TIDAL_STEPHENSON_2020: -25.82,
+		SE_TIDAL_DEFAULT: -25.936,
 		SE_TIDAL_AUTOMATIC: 999999,
 		SE_TIDAL_MOSEPH: -25.58,
-		SE_TIDAL_SWIEPH: -25.8,
-		SE_TIDAL_JPLEPH: -25.8,
-		SE_DELTAT_AUTOMATIC: 0.0000000001,
+		SE_TIDAL_SWIEPH: -25.936,
+		SE_TIDAL_JPLEPH: -25.936,
+		SE_DELTAT_AUTOMATIC: -0.0000000001,
 		SE_MODEL_DELTAT: 0,
 		SE_MODEL_PREC_LONGTERM: 1,
 		SE_MODEL_PREC_SHORTTERM: 2,
@@ -5237,12 +5249,13 @@ declare module "sweph" {
 		SEMOD_JPLHORA_2: 2,
 		SEMOD_JPLHORA_3: 3,
 		SEMOD_JPLHORA_DEFAULT: 3,
-		SEMOD_NDELTAT: 5,
+		SEMOD_NDELTAT: 6,
 		SEMOD_DELTAT_STEPHENSON_MORRISON_1984: 1,
 		SEMOD_DELTAT_STEPHENSON_1997: 2,
 		SEMOD_DELTAT_STEPHENSON_MORRISON_2004: 3,
 		SEMOD_DELTAT_ESPENAK_MEEUS_2006: 4,
 		SEMOD_DELTAT_STEPHENSON_ETC_2016: 5,
-		SEMOD_DELTAT_DEFAULT: 5
+		SEMOD_DELTAT_STEPHENSON_ETC_2020: 6,
+		SEMOD_DELTAT_DEFAULT: 6
 	}
 }

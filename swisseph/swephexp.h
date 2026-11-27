@@ -374,15 +374,17 @@ extern "C" {
  * only used for experimenting with various JPL ephemeris files
  * which are available at Astrodienst's internal network
  */
-#define SE_DE_NUMBER    431
+#define SE_DE_NUMBER    441
+#define SE3_DE_NUMBER   441
 #define SE_FNAME_DE200  "de200.eph"
 #define SE_FNAME_DE403  "de403.eph"
 #define SE_FNAME_DE404  "de404.eph"
 #define SE_FNAME_DE405  "de405.eph"
 #define SE_FNAME_DE406  "de406.eph"
 #define SE_FNAME_DE431  "de431.eph"
-#define SE_FNAME_DFT    SE_FNAME_DE431
-#define SE_FNAME_DFT2   SE_FNAME_DE406
+#define SE_FNAME_DE441  "de441.eph"
+#define SE_FNAME_DFT    SE_FNAME_DE441
+#define SE_FNAME_DFT3    SE_FNAME_DE441
 #define SE_STARFILE_OLD "fixstars.cat"
 #define SE_STARFILE     "sefstars.txt"
 #define SE_ASTNAMFILE   "seasnam.txt"
@@ -400,7 +402,7 @@ extern "C" {
 #if MSDOS
 #  define SE_EPHE_PATH    "\\sweph\\ephe\\"
 #else
-#  define SE_EPHE_PATH    ".:/users/ephe2/:/users/ephe/"
+#  define SE_EPHE_PATH    ".:/home/ephe/"
     /* At Astrodienst, we maintain two ephemeris areas for the 600'000+  asteroid files: 
        the short files in /users/ephe/ast*, the long file in /users/ephe2/ast*.
        /users  is a synonym for /home on many systems */
@@ -484,10 +486,11 @@ extern "C" {
 #define SE_TIDAL_DE422          (-25.85)   /* JPL Interoffice Memorandum 14-mar-2008 on DE421 (sic!) Lunar Orbit */
 #define SE_TIDAL_DE430          (-25.82)   /* JPL Interoffice Memorandum 9-jul-2013 on DE430 Lunar Orbit */
 #define SE_TIDAL_DE431          (-25.80)   /* IPN Progress Report 42-196 • February 15, 2014, p. 15; was (-25.82) in V. 2.00.00 */
-#define SE_TIDAL_DE441          (-25.936)   /* unpublished value, from email by Jon Giorgini to DK on 11 Apr 2021 */
+#define SE_TIDAL_DE441          (-25.936)   /* from an email by Jon Giorgini to DK on 11 Apr 2021 */
 #define SE_TIDAL_26             (-26.0)
 #define SE_TIDAL_STEPHENSON_2016             (-25.85)
-#define SE_TIDAL_DEFAULT        SE_TIDAL_DE431
+#define SE_TIDAL_STEPHENSON_2020           (-25.82) /* mail from Jon Giorgini to DK on 8-Oct-2026 */
+#define SE_TIDAL_DEFAULT        SE_TIDAL_DE441
 #define SE_TIDAL_AUTOMATIC             999999
 #define SE_TIDAL_MOSEPH                SE_TIDAL_DE404
 #define SE_TIDAL_SWIEPH                SE_TIDAL_DEFAULT
@@ -596,14 +599,15 @@ extern "C" {
  * Horizons over its whole time range.
  */
 
-#define SEMOD_NDELTAT		5
+#define SEMOD_NDELTAT		6
 #define SEMOD_DELTAT_STEPHENSON_MORRISON_1984   1
 #define SEMOD_DELTAT_STEPHENSON_1997   2
 #define SEMOD_DELTAT_STEPHENSON_MORRISON_2004   3
 #define SEMOD_DELTAT_ESPENAK_MEEUS_2006   4
 #define SEMOD_DELTAT_STEPHENSON_ETC_2016   5
+#define SEMOD_DELTAT_STEPHENSON_ETC_2020   6
 //#define SEMOD_DELTAT_DEFAULT   SEMOD_DELTAT_ESPENAK_MEEUS_2006
-#define SEMOD_DELTAT_DEFAULT   SEMOD_DELTAT_STEPHENSON_ETC_2016
+#define SEMOD_DELTAT_DEFAULT   SEMOD_DELTAT_STEPHENSON_ETC_2020
 
 /**************************************************************
  * here follow some ugly definitions which are only required
@@ -691,6 +695,7 @@ ext_def(void) swe_get_astro_models(char *samod, char *sdet, int32 iflag);
  ****************************/
 
 ext_def(char *) swe_version(char *);
+ext_def(int32) swe_get_denum(void);
 ext_def(char *) swe_get_library_path(char *);
 
 /* planets, moon, nodes etc. */

@@ -12,6 +12,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 	exports["set_tid_acc"] = Napi::Function::New(env, sweph_set_tid_acc);
 	exports["set_topo"] = Napi::Function::New(env, sweph_set_topo);
 	exports["version"] = Napi::Function::New(env, sweph_version);
+	exports["get_denum"] = Napi::Function::New(env, sweph_get_denum);
 	exports["get_library_path"] = Napi::Function::New(env, sweph_get_library_path);
 	exports["get_tid_acc"] = Napi::Function::New(env, sweph_get_tid_acc);
 	exports["get_astro_models"] = Napi::Function::New(env, sweph_get_astro_models);

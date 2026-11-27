@@ -62,7 +62,7 @@
  * move over from swephexp.h
  */
 
-#define SE_VERSION      "2.10.03" 
+#define SE_VERSION      "2.10.04" 
 
 #define J2000           2451545.0  	/* 2000 January 1.5 */
 #define B1950           2433282.42345905  	/* 1950 January 0.923 */
@@ -190,6 +190,7 @@
 #define SEI_FILE_EFPOSBEGIN      500
 
 #define SE_FILE_SUFFIX	"se1"
+#define SE3_FILE_SUFFIX	"se3"
 
 #define SEI_NEPHFILES   7
 #define SEI_CURR_FPOS   -1
@@ -714,6 +715,8 @@ struct file_data {
   FILE *fptr;		/* ephemeris file pointer */
   double tfstart;       /* file may be used from this date */
   double tfend;         /*      through this date          */
+  double tnom0;         /* dates this open file serves, [tnom0, tnom1):  */
+  double tnom1;         /* its nominal range, with the first-day rule    */
   int32 iflg; 		/* byte reorder flag and little/bigendian flag */
   short npl;		/* how many planets in file */
   int ipl[SEI_FILE_NMAXPLAN];	/* planet numbers */

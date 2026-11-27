@@ -28,6 +28,7 @@ export const set_astro_models = s.set_astro_models;
 export const set_tid_acc = s.set_tid_acc;
 export const set_topo = s.set_topo;
 export const version = s.version;
+export const get_denum = s.get_denum;
 export const get_library_path = s.get_library_path;
 export const get_tid_acc = s.get_tid_acc;
 export const get_astro_models = s.get_astro_models;

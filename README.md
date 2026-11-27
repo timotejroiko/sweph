@@ -38,8 +38,7 @@ This library is version locked to the Swiss Ephemeris in addition to its own rev
 
 Updates to this library will be released under new revisions, while updates to Swiss Ephemeris will be released under matching SemVer versions.
 
-**Current Version: 2.10.3-7**  
-**Equivalent to Swiss Ephemeris version: 2.10.03 revision 7**
+**Current Version: 2.10.4** (Swiss Ephemeris 2.10.04)
 
 ## Documentation
 

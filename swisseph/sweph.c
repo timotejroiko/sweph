@@ -182,6 +182,7 @@ static const int pnoint2jpl[]   = PNOINT2JPL;
 static const int pnoext2int[] = {SEI_SUN, SEI_MOON, SEI_MERCURY, SEI_VENUS, SEI_MARS, SEI_JUPITER, SEI_SATURN, SEI_URANUS, SEI_NEPTUNE, SEI_PLUTO, 0, 0, 0, 0, SEI_EARTH, SEI_CHIRON, SEI_PHOLUS, SEI_CERES, SEI_PALLAS, SEI_JUNO, SEI_VESTA, };
 
 static int32 swecalc(double tjd, int ipl, int iplmoon, int32 iflag, double *x, char *serr);
+static char *jd_and_date(double tjd, char *s);
 static int do_fread(void *targ, int size, int count, int corrsize, 
 		    FILE *fp, int32 fpos, int freord, int fendian, int ifno, 
 		    char *serr);
@@ -223,6 +224,7 @@ static int app_pos_rest(struct plan_data *pdp, int32 iflag,
     double *xx, double *x2000, struct epsilon *oe, char *serr);
 static int open_jpl_file(double *ss, char *fname, char *fpath, char *serr);
 static void free_planets(void);
+static void gen_filename_range(double tjd, int ipli, double *tnom0, double *tnom1);
 
 #ifdef TRACE
 static void trace_swe_calc(int param, double tjd, int ipl, int32 iflag, double *xx, char *serr);
@@ -237,61 +239,61 @@ char *CALL_CONV swe_version(char *s)
   return s;
 }
 
-#ifndef NO_SWE_GLP	// -DNO_SWE_GLP to suppress this function
+int32 CALL_CONV swe_get_denum(void)
+{
+  return swi_get_denum(SEI_SUN, 0);
+}
+
+#ifndef NO_SWE_GLP      // -DNO_SWE_GLP to suppress this function
 #if MSDOS
 HANDLE dllhandle = NULL;        // global used in swe_version
-				// if DLL, set by DllMain()
-#else		
+                                // if DLL, set by DllMain()
+#else
 #ifdef __GNUC__
-// The following define is actually forbidden. 
+// The following define is actually forbidden.
 // It would be better to compile with -D_GNU_SOURCE.
 #ifndef __USE_GNU
 #define __USE_GNU
 #endif
-#include <dlfcn.h>		// must be linked with -ldl
-  static Dl_info dli;
+#include <dlfcn.h>              // must be linked with -ldl
 #endif
+#include <stdlib.h>             // realpath(), free()
 #endif // MSDOS
-
+// Returns the path of the library (of the executable, if statically
+// linked), with symbolic links resolved. s must hold AS_MAXCH bytes.
 char *CALL_CONV swe_get_library_path(char *s)
 {
-  size_t bytes;
-  size_t len;
   *s = '\0';
-#if !defined(__APPLE) 
-  len = AS_MAXCH;
-  bytes = 0;
+#if !defined(__APPLE)
 #if MSDOS
-  bytes = GetModuleFileName((HMODULE) dllhandle, (TCHAR*) s, (DWORD) len);
+  DWORD n = GetModuleFileName((HMODULE) dllhandle, (TCHAR*) s, (DWORD) AS_MAXCH);
+  if (n >= AS_MAXCH) n = AS_MAXCH - 1;  // truncated
+  s[n] = '\0';
 #else
-  #ifdef __GNUC__
-    if (dladdr((void *)swe_version, &dli) != 0) {
-      if (strlen(dli.dli_fname) >= len) {
-	strncpy(s, dli.dli_fname, len);
-	s[len] = '\0';
-      } else{
-	strcpy(s, dli.dli_fname);
-      }
-      bytes = strlen(s);
-    } else {
-      bytes = readlink("/proc/self/exe", s, len);
-    }
-  #else
-    bytes = readlink("/proc/self/exe", s, len);
-  #endif
+  const char *name = "/proc/self/exe";
+  char *rp;
+#ifdef __GNUC__
+  Dl_info dli;
+  if (dladdr((void *) swe_version, &dli) != 0 && dli.dli_fname != NULL)
+    name = dli.dli_fname;
 #endif
-  s[bytes] = '\0';
+  rp = realpath(name, NULL);            // resolves all symlinks, malloc'd
+  strncpy(s, rp != NULL ? rp : name, AS_MAXCH - 1);
+  s[AS_MAXCH - 1] = '\0';
+  free(rp);
+#endif
 #endif
   return s;
 }
-#else	// NO_SWE_GLP
+#else   // NO_SWE_GLP
 // we need this function because swetest requires it
 char *CALL_CONV swe_get_library_path(char *s)
 {
   *s = '\0';
   return s;
 }
-#endif	// NO_SWE_GLP
+#endif  // NO_SWE_GLP
+
 
 /* The routine called by the user.
  * It checks whether a position for the same planet, the same t, and the
@@ -306,7 +308,31 @@ char *CALL_CONV swe_get_library_path(char *s)
  * program tests only.
  * -> If no speed flag has been specified, no speed will be returned.
  */
+/* date of the current swe_calc() call. sweph() chooses the ephemeris file
+ * by this date also for the other positions computed in the same call,
+ * e.g. the light-time corrected ones, which are computed for slightly
+ * earlier dates. Otherwise, near the start of a file, a true position and
+ * its light-time corrected position could come from two different files;
+ * for the Moon this gave errors of up to 13 mas (2026-11-22). */
+static TLS double tjd_calc = 0;
+static TLS AS_BOOL have_tjd_calc = FALSE;
+static int32 swecalc_1(double tjd, int ipl, int32 iflag, double *xx, char *serr);
+
 int32 CALL_CONV swe_calc(double tjd, int ipl, int32 iflag, 
+	double *xx, char *serr) 
+{
+  int32 retc;
+  double tjd_calc_sv = tjd_calc;
+  AS_BOOL have_tjd_calc_sv = have_tjd_calc;
+  tjd_calc = tjd;
+  have_tjd_calc = TRUE;
+  retc = swecalc_1(tjd, ipl, iflag, xx, serr);
+  tjd_calc = tjd_calc_sv;
+  have_tjd_calc = have_tjd_calc_sv;
+  return retc;
+}
+
+static int32 swecalc_1(double tjd, int ipl, int32 iflag, 
 	double *xx, char *serr) 
 {
   int i, j;
@@ -724,8 +750,18 @@ static int32 swecalc(double tjd, int ipl, int32 iplmoon, int32 iflag, double *x,
 	break;
     } 
     /* heliocentric, lighttime etc. */
-    if ((retc = app_pos_etc_moon(iflag, serr)) != OK)
+    if ((retc = app_pos_etc_moon(iflag, serr)) != OK) {
+      /* light-time point beyond the range of the JPL file: Moshier, as
+       * main_planet() does for the planets (2026-11-19) */
+      if (retc == BEYOND_EPH_LIMITS && (iflag & SEFLG_JPLEPH)
+	&& tjd > MOSHLUEPH_START && tjd < MOSHLUEPH_END) {
+	iflag = (iflag & ~SEFLG_JPLEPH) | SEFLG_MOSEPH;
+	if (serr != NULL && strlen(serr) + 30 < AS_MAXCH)
+	  strcat(serr, " \nusing Moshier Eph; ");
+	goto moshier_moon;
+      }
       goto return_error; /* retc may be wrong with sidereal calculation */
+    }
   /********************************************** 
    * barycentric sun                            * 
    * (only JPL and SWISSEPH ephemerises)        *
@@ -978,9 +1014,11 @@ static int32 swecalc(double tjd, int ipl, int32 iplmoon, int32 iflag, double *x,
     if (tjd < MOSHLUEPH_START || tjd > MOSHLUEPH_END) {
       for (i = 0; i < 24; i++)
 	x[i] = 0;
-      if (serr != NULL)
-	sprintf(serr, "Interpolated apsides are restricted to JD %8.1f - JD %8.1f",
-		MOSHLUEPH_START, MOSHLUEPH_END);
+      if (serr != NULL) {
+	char sd0[60], sd1[60], sd2[60];
+	sprintf(serr, "interpolated apsides not available at %s; restricted to %s - %s",
+		jd_and_date(tjd, sd0), jd_and_date(MOSHLUEPH_START, sd1), jd_and_date(MOSHLUEPH_END, sd2));
+      }
       return ERR;
     }
     ndp = &swed.nddat[SEI_INTP_APOG];
@@ -1002,9 +1040,11 @@ static int32 swecalc(double tjd, int ipl, int32 iplmoon, int32 iflag, double *x,
     if (tjd < MOSHLUEPH_START || tjd > MOSHLUEPH_END) {
       for (i = 0; i < 24; i++)
 	x[i] = 0;
-      if (serr != NULL)
-	sprintf(serr, "Interpolated apsides are restricted to JD %8.1f - JD %8.1f",
-		MOSHLUEPH_START, MOSHLUEPH_END);
+      if (serr != NULL) {
+	char sd0[60], sd1[60], sd2[60];
+	sprintf(serr, "interpolated apsides not available at %s; restricted to %s - %s",
+		jd_and_date(tjd, sd0), jd_and_date(MOSHLUEPH_START, sd1), jd_and_date(MOSHLUEPH_END, sd2));
+      }
       return ERR;
     }
     ndp = &swed.nddat[SEI_INTP_PERG];
@@ -1049,16 +1089,19 @@ static int32 swecalc(double tjd, int ipl, int32 iplmoon, int32 iflag, double *x,
       ifno = SEI_FILE_MAIN_AST;
     }
     if (ipli == SEI_CHIRON && (tjd < CHIRON_START || tjd > CHIRON_END)) {
-      if (serr != NULL)
-	sprintf(serr, "Chiron's ephemeris is restricted to JD %8.1f - JD %8.1f",
-		CHIRON_START, CHIRON_END);
+      if (serr != NULL) {
+	char sd0[60], sd1[60], sd2[60];
+	sprintf(serr, "Chiron not available at %s; restricted to %s - %s",
+		jd_and_date(tjd, sd0), jd_and_date(CHIRON_START, sd1), jd_and_date(CHIRON_END, sd2));
+      }
       return ERR;
     }
     if (ipli == SEI_PHOLUS && (tjd < PHOLUS_START || tjd > PHOLUS_END)) {
-      if (serr != NULL)
-	sprintf(serr, 
-		"Pholus's ephemeris is restricted to JD %8.1f - JD %8.1f",
-		PHOLUS_START, PHOLUS_END);
+      if (serr != NULL) {
+	char sd0[60], sd1[60], sd2[60];
+	sprintf(serr, "Pholus not available at %s; restricted to %s - %s",
+		jd_and_date(tjd, sd0), jd_and_date(PHOLUS_START, sd1), jd_and_date(PHOLUS_END, sd2));
+      }
       return ERR;
     }
   do_asteroid:
@@ -1153,6 +1196,35 @@ static int32 swecalc(double tjd, int ipl, int32 iplmoon, int32 iflag, double *x,
   for (i = 0; i < 24; i++)
     x[i] = 0;
   return ERR;
+}
+
+/* nominal range of the ephemeris file that swi_gen_filename() names for
+ * tjd and ipli: the dates [*tnom0, *tnom1) for which it names the same file.
+ * planet, moon and main asteroid files cover NCTIES centuries each and
+ * overlap their neighbours by some days; the other files cover all dates.
+ * the century rule must be the same as in swi_gen_filename(). */
+static void gen_filename_range(double tjd, int ipli, double *tnom0, double *tnom1)
+{
+  int icty, y0, y1;
+  int ncties = (int) NCTIES;
+  int jmon, jday, jyear;
+  double jut;
+  if (ipli < 0 || ipli >= SEI_NPLANETS || ipli == SEI_ANYBODY) {
+    *tnom0 = -1e30;
+    *tnom1 = 1e30;
+    return;
+  }
+  swe_revjul(tjd, tjd >= 2305447.5, &jyear, &jmon, &jday, &jut);
+  icty = jyear / 100;
+  if (jyear < 0 && jyear % 100 != 0)
+    icty -= 1;
+  while (icty % ncties != 0)
+    icty--;
+  y0 = icty * 100;
+  y1 = y0 + ncties * 100;
+  /* swi_gen_filename() uses the gregorian calendar from 1600 on */
+  *tnom0 = swe_julday(y0, 1, 1, 0, y0 >= 1600);
+  *tnom1 = swe_julday(y1, 1, 1, 0, y1 >= 1600);
 }
 
 static void free_planets(void)
@@ -1273,6 +1345,7 @@ void CALL_CONV swe_close(void)
     free(swed.deps);
     swed.deps = NULL;
   }
+  swed.eop_dpsi_loaded = 0;
   if (swed.n_fixstars_records > 0) {
     free(swed.fixed_stars);
     swed.fixed_stars = NULL;
@@ -1307,6 +1380,7 @@ void CALL_CONV swe_close(void)
 #endif  /* TRACE */
 }
 
+#if 1
 /* sets ephemeris file path. 
  * also calls swe_close(). this makes sure that swe_calc()
  * won't return planet positions previously computed from other
@@ -1317,6 +1391,56 @@ void CALL_CONV swe_set_ephe_path(const char *path)
   int i, iflag;
   char s[AS_MAXCH];
   char serr[AS_MAXCH];
+  char *sp;
+  double xx[6], denum = 0;
+  /* close all open files and delete all planetary data */
+  swi_close_keep_topo_etc();
+  swi_init_swed_if_start();
+  swed.ephe_path_is_set = TRUE;
+  /* environment variable SE_EPHE_PATH has priority */
+  if ((sp = getenv("SE_EPHE_PATH")) != NULL 
+    && strlen(sp) != 0
+    && strlen(sp) <= AS_MAXCH-1-13) {
+    strcpy(s, sp);
+  } else if (path == NULL || *path == '\0') {
+    strcpy(s, SE_EPHE_PATH);
+  } else if (strlen(path) <= AS_MAXCH-1-13) {
+    strcpy(s, path);
+  } else {
+    strcpy(s, SE_EPHE_PATH);
+  }
+  i = (int) strlen(s);
+  if (*(s + i - 1) != *DIR_GLUE && *s != '\0')
+    strcat(s, DIR_GLUE);
+  strcpy(swed.ephepath, s);  
+//swe_set_interpolate_nut(TRUE);
+  /* try to open lunar ephemeris, in order to get DE number and set
+   * tidal acceleration of the Moon */
+  iflag = SEFLG_SWIEPH|SEFLG_J2000|SEFLG_TRUEPOS|SEFLG_ICRS;
+  swed.last_epheflag = 2;
+  swe_calc(J2000, SE_MOON, iflag, xx, serr);
+  if (swed.fidat[SEI_FILE_MOON].fptr != NULL) {
+    denum = swed.fidat[SEI_FILE_MOON].sweph_denum;
+  } 
+  swi_close_keep_topo_etc();
+  swed.ephe_path_is_set = TRUE;
+  strcpy(swed.ephepath, s);
+  if (denum > 0) {
+    swed.fidat[SEI_FILE_MOON].sweph_denum = denum;
+    swi_set_tid_acc(0, 0, denum, NULL);
+  }
+}
+
+#else
+/* sets ephemeris file path. 
+ * also calls swe_close(). this makes sure that swe_calc()
+ * won't return planet positions previously computed from other
+ * ephemerides
+ */
+void CALL_CONV swe_set_ephe_path(const char *path) 
+{
+  int i, iflag;
+  char s[AS_MAXCH];
   char *sp;
   double xx[6];
   /* close all open files and delete all planetary data */
@@ -1344,7 +1468,7 @@ void CALL_CONV swe_set_ephe_path(const char *path)
    * tidal acceleration of the Moon */
   iflag = SEFLG_SWIEPH|SEFLG_J2000|SEFLG_TRUEPOS|SEFLG_ICRS;
   swed.last_epheflag = 2;
-  swe_calc(J2000, SE_MOON, iflag, xx, serr);
+  swe_calc(J2000, SE_MOON, iflag, xx, NULL);
   if (swed.fidat[SEI_FILE_MOON].fptr != NULL) {
     swi_set_tid_acc(0, 0, swed.fidat[SEI_FILE_MOON].sweph_denum, NULL);
   } 
@@ -1376,6 +1500,7 @@ void CALL_CONV swe_set_ephe_path(const char *path)
   }
 #endif
 }
+#endif
 
 void load_dpsi_deps(void)
 {
@@ -1443,11 +1568,11 @@ void load_dpsi_deps(void)
       return;
     }
     /* dpsi, deps Bulletin B */
-    dpsi = atof(s + 168);
+    dpsi = atof(s + 167);
     deps = atof(s + 178);
     if (dpsi == 0) {
       /* try dpsi, deps Bulletin A */
-      dpsi = atof(s + 99);
+      dpsi = atof(s + 98);
       deps = atof(s + 118);
     }
     if (dpsi == 0) {
@@ -2105,6 +2230,33 @@ static int jplplan(double tjd, int ipli, int32 iflag, AS_BOOL do_save,
   return (OK);
 }
 
+/* "JD 4825621.5 = 01.07.8500" for messages: Julian day and calendar date
+ * as swetest -fT prints it (dd.mm.yyyy, "j" appended for Julian calendar
+ * dates, i.e. before 15.10.1582, time only if not 0h; tjd is TT);
+ * s needs at least 60 bytes (added 2026-11-19) */
+static char *jd_and_date(double tjd, char *s)
+{
+  int iyear, imon, iday;
+  int32 ih, im, isec, isgn;
+  int gregflag = SE_GREG_CAL;
+  double hour, dsecfr;
+  if (fabs(tjd * 10 - floor(tjd * 10 + 0.5)) < 1e-6)
+    sprintf(s, "JD %.1f = ", tjd);
+  else
+    sprintf(s, "JD %.6f = ", tjd);
+  if (tjd < 2299160.5)
+    gregflag = SE_JUL_CAL;
+  swe_revjul(tjd, gregflag, &iyear, &imon, &iday, &hour);
+  sprintf(s + strlen(s), "%02d.%02d.%04d", iday, imon, iyear);
+  if (gregflag == SE_JUL_CAL)
+    strcat(s, "j");
+  if (hour != 0) {
+    swe_split_deg(hour, SE_SPLIT_DEG_ROUND_SEC, &ih, &im, &isec, &dsecfr, &isgn);
+    sprintf(s + strlen(s), " %d:%02d:%02d TT", ih, im, isec);
+  }
+  return s;
+}
+
 /* 
  * this function looks for an ephemeris file, 
  * opens it, if not yet open,
@@ -2127,6 +2279,9 @@ static int sweph(double tjd, int ipli, int ifno, int32 iflag, double *xsunb, AS_
   int i, ipl, retc, subdirlen;
   char s[2 * AS_MAXCH], subdirnam[AS_MAXCH], fname[AS_MAXCH], *sp;
   double t, tsv;       
+  double tsel = tjd;    /* date by which the file is chosen, see below */
+  double tjd_nom = tjd; /* a date in the nominal range of the file opened */
+  double tnom1_prev = 0; /* end of that range if the previous file was opened */
   double xemb[6], xx[6], *xp;
   struct plan_data *pdp;
   struct plan_data *pedp = &swed.pldat[SEI_EARTH];
@@ -2161,10 +2316,21 @@ static int sweph(double tjd, int ipli, int ifno, int32 iflag, double *xsunb, AS_
   /****************************** 
    * get correct ephemeris file * 
    ******************************/
+  /* the file is chosen by the date tsel: the date of the current swe_calc()
+   * call, if tjd is near it (light-time corrected positions of this call),
+   * otherwise tjd itself */
+  if (have_tjd_calc && fabs(tjd - tjd_calc) <= 1)
+    tsel = tjd_calc;
+  tjd_nom = tsel;
+reselect:
   if (fdp->fptr != NULL) {
     /* if tjd is beyond file range, close old file.
-     * if new asteroid, close old file. */
+     * if new asteroid, close old file.
+     * if tsel is beyond the file's nominal range (in the overlap with the
+     * neighbouring file), close it too: otherwise the file used in the
+     * overlap would depend on the order of earlier calls. */
     if (tjd < fdp->tfstart || tjd > fdp->tfend
+      || tsel < fdp->tnom0 || tsel >= fdp->tnom1
       || (ipl == SEI_ANYBODY && ipli != pdp->ibdy)) { 	
       fclose(fdp->fptr);
       fdp->fptr = NULL;
@@ -2178,7 +2344,7 @@ static int sweph(double tjd, int ipli, int ifno, int32 iflag, double *xsunb, AS_
   }
   /* if sweph file not open, find and open it */
   if (fdp->fptr == NULL) {
-    swi_gen_filename(tjd, ipli, fname); 
+    swi_gen_filename(tsel, ipli, fname); 
     strcpy(subdirnam, fname);
     sp = strrchr(subdirnam, (int) *DIR_GLUE);
     if (sp != NULL) {
@@ -2223,16 +2389,80 @@ again:
       }
       return(NOT_AVAILABLE);
     }
-    /* during the search error messages may have been built, delete them */
+    /* during the search, error messages may have been built, delete them */
     if (serr != NULL) *serr = '\0';	
     retc = read_const(ifno, serr);
+#if 1 // dieter 24 april 2026
+    // tjd too close to file start => use previous file
+    // Only if it is another file and it exists: it is missing before the
+    // first file, if the user does not have it, and for an asteroid with
+    // only a short file (..s.se1, the generated name is that of the long
+    // file); without this check, read_const() was called with fptr == NULL
+    // and crashed. swi_fopen() with ifno -1, so that a failed search does
+    // not change fdp->fnam.
+      if (1 && retc == OK && tsel < swed.fidat[ifno].tfstart + 1) {
+        char fname2[AS_MAXCH];
+        FILE *fptest;
+        swi_gen_filename(tsel - 1000, ipli, fname2);
+        if (strcmp(fname2, fname) != 0
+          && (fptest = swi_fopen(-1, fname2, swed.ephepath, NULL)) != NULL) {
+          fclose(fptest);
+          fclose(fdp->fptr);
+          tnom1_prev = swed.fidat[ifno].tfstart + 1;
+          strcpy(fname, fname2);
+          strcpy(s, fname);
+          fdp->fptr = swi_fopen(ifno, s, swed.ephepath, serr);
+          if (fdp->fptr == NULL)
+            return(NOT_AVAILABLE);
+          retc = read_const(ifno, serr);
+          tjd_nom = tsel - 1000;
+        }
+      }
+    // tjd too close to file end => use next file (not necessary)
+    if (0 && tjd > swed.fidat[ifno].tfend - 1) {
+        swi_gen_filename(tjd + 1000, ipli, fname); 
+        strcpy(s, fname);
+        fdp->fptr = swi_fopen(ifno, s, swed.ephepath, serr);
+    retc = read_const(ifno, serr);
+    }
+#endif
     if (retc != OK)
       return(retc);
+    /* the range of dates this file serves, as the rules above choose it:
+     * the nominal range of the file actually opened, and the first day of a
+     * file (tjd < tfstart + 1) belongs to the previous file, if that exists.
+     * Otherwise an open file would serve dates for which a new search
+     * chooses another file, and the result would depend on history.
+     * The first-day rule applies also to a file opened by the rule itself
+     * (the previous file): its own first day belongs to its predecessor. */
+    gen_filename_range(tjd_nom, ipli, &fdp->tnom0, &fdp->tnom1);
+    if (tjd_nom != tjd)
+      fdp->tnom1 = tnom1_prev;
+    if (fdp->tnom0 > -1e29 && fdp->tnom0 < fdp->tfstart + 1) {
+      char fname2[AS_MAXCH];
+      FILE *fptest;
+      swi_gen_filename(fdp->tnom0 - 1000, ipli, fname2);
+      if (strcmp(fname2, fname) != 0
+        && (fptest = swi_fopen(-1, fname2, swed.ephepath, NULL)) != NULL) {
+        fclose(fptest);
+        fdp->tnom0 = fdp->tfstart + 1;
+      }
+    }
   }
   /* if first ephemeris file (J-3000), it might start a mars period
    * after -3000. if last ephemeris file (J3000), it might end a
    * 4000-day-period before 3000. */
+  if ((tjd < fdp->tfstart || tjd > fdp->tfend) && tsel != tjd) {
+    /* the file chosen by the date of the swe_calc() call does not contain
+     * tjd: choose the file by tjd itself */
+    fclose(fdp->fptr);
+    fdp->fptr = NULL;
+    tsel = tjd;
+    tjd_nom = tjd;
+    goto reselect;
+  }
   if (tjd < fdp->tfstart || tjd > fdp->tfend) {
+    char sd1[60], sd2[60];
     if (serr != NULL) {
       sp = strrchr(fname, (int) *DIR_GLUE);
       if (sp != NULL) {
@@ -2247,19 +2477,19 @@ again:
 	  sprintf(s, "plan. COB No. %d (%s): ", ipli, sp);
 	else
 	  sprintf(s, "plan. moon No. %d (%s): ", ipli, sp);
-      } else if (ipli > SEI_PLUTO) {
+      } else if (ipli >= SEI_ANYBODY || ifno >= 2) {
         sprintf(s, "asteroid eph. file (%s): ", sp);
-      } else if (ipli != SEI_MOON) {
+      } else if (ifno == 0) {
         sprintf(s, "planets eph. file (%s): ", sp);
-      } else {
+      } else if (ifno == 1) {
         sprintf(s, "moon eph. file (%s): ", sp);
       }
       if (tjd < fdp->tfstart) {
-	sprintf(s + strlen(s), "jd %f < lower limit %f;", 
-		  tjd, fdp->tfstart); 
+	sprintf(s + strlen(s), "%s < lower limit %s;", 
+		  jd_and_date(tjd, sd1), jd_and_date(fdp->tfstart, sd2)); 
       } else {
-	sprintf(s + strlen(s), "jd %f > upper limit %f;", 
-		  tjd, fdp->tfend); 
+	sprintf(s + strlen(s), "%s > upper limit %s;", 
+		  jd_and_date(tjd, sd1), jd_and_date(fdp->tfend, sd2)); 
       }
       if (strlen(serr) + strlen(s) < AS_MAXCH)
 	strcat(serr, s);
@@ -2592,6 +2822,10 @@ static int app_pos_etc_plan(int ipli, int iplmoon, int32 iflag, char *serr)
       for (i = 0; i <= 2; i++) {	/* rough apparent position at t*/
 	//xx[i] = pdp->x[i] - dt * pdp->x[i+3];
 	xx[i] = xx0[i] - dt * xx0[i+3];
+	/* xx0[] is barycentric: heliocentric distance for the next pass */
+	if ((iflag & SEFLG_HELCTR)
+	  && (pdp->iephe == SEFLG_JPLEPH || pdp->iephe == SEFLG_SWIEPH))
+	  xx[i] -= swed.pldat[SEI_SUNBARY].x[i];
       }
     }
     /* part of daily motion resulting from change of dt */
@@ -3456,7 +3690,8 @@ static int app_pos_etc_plan_osc(int ipl, int ipli, int32 iflag, char *serr)
     for (j = 0; j <= niter; j++) {
       for (i = 0; i <= 2; i++) {
 	dx[i] = xx[i];
-	if (!(iflag & SEFLG_HELCTR) && !(iflag & SEFLG_BARYCTR))
+	/* heliocentric: xobs[] is the Sun */
+	if (!(iflag & SEFLG_BARYCTR))
 	  dx[i] -= xobs[i];
       }
       /* new dt */
@@ -4161,6 +4396,10 @@ static int app_pos_etc_moon(int32 iflag, char *serr)
         if (retc != OK) {
 	      swi_close_jpl_file();
 	      swed.jpl_file_is_open = FALSE;
+	      /* light-time point outside the JPL file: error, as for the Sun
+	       * and the planets (before 2026-11-19 the Moon was computed
+	       * from unset xx[] and xe[]) */
+	      return(retc);
         } 
 	for (i = 0; i <= 5; i++)
 	  xx[i] += xe[i];
@@ -4380,9 +4619,34 @@ static int get_new_segment(double tjd, int ipli, int ifno, char *serr)
   int fendian = (int) fdp->iflg & SEI_FILE_LITENDIAN;
   uint32 longs[MAXORD+1];
   /* compute segment number */
+#if 1
   iseg = (int32) ((tjd - pdp->tfstart) / pdp->dseg);
+#else 
+  // Dieter on 6 March 2026, bugfix for SE3: replaces previous line by next few lines
+  // It fixes the problem that older ephemeris files may start later than the 
+  // starting date mentioned in them
+  iseg = (int32) floor((tjd - pdp->tfstart) / pdp->dseg); 
+  if (iseg < 0) {
+    i = fdp->ipl[0]; 
+    if (serr != NULL) {
+      if (i > SE_AST_OFFSET) {
+        i -= SE_AST_OFFSET;
+        sprintf(serr, "ephemeris of asteroid %d not available for this date (1)", i);
+      } else {
+        sprintf(serr, "ephemeris of object %d not available for this date (2)", i);
+      }
+    }
+    return(NOT_AVAILABLE);
+  } // end of new code from 6 March 2026
+#endif
   /*if (tjd - pdp->tfstart < 0)
       return(NOT_AVAILABLE);*/
+  /* tjd == tfend passes the range check, but gives iseg == nndx, i.e. the
+   * index entry after the last segment, and garbage coefficients (an
+   * asteroid file at its upper limit gave r = 38 au instead of 3.5 au).
+   * Use the last segment, which ends at tfend. (fixed 2026-11-16) */
+  if (iseg >= pdp->nndx && pdp->nndx > 0)
+    iseg = pdp->nndx - 1;
   pdp->tseg0 = pdp->tfstart + iseg * pdp->dseg;
   pdp->tseg1 = pdp->tseg0 + pdp->dseg;
   /* get file position of coefficients from file */
@@ -4850,6 +5114,16 @@ fendian, ifno, serr);
     pdp->dqrot    = doubles[7];
     pdp->peri     = doubles[8];
     pdp->dperi    = doubles[9];
+    /* a segment still held from the previous file of this planet is not
+     * valid any more: its tseg0/tseg1 may still contain the next dates, and
+     * then it would be used instead of the new file; also, the new file may
+     * have another ncoe. This applies to all planets of the file, not only
+     * to the planet that caused the switch and not only to planets with a
+     * reference ellipse. */
+    if (pdp->segp != NULL) {
+      free((void *) pdp->segp);
+      pdp->segp = NULL;
+    }
     /* alloc space for chebyshew coefficients */
     /* if reference ellipse is used, read its coefficients */
     if (pdp->iflg & SEI_FLG_ELLIPSE) {
@@ -6107,9 +6381,14 @@ static int32 plaus_iflag(int32 iflag, int32 ipl, double tjd, char *serr)
   if (epheflag == 0)
     epheflag = SEFLG_DEFAULTEPH;
   iflag = (iflag & ~SEFLG_EPHMASK) | epheflag;
-  /* SEFLG_JPLHOR only with JPL and Swiss Ephemeeris */
-  if (!(epheflag & SEFLG_JPLEPH)) 
+  /* SEFLG_JPLHOR and SEFLG_JPLHOR_APPROX only with the JPL file: they are
+   * test features for comparisons with JPL Horizons. If they are removed,
+   * a warning is returned in serr. */
+  if (!(epheflag & SEFLG_JPLEPH)) {
+    if ((iflag & (SEFLG_JPLHOR | SEFLG_JPLHOR_APPROX)) && serr != NULL)
+      strcpy(serr, "JPL Horizons mode (SEFLG_JPLHOR, SEFLG_JPLHOR_APPROX) only with the JPL file; ignored");
     iflag = iflag & ~(SEFLG_JPLHOR | SEFLG_JPLHOR_APPROX);
+  }
   /* planets that have no JPL Horizons mode */
   if (ipl == SE_OSCU_APOG || ipl == SE_TRUE_NODE 
       || ipl == SE_MEAN_APOG || ipl == SE_MEAN_NODE
@@ -6943,6 +7222,55 @@ int32 CALL_CONV swe_fixstar2_mag(char *star, double *mag, char *serr)
   return retc;
 }
 
+/* catalog number at the start of a seasnam.txt line, or -1 for comment
+ * and empty lines (the number may be in brackets) */
+static int seasnam_line_number(char *s)
+{
+  char *sp = s;
+  while (*sp == ' ' || *sp == '\t' || *sp == '(' || *sp == '[' || *sp == '{')
+    sp++;
+  if (!isdigit((int) *sp))
+    return -1;
+  return atoi(sp);
+}
+
+/* seasnam.txt is normally sorted by catalog number (mpc2seasnam.pl writes
+ * it in MPCORB order, 895910 lines in 2026). Binary search over the file
+ * positions; afterwards fp is at the start of a line not later than the
+ * line of asteroid ipli, in a sorted file within a few kB of it. */
+static void seasnam_seek(FILE *fp, int ipli)
+{
+  char si[AS_MAXCH];
+  long lo = 0, hi, mid, pos;
+  int n;
+  if (fseek(fp, 0L, SEEK_END) != 0 || (hi = ftell(fp)) <= 0) {
+    fseek(fp, 0L, SEEK_SET);
+    return;
+  }
+  /* the line of ipli starts in [lo, hi]; lo is always a line start */
+  while (hi - lo > 4096) {
+    mid = lo + (hi - lo) / 2;
+    fseek(fp, mid, SEEK_SET);
+    n = -1;
+    pos = hi;
+    if (fgets(si, AS_MAXCH, fp) != NULL) {	/* skip rest of a line */
+      pos = ftell(fp);
+      while (pos < hi && fgets(si, AS_MAXCH, fp) != NULL) {
+	if ((n = seasnam_line_number(si)) >= 0)
+	  break;
+	pos = ftell(fp);
+      }
+    }
+    if (n < 0 || pos >= hi)
+      hi = mid;
+    else if (n < ipli)
+      lo = pos;
+    else
+      hi = pos;
+  }
+  fseek(fp, lo, SEEK_SET);
+}
+
 char *CALL_CONV swe_get_planet_name(int ipl, char *s) 
 {
   int i;
@@ -7080,6 +7408,15 @@ char *CALL_CONV swe_get_planet_name(int ipl, char *s)
           FILE *fp;
           char si[AS_MAXCH], *sp, *sp2;
           if ((fp = swi_fopen(-1, SE_ASTNAMFILE, swed.ephepath, NULL)) != NULL) {
+           /* pass 0: binary search (sorted file); pass 1, only if the
+            * number was not found: whole file, as before (unsorted file) */
+           int pass, found = FALSE;
+           for (pass = 0; pass < 2 && !found; pass++) {
+            if (pass == 0)
+              seasnam_seek(fp, ipli);
+            else
+              fseek(fp, 0L, SEEK_SET);
+            iplf = 0;
             while(ipli != iplf && (sp = fgets(si, AS_MAXCH, fp)) != NULL) {
               while (*sp == ' ' || *sp == '\t' 
                      || *sp == '(' || *sp == '[' || *sp == '{')
@@ -7088,8 +7425,11 @@ char *CALL_CONV swe_get_planet_name(int ipl, char *s)
                 continue;
               /* catalog number of body of current line */
               iplf = atoi(sp);
+              if (pass == 0 && iplf > ipli)
+                break;	/* sorted file: ipli is not in it */
               if (ipli != iplf)
                 continue;
+              found = TRUE;
               /* set pointer after catalog number */
               sp = strpbrk(sp, " \t");
               if (sp == NULL)
@@ -7104,6 +7444,7 @@ char *CALL_CONV swe_get_planet_name(int ipl, char *s)
               swi_right_trim(sp);
               strcpy(s, sp);
             }
+           }
             fclose(fp);
           }
         }
@@ -7322,21 +7663,17 @@ int swi_get_observer(double tjd, int32 iflag,
    * the height above sea level must be taken into account.
    * with the moon, an altitude of 3000 m makes a difference 
    * of about 2 arc seconds.
-   * height is referred to the average sea level. however, 
-   * the spheroid (geoid), which is defined by the average 
-   * sea level (or rather by all points of same gravitational
-   * potential), is of irregular shape and cannot easily
-   * be taken into account. therefore, we refer height to 
-   * the surface of the ellipsoid. the resulting error 
-   * is below 500 m, i.e. 0.2 - 0.3 arc seconds with the moon.
+   * Height is referred to the surface of the rotation ellipsoid. 
+   * The geoid, which is defined by the average sea level 
+   * (i.e. by all points of same gravitational potential), 
+   * is of irregular shape and cannot easily be taken into 
+   * account. The resulting error in position is roughly 
+   * 0.1 arcsec with the Moon and a lot smaller with the planets.
    */
   cosfi = cos(swed.topd.geolat * DEGTORAD);
   sinfi = sin(swed.topd.geolat * DEGTORAD);
   cc= 1 / sqrt(cosfi * cosfi + (1-f) * (1-f) * sinfi * sinfi); 
   ss= (1-f) * (1-f) * cc; 
-  /* neglect polar motion (displacement of a few meters), as long as 
-   * we use the earth ellipsoid */
-  /* ... */
   /* add sidereal time */
   cosl = cos((swed.topd.geolon + sidt) * DEGTORAD);
   sinl = sin((swed.topd.geolon + sidt) * DEGTORAD);
@@ -7438,29 +7775,7 @@ int32 CALL_CONV swe_lat_to_lmt(double tjd_lat, double geolon, double *tjd_lmt, c
 static int open_jpl_file(double *ss, char *fname, char *fpath, char *serr)
 {
   int retc;
-  char serr2[AS_MAXCH];
   retc = swi_open_jpl_file(ss, fname, fpath, serr);
-  /* If we fail with default JPL ephemeris (DE431), we try the second default
-   * (DE406), but only if serr is not NULL and an warning message can be 
-   * returned. */
-  if (retc != OK && strstr(fname, SE_FNAME_DFT) != NULL && serr != NULL) {
-    retc = swi_open_jpl_file(ss, SE_FNAME_DFT2, fpath, serr2);
-    if (retc == OK) {
-      strcpy(swed.jplfnam, SE_FNAME_DFT2);
-      if (serr != NULL) {
-        strcpy(serr2, "Error with JPL ephemeris file ");
-	if (strlen(serr2) + strlen(SE_FNAME_DFT) < AS_MAXCH)
-	  strcat(serr2, SE_FNAME_DFT);
-	if (strlen(serr2) + strlen(serr) + 2 < AS_MAXCH) 
-	  sprintf(serr2 + strlen(serr2), ": %s", serr);
-	if (strlen(serr2) + 17 < AS_MAXCH) 
-	  strcat(serr2, ". Defaulting to ");
-	if (strlen(serr2) + strlen(SE_FNAME_DFT2) < AS_MAXCH) 
-	  strcat(serr2, SE_FNAME_DFT2);
-        strcpy(serr, serr2);
-      }
-    }
-  }
   if (retc == OK) {
     swed.jpldenum = swi_get_jpl_denum();
     swed.jpl_file_is_open = TRUE;

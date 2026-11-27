@@ -16,6 +16,7 @@ void sweph_set_astro_models(const Napi::CallbackInfo& info);
 void sweph_set_tid_acc(const Napi::CallbackInfo& info);
 void sweph_set_topo(const Napi::CallbackInfo& info);
 Napi::String sweph_version(const Napi::CallbackInfo& info);
+Napi::Number sweph_get_denum(const Napi::CallbackInfo& info);
 Napi::String sweph_get_library_path(const Napi::CallbackInfo& info);
 Napi::Number sweph_get_tid_acc(const Napi::CallbackInfo& info);
 Napi::Value sweph_get_astro_models(const Napi::CallbackInfo& info);
