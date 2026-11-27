@@ -238,8 +238,6 @@ exports.SE_FNAME_DE406 = "de406.eph";
 exports.SE_FNAME_DE431 = "de431.eph";
 exports.SE_FNAME_DE441 = "de441.eph";
 exports.SE_FNAME_DFT = exports.SE_FNAME_DE441;
-// Legacy filename alias. Swiss Ephemeris no longer falls back to DE406.
-exports.SE_FNAME_DFT2 = exports.SE_FNAME_DE406;
 exports.SE_FNAME_DFT3 = exports.SE_FNAME_DE441;
 exports.SE_STARFILE_OLD = "fixstars.cat";
 exports.SE_STARFILE = "sefstars.txt";

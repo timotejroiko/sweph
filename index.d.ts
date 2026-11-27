@@ -5138,8 +5138,6 @@ declare module "sweph" {
 		SE_FNAME_DE431: "de431.eph",
 		SE_FNAME_DE441: "de441.eph",
 		SE_FNAME_DFT: "de441.eph",
-		/** @deprecated Use SE_FNAME_DE406 to select this file explicitly. */
-		SE_FNAME_DFT2: "de406.eph",
 		SE_FNAME_DFT3: "de441.eph",
 		SE_STARFILE_OLD: "fixstars.cat",
 		SE_STARFILE: "sefstars.txt",
